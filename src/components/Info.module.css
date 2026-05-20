@@ -74,6 +74,8 @@
   border-radius: 8px;
   transition: all 0.2s ease;
   font-family: var(--headerFont);
+  min-width: 44px;
+  min-height: 44px;
 }
 
 .closeBtn:hover {
@@ -284,6 +286,8 @@
   transition: all 0.2s ease;
   -webkit-text-stroke: 3px black;
   paint-order: stroke fill;
+  min-width: 44px;
+  min-height: 44px;
 }
 
 .closeButtonBottom:focus-visible {
