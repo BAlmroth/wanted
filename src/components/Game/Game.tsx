@@ -24,6 +24,7 @@ export default function Game() {
     transaction,
     error,
     resetToIdle,
+    user,
   } = useGameLogic();
 
   if (error?.type === "TOKEN_EXPIRED") return <TokenExpired />;
@@ -41,7 +42,9 @@ export default function Game() {
         </div>
       )}
 
-      {gameState === "idle" && <Idle onStartGame={startGame} />}
+      {gameState === "idle" && (
+        <Idle onStartGame={startGame} userName={user?.name} />
+      )}
       {gameState === "playing" && (
         <GameOn
           currentLevel={currentLevel}
