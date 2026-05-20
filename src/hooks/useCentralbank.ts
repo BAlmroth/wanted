@@ -4,6 +4,7 @@ import {
   createTransaction,
   sendPayout,
 } from "../utils/centralbank";
+import { TIVOLI_MODE } from "../config";
 import type {
   CentralbankUser,
   Transaction,
@@ -18,6 +19,13 @@ export function useCentralbank() {
   const [error, setError] = useState<CentralbankError | null>(null);
 
   useEffect(() => {
+    if (!TIVOLI_MODE) {
+      // Standalone mode - set guest user immediately
+      setUser({ id: "guest-123", name: "guest" });
+      return;
+    }
+
+    // Tivoli mode - get token from URL
     const params = new URLSearchParams(window.location.search);
     const token = params.get("identity_token");
     history.replaceState({}, "", window.location.pathname);
@@ -35,6 +43,14 @@ export function useCentralbank() {
 
   async function startGame() {
     try {
+      if (!TIVOLI_MODE) {
+        // Standalone mode - create transaction without token
+        const txn = await createTransaction("");
+        setTransaction(txn);
+        return txn.stamp;
+      }
+
+      // Tivoli mode - require token
       if (!identityToken) {
         const error: CentralbankError = { type: "TOKEN_EXPIRED" };
         setError(error);

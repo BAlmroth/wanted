@@ -1,3 +1,6 @@
+import { TIVOLI_MODE } from "../config";
+import { generateMockLevel } from "./gameUtils.mock";
+
 const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL;
 const SUPABASE_ANON_KEY = import.meta.env.VITE_SUPABASE_ANON_KEY;
 
@@ -19,6 +22,9 @@ export type LevelData = {
 };
 
 export async function generateLevel(count: number): Promise<LevelData> {
+  if (!TIVOLI_MODE) {
+    return generateMockLevel(count);
+  }
   const res = await fetch(`${SUPABASE_URL}/rest/v1/rpc/generate_level`, {
     method: "POST",
     headers: {
@@ -40,6 +46,9 @@ export async function validateClick(
   sessionId: string,
   clickedIndex: number,
 ): Promise<boolean> {
+  if (!TIVOLI_MODE) {
+    return true;
+  }
   const res = await fetch(`${SUPABASE_URL}/rest/v1/rpc/validate_click`, {
     method: "POST",
     headers: {

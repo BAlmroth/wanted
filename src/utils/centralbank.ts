@@ -1,5 +1,11 @@
 import { calculatePayout } from "./gameUtils";
-import type { CentralbankUser, Transaction, ApiError } from "../types/CentralBank";
+import { TIVOLI_MODE } from "../config";
+import * as mockCentralbank from "./centralbank.mock";
+import type {
+  CentralbankUser,
+  Transaction,
+  ApiError,
+} from "../types/CentralBank";
 
 const BASE_URL = import.meta.env.VITE_CENTRALBANK_URL;
 const API_KEY = import.meta.env.VITE_CENTRALBANK_API_KEY;
@@ -9,32 +15,56 @@ const headers = {
 };
 
 export async function getIdentity(token: string): Promise<CentralbankUser> {
+  if (!TIVOLI_MODE) {
+    return mockCentralbank.getIdentity(token);
+  }
   const res = await fetch(`${BASE_URL}/identity-tokens/${token}`, { headers });
   if (!res.ok) {
-    const error: ApiError = { message: "Could not verify identity", status: res.status };
+    const error: ApiError = {
+      message: "Could not verify identity",
+      status: res.status,
+    };
     throw error;
   }
   const data = await res.json();
   return data.user;
 }
 
-export async function createTransaction(identityToken: string): Promise<Transaction> {
+export async function createTransaction(
+  identityToken: string,
+): Promise<Transaction> {
+  if (!TIVOLI_MODE) {
+    return mockCentralbank.createTransaction(identityToken);
+  }
   const res = await fetch(`${BASE_URL}/transactions`, {
     method: "POST",
     headers,
-    body: JSON.stringify({ identity_token: identityToken, amount: 2, api_key: API_KEY }),
+    body: JSON.stringify({
+      identity_token: identityToken,
+      amount: 2,
+      api_key: API_KEY,
+    }),
   });
   if (!res.ok) {
-    const error: ApiError = { message: "Transaction failed", status: res.status };
+    const error: ApiError = {
+      message: "Transaction failed",
+      status: res.status,
+    };
     throw error;
   }
   return res.json();
 }
 
-export async function sendPayout(transactionId: string, levelsCleared: number): Promise<void> {
+export async function sendPayout(
+  transactionId: string,
+  levelsCleared: number,
+): Promise<void> {
   const amount = calculatePayout(levelsCleared);
   if (amount === 0) {
     return;
+  }
+  if (!TIVOLI_MODE) {
+    return mockCentralbank.sendPayout(transactionId, levelsCleared);
   }
   const res = await fetch(`${BASE_URL}/transactions/${transactionId}/payout`, {
     method: "POST",

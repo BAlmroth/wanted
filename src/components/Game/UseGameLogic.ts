@@ -9,6 +9,7 @@ import {
 } from "../../utils/gameUtils";
 import { saveScore } from "../../utils/leaderboard";
 import { useCentralbank } from "../../hooks/useCentralbank";
+import { TIVOLI_MODE } from "../../config";
 
 export function useGameLogic() {
   const [gameState, setGameState] = useState<"idle" | "playing" | "gameover">(
@@ -88,11 +89,21 @@ export function useGameLogic() {
       return;
 
     let correct: boolean;
-    try {
-      correct = await validateClick(sessionId, character.id);
-    } catch {
-      setMessage("Connection error, try clicking again.");
-      return;
+
+    if (!TIVOLI_MODE) {
+      // Standalone mode - check if clicked character matches target
+      correct = character.figure === targetFigure;
+      console.log(
+        `[STANDALONE MODE] Click validation: ${correct ? "Correct!" : "Wrong!"}`,
+      );
+    } else {
+      // Tivoli mode - validate on server
+      try {
+        correct = await validateClick(sessionId, character.id);
+      } catch {
+        setMessage("Connection error, try clicking again.");
+        return;
+      }
     }
 
     if (correct) {
