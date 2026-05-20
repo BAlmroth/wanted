@@ -39,4 +39,5 @@ export interface GameOverProps {
 
 export interface IdleProps {
   onStartGame: () => void;
+  userName?: string | null;
 }

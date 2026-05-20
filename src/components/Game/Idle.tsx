@@ -7,13 +7,25 @@ import { Navigation } from "./Navigation";
 import Instructions from "../Instructions";
 import Info from "../Info";
 
-export function Idle({ onStartGame }: IdleProps): ReactNode {
-  const [infoMode, setInfoMode] = useState<null | "play" | "info">(null);
+export function Idle({ onStartGame, userName }: IdleProps): ReactNode {
+  const [isOpen, setIsOpen] = useState(false);
+  const [showCautionOnly, setShowCautionOnly] = useState(false);
+  const [showStartButton, setShowStartButton] = useState(false);
 
-  const openInfoForPlay = () => setInfoMode("play");
-  const openInfo = () => setInfoMode("info");
-  const handleStartFromInfo = () => {
-    setInfoMode(null);
+  const openInfoForPlay = () => {
+    setShowCautionOnly(!userName);
+    setShowStartButton(true);
+    setIsOpen(true);
+  };
+
+  const openInfo = () => {
+    setShowCautionOnly(false);
+    setShowStartButton(false);
+    setIsOpen(true);
+  };
+
+  const handleStartGame = () => {
+    setIsOpen(false);
     onStartGame();
   };
 
@@ -34,10 +46,11 @@ export function Idle({ onStartGame }: IdleProps): ReactNode {
       </div>
 
       <Info
-        isOpen={infoMode !== null}
-        onClose={() => setInfoMode(null)}
-        onStartGame={handleStartFromInfo}
-        showStartButton={infoMode === "play"}
+        isOpen={isOpen}
+        onClose={() => setIsOpen(false)}
+        onStartGame={handleStartGame}
+        showStartButton={showStartButton}
+        showCautionOnly={showCautionOnly}
       />
     </>
   );
