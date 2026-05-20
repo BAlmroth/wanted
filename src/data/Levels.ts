@@ -12,10 +12,10 @@ export const LEVELS: LevelConfig[] = [
   { level: 9, gridCount: 38,  carousel: true, carouselSpeed: 140, carouselGap: 10,  carouselCols: 7, carouselShakiness: 0.3, carouselSameDirection: true }, 
   { level: 10, gridCount: 38,  carousel: true, carouselSpeed: 160, carouselGap: 4,   carouselCols: 7, carouselShakiness: 0.4, carouselSameDirection: false }, 
   { level: 11, gridCount: 38,  carousel: true, carouselSpeed: 180, carouselGap: 4,   carouselCols: 7, carouselShakiness: 0.4, carouselSameDirection: true }, 
-  { level: 12, gridCount: 40, carousel: true, carouselSpeed: 220, carouselGap: 2, carouselCols: 8, carouselShakiness: 0.4, carouselSameDirection: false },
+  { level: 12, gridCount: 40, carousel: true, carouselSpeed: 220, carouselGap: 2, carouselCols: 7, carouselShakiness: 0.4, carouselSameDirection: false },
   { level: 13, gridCount: 42, carousel: true, carouselSpeed: 200, carouselGap: 4, carouselCols: 7, carouselShakiness: 0.3, carouselSameDirection: true },
-  { level: 14, gridCount: 50, carousel: true, carouselSpeed: 240, carouselGap: 2, carouselCols: 5, carouselShakiness: 0.3, carouselSameDirection: false },
-  { level: 15, gridCount: 50, carousel: true, carouselSpeed: 240, carouselGap: 2, carouselCols: 5, carouselShakiness: 0.3, carouselSameDirection: true },
-  { level: 16, gridCount: 50, carousel: true, carouselSpeed: 240, carouselGap: 2, carouselCols: 5, carouselShakiness: 0.3, carouselSameDirection: false },
+  { level: 14, gridCount: 45, carousel: true, carouselSpeed: 240, carouselGap: 2, carouselCols: 7, carouselShakiness: 0.3, carouselSameDirection: false },
+  { level: 15, gridCount: 45, carousel: true, carouselSpeed: 260, carouselGap: 2, carouselCols: 7, carouselShakiness: 0.3, carouselSameDirection: true },
+  { level: 16, gridCount: 45, carousel: true, carouselSpeed: 260, carouselGap: 2, carouselCols: 7, carouselShakiness: 0.3, carouselSameDirection: false },
 
 ];
