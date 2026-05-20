@@ -2,12 +2,14 @@ import { useEffect, useRef, useState } from "react";
 import styles from "./Info.module.css";
 import DownArrow from "../assets/DownArrow.png";
 import InfoContent from "./InfoContent";
+import Caution from "./Caution";
 
 interface InfoModalProps {
   isOpen: boolean;
   onClose: () => void;
   onStartGame?: () => void;
   showStartButton?: boolean;
+  showCautionOnly?: boolean;
 }
 
 export default function Info({
@@ -15,6 +17,7 @@ export default function Info({
   onClose,
   onStartGame,
   showStartButton = true,
+  showCautionOnly = false,
 }: InfoModalProps) {
   const scrollRef = useRef<HTMLDivElement | null>(null);
   const modalRef = useRef<HTMLDivElement | null>(null);
@@ -22,7 +25,7 @@ export default function Info({
   const [hasEverScrolledToBottom, setHasEverScrolledToBottom] = useState(false);
 
   const handleStart = () => {
-    if (onStartGame) onStartGame();
+    onStartGame?.();
     onClose();
   };
 
@@ -45,20 +48,20 @@ export default function Info({
       if (event.key === "Escape") {
         onClose();
       }
-      
+
       // Fokus trap - keep focus in the modal
       if (event.key === "Tab" && modalRef.current) {
         const focusableElements = modalRef.current.querySelectorAll(
-          'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+          'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])',
         );
         const focusableArray = Array.from(focusableElements) as HTMLElement[];
-        
+
         if (focusableArray.length === 0) return;
-        
+
         const firstElement = focusableArray[0];
         const lastElement = focusableArray[focusableArray.length - 1];
         const activeElement = document.activeElement;
-        
+
         if (event.shiftKey) {
           // Shift + Tab (back)
           if (activeElement === firstElement) {
@@ -106,7 +109,7 @@ export default function Info({
       // Focus on teh first focusable element
       if (modalRef.current) {
         const focusableElements = modalRef.current.querySelectorAll(
-          'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+          'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])',
         );
         const firstElement = focusableElements[0] as HTMLElement;
         if (firstElement) {
@@ -121,7 +124,13 @@ export default function Info({
   return (
     <>
       <div className={styles.overlay} onClick={onClose} role="presentation" />
-      <div ref={modalRef} className={styles.modal} role="dialog" aria-modal="true" aria-labelledby="modal-title">
+      <div
+        ref={modalRef}
+        className={styles.modal}
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="modal-title"
+      >
         <div className={styles.header}>
           <h3 id="modal-title">Game Info</h3>
           <button
@@ -139,7 +148,8 @@ export default function Info({
             className={styles.scrollContent}
             onScroll={checkScrollPosition}
           >
-            <InfoContent />
+            <Caution />
+            {!showCautionOnly && <InfoContent />}
           </div>
 
           {!hasScrolledToBottom && (
@@ -153,14 +163,14 @@ export default function Info({
         </div>
 
         <div className={styles.footer}>
-          {showStartButton ? (
+          {showStartButton || showCautionOnly ? (
             <button
               className={styles.closeButtonBottom}
               onClick={handleStart}
               disabled={!hasEverScrolledToBottom}
               aria-disabled={!hasEverScrolledToBottom}
             >
-              Ready? - Start game 2€
+              {showCautionOnly ? "Start game 2€" : "Ready? - Start game 2€"}
             </button>
           ) : (
             <button className={styles.closeButtonBottom} onClick={onClose}>

@@ -3,14 +3,6 @@ import styles from "./Info.module.css";
 export default function InfoContent() {
   return (
     <>
-      <div className={styles.caution}>
-        <h2>CAUTION</h2>
-        <h3>
-          This game contains flashing lights and fast animations. If you are
-          sensitive to visual effects, play with caution.
-        </h3>
-      </div>
-
       <h4 className={styles.tagline}>
         Find the wanted Rune before time runs out!
       </h4>
@@ -40,7 +32,8 @@ export default function InfoContent() {
               <kbd>Arrow Keys</kbd> - Move cursor on screen (keyboard mode)
             </li>
             <li>
-              <kbd>Enter</kbd> or <kbd>Space</kbd> - Select character under cursor (keyboard mode)
+              <kbd>Enter</kbd> or <kbd>Space</kbd> - Select character under
+              cursor (keyboard mode)
             </li>
             <li>
               <kbd>Esc</kbd> - Close this dialog
