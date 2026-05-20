@@ -41,7 +41,7 @@ export function GameOver({
   return (
     <div className={containerClassName}>
       <h1 className={titleClassName}>{resultText}</h1>
-      <h2>{subtitleText}</h2>
+      <h3>{subtitleText}</h3>
 
       <section className={styles.infoBoxes}>
         <div className={styles.box}>
