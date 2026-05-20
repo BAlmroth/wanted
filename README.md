@@ -21,8 +21,9 @@ An interactive web application where you race against time to find the correct c
 
 **Wanted** is a fast-paced game where you must recognize and click on the correct characters based on emotional expressions. The game is divided into progressive levels:
 
-- **Levels**: Increasing difficulty with more characters on screen and animations
-- **Time Limits**: You start with 10sec that counts down and for every level you clear you get 2 extra sec.
+- **Levels**: Starting with a static grid and progressing to animated carousel-style gameplay
+- **Time Limits**: You start with 10 seconds that counts down, and for every level you clear you get 2 extra seconds
+- **Dynamic Animations**: Later levels include carousel animations with varying speeds, direction, and "shakiness" effects
 - **Leaderboard**: Earn points and climb the leaderboard rankings
 - **Emotions**: Find happy 😊, sad 😢, angry 😠, loving 💕 or dead 💀 Rune
 
@@ -91,6 +92,14 @@ npm run dev
 
 The application automatically opens at `http://localhost:5173`
 
+### Environment Variables
+Copy `.env.example` to `.env` and configure:
+
+Add your configuration for:
+- **Supabase** - For leaderboard functionality
+- **Centralbank API** - For payment/transaction handling
+- **Tivoli** - For authentication integration
+
 ## 🔨 Build & Deployment
 
 ### Create Production Build
@@ -113,7 +122,7 @@ The project is configured for deployment on **Vercel**.
 | **CSS Modules** | Scoped styling |
 | **ESLint** | Code quality |
 
-## 📝 License
+## �📝 License
 
 This project is licensed under the MIT License.
 
