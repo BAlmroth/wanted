@@ -6,12 +6,17 @@ import { Navigation } from "./Navigation";
 import Info from "../Info";
 import { calculatePayout } from "../../utils/gameUtils";
 
+interface GameOverWithTypeProps extends GameOverProps {
+  resultType?: "gameover" | "win";
+}
+
 export function GameOver({
   score,
   currentLevel,
   onPlayAgain,
   transaction,
-}: GameOverProps) {
+  resultType = "gameover",
+}: GameOverWithTypeProps) {
   const [infoMode, setInfoMode] = useState<null | "play" | "info">(null);
 
   const openInfoForPlay = () => setInfoMode("play");
@@ -28,9 +33,13 @@ export function GameOver({
     "https://"
   );
 
+  const resultText = resultType === "win" ? "WINNER" : "GAME OVER";
+  const containerClassName = resultType === "win" ? styles.winContainer : styles.overContainer;
+  const titleClassName = resultType === "win" ? styles.titleWinner : styles.titleGameOver;
+
   return (
-    <div className={styles.overContainer}>
-      <h1>GAME OVER</h1>
+    <div className={containerClassName}>
+      <h1 className={titleClassName}>{resultText}</h1>
 
       <section className={styles.infoBoxes}>
         <div className={styles.box}>

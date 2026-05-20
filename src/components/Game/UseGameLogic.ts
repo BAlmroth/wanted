@@ -22,6 +22,7 @@ export function useGameLogic() {
   const [score, setScore] = useState(0);
   const [timerKey, setTimerKey] = useState(0);
   const [loading, setLoading] = useState(false);
+  const [isWin, setIsWin] = useState(false);
   const gameEndedRef = useRef(false);
   const timerRef = useRef<TimerHandle>(null);
   const {
@@ -40,6 +41,7 @@ export function useGameLogic() {
     setTargetFigure("");
     setScore(0);
     setLevelIndex(0);
+    setIsWin(false);
   }
 
   const currentLevel = LEVELS[levelIndex];
@@ -102,6 +104,7 @@ export function useGameLogic() {
         // Game completed - save score and end game
         gameEndedRef.current = true;
         setScore(newScore);
+        setIsWin(true);
         await endGame(currentLevel.level);
         if (user?.name) {
           try {
@@ -158,5 +161,6 @@ export function useGameLogic() {
     error,
     resetToIdle,
     user,
+    isWin,
   };
 }

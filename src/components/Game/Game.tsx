@@ -24,6 +24,7 @@ export default function Game() {
     transaction,
     error,
     resetToIdle,
+    isWin,
     user,
   } = useGameLogic();
 
@@ -65,6 +66,7 @@ export default function Game() {
           currentLevel={currentLevel}
           onPlayAgain={startGame}
           transaction={transaction}
+          resultType={isWin ? "win" : "gameover"}
         />
       )}
     </>

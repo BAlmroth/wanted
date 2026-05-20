@@ -1,13 +1,22 @@
-.overContainer {
+.overContainer,
+.winContainer {
   display: flex;
   align-items: center;
   flex-direction: column;
 }
 
 .leaderboardH,
-.overContainer h1 {
-  color: var(--yrgoRed);
+.overContainer h1,
+.winContainer h1 {
   font-size: 5rem;
+}
+
+.titleGameOver {
+  color: var(--yrgoRed);
+}
+
+.titleWinner {
+  color: #2ecc71;
 }
 
 .statsBox {
@@ -205,12 +214,14 @@
     width: 30vw;
   }
 
-  .overContainer h1 {
+  .overContainer h1,
+  .winContainer h1 {
     font-size: 15rem;
     margin-top: 0.5rem;
   }
 
-  .overContainer h2 {
+  .overContainer h2,
+  .winContainer h2 {
     margin-top: -3rem;
   }
 }
