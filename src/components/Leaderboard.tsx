@@ -7,7 +7,23 @@ export function Leaderboard() {
   const [entries, setEntries] = useState<LeaderboardEntry[]>([]);
 
   useEffect(() => {
-    getTopFive().then(setEntries);
+    let timeoutId: ReturnType<typeof setTimeout>;
+
+    const handleResize = () => {
+      clearTimeout(timeoutId);
+      timeoutId = setTimeout(() => {
+        const limit = window.innerWidth >= 768 ? 10 : 5;
+        getTopFive(limit).then(setEntries);
+      }, 250);
+    };
+
+    const limit = window.innerWidth >= 768 ? 10 : 5;
+    getTopFive(limit).then(setEntries); // Initial fetch
+    window.addEventListener("resize", handleResize);
+    return () => {
+      clearTimeout(timeoutId);
+      window.removeEventListener("resize", handleResize);
+    };
   }, []);
 
   return (

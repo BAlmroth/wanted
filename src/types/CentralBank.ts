@@ -21,4 +21,9 @@ export type CentralbankError =
   | { type: "TOKEN_EXPIRED" }
   | { type: "TRANSACTION_FAILED" }
   | { type: "PAYOUT_FAILED" }
-  | { type: "NETWORK_ERROR"; message: string };
+  | { type: "IDENTITY_FAILED" };
+
+export interface ApiError {
+  message: string;
+  status?: number;
+}

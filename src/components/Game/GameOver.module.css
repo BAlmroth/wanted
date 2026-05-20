@@ -1,13 +1,22 @@
-.overContainer {
+.overContainer,
+.winContainer {
   display: flex;
   align-items: center;
   flex-direction: column;
 }
 
 .leaderboardH,
-.overContainer h1 {
-  color: var(--yrgoRed);
+.overContainer h1,
+.winContainer h1 {
   font-size: 5rem;
+}
+
+.titleGameOver {
+  color: var(--yrgoRed);
+}
+
+.titleWinner {
+  color: #2ecc71;
 }
 
 .statsBox {
@@ -110,7 +119,6 @@
   display: flex;
   justify-content: space-between;
   padding: 0 1rem;
-  margin-bottom: 1.5rem;
 }
 
 .statItem {
@@ -138,10 +146,14 @@
 
 .rewardBox {
   width: 100%;
-  background-color: #f5f1b5;
+  background-color: white;
   border-radius: 12px;
-  padding: 1.5rem 1rem;
+  padding: 0.5rem;
   box-shadow: inset 0 0 4px 3px rgba(0, 0, 0, 0.15);
+}
+
+.rewardBox p {
+  margin: 0;
 }
 
 .rewardTitle {
@@ -157,8 +169,6 @@
 
 .infoBoxes {
   max-width: 80%;
-  margin-top: 1.5rem;
-  margin-bottom: 1rem;
 }
 
 .leaderboardH {
@@ -190,6 +200,10 @@
   margin-bottom: 1rem;
 }
 
+.stamp {
+  width: 30%;
+}
+
 @media (min-width: 768px) {
   .infoBoxes {
     display: flex;
@@ -200,12 +214,14 @@
     width: 30vw;
   }
 
-  .overContainer h1 {
+  .overContainer h1,
+  .winContainer h1 {
     font-size: 15rem;
     margin-top: 0.5rem;
   }
 
-  .overContainer h2 {
+  .overContainer h2,
+  .winContainer h2 {
     margin-top: -3rem;
   }
 }

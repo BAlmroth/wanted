@@ -22,6 +22,7 @@ export function useGameLogic() {
   const [score, setScore] = useState(0);
   const [timerKey, setTimerKey] = useState(0);
   const [loading, setLoading] = useState(false);
+  const [isWin, setIsWin] = useState(false);
   const gameEndedRef = useRef(false);
   const timerRef = useRef<TimerHandle>(null);
   const {
@@ -29,8 +30,19 @@ export function useGameLogic() {
     endGame,
     transaction,
     error,
+    clearError,
     user,
   } = useCentralbank();
+
+  function resetToIdle() {
+    clearError();
+    setGameState("idle");
+    setCharacters([]);
+    setTargetFigure("");
+    setScore(0);
+    setLevelIndex(0);
+    setIsWin(false);
+  }
 
   const currentLevel = LEVELS[levelIndex];
 
@@ -41,7 +53,10 @@ export function useGameLogic() {
     setSessionId(data.sessionId);
     setTargetFigure(resolveFigure(data.targetFigure));
     setCharacters(
-      data.grid.map((c) => ({ ...c, figure: resolveFigure(c.figure) })),
+      data.grid.map((character) => ({
+        ...character,
+        figure: resolveFigure(character.figure),
+      })),
     );
     setLoading(false);
   }
@@ -52,15 +67,33 @@ export function useGameLogic() {
     setMessage("");
     setTimerKey((k) => k + 1);
     gameEndedRef.current = false;
+
+    try {
+      await startCentralbankGame();
+    } catch {
+      return;
+    }
+
     setGameState("playing");
-    await startCentralbankGame();
     await loadLevel(0);
   }
 
   async function handleClick(character: GridCharacter) {
-    if (gameState !== "playing" || !sessionId || loading || gameEndedRef.current) return;
+    if (
+      gameState !== "playing" ||
+      !sessionId ||
+      loading ||
+      gameEndedRef.current
+    )
+      return;
 
-    const correct = await validateClick(sessionId, character.id);
+    let correct: boolean;
+    try {
+      correct = await validateClick(sessionId, character.id);
+    } catch {
+      setMessage("Connection error, try clicking again.");
+      return;
+    }
 
     if (correct) {
       const newScore = score + 1;
@@ -71,6 +104,7 @@ export function useGameLogic() {
         // Game completed - save score and end game
         gameEndedRef.current = true;
         setScore(newScore);
+        setIsWin(true);
         await endGame(currentLevel.level);
         if (user?.name) {
           try {
@@ -97,7 +131,7 @@ export function useGameLogic() {
       return;
     }
     gameEndedRef.current = true;
-    
+
     await endGame(currentLevel.level);
     if (user?.name && score > 0) {
       try {
@@ -125,5 +159,8 @@ export function useGameLogic() {
     handleTimeUp,
     transaction,
     error,
+    resetToIdle,
+    user,
+    isWin,
   };
 }

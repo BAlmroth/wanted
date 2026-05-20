@@ -4,6 +4,8 @@ import { GameOn } from "./GameOn";
 import { GameOver } from "./GameOver";
 import TokenExpired from "../../errors/TokenExpired";
 import PayoutFailed from "../../errors/PayoutFailed";
+import TransactionFailed from "../../errors/TransactionFailed";
+import styles from "../../errors/error.module.css";
 
 export default function Game() {
   const {
@@ -21,34 +23,52 @@ export default function Game() {
     handleTimeUp,
     transaction,
     error,
+    resetToIdle,
+    isWin,
+    user,
   } = useGameLogic();
 
-  //Error handling
-if (error?.type === "TOKEN_EXPIRED") return <TokenExpired />;
-if (error?.type === "PAYOUT_FAILED") return <PayoutFailed transactionId={transaction?.id} />;
-if (error?.type === "NETWORK_ERROR") return <p>Network error: {error.message}</p>;
-if (error) return <p>Something went wrong: {error.type}</p>;
+  if (error?.type === "TOKEN_EXPIRED") return <TokenExpired />;
+  if (error?.type === "PAYOUT_FAILED")
+    return <PayoutFailed transactionId={transaction?.id} />;
+  if (error?.type === "TRANSACTION_FAILED")
+    return <TransactionFailed onRetry={resetToIdle} />;
 
-  if (gameState === "idle") {
-    return <Idle onStartGame={startGame} />;
-  }
+  return (
+    <>
+      {error && (
+        <div className={styles.toast}>
+          <h3>Something went wrong</h3>
+          <button onClick={resetToIdle}>Try again</button>
+        </div>
+      )}
 
-  if (gameState === "playing") {
-    return (
-      <GameOn
-        currentLevel={currentLevel}
-        targetFigure={targetFigure}
-        characters={characters}
-        message={message}
-        score={score}
-        loading={loading}
-        timerKey={timerKey}
-        timerRef={timerRef}
-        onCharacterClick={handleClick}
-        onTimeUp={handleTimeUp}
-      />
-    );
-  }
-
-  return <GameOver score={score} currentLevel={currentLevel} onPlayAgain={startGame} transaction={transaction} />;
+      {gameState === "idle" && (
+        <Idle onStartGame={startGame} userName={user?.name} />
+      )}
+      {gameState === "playing" && (
+        <GameOn
+          currentLevel={currentLevel}
+          targetFigure={targetFigure}
+          characters={characters}
+          message={message}
+          score={score}
+          loading={loading}
+          timerKey={timerKey}
+          timerRef={timerRef}
+          onCharacterClick={handleClick}
+          onTimeUp={handleTimeUp}
+        />
+      )}
+      {gameState === "gameover" && (
+        <GameOver
+          score={score}
+          currentLevel={currentLevel}
+          onPlayAgain={startGame}
+          transaction={transaction}
+          resultType={isWin ? "win" : "gameover"}
+        />
+      )}
+    </>
+  );
 }

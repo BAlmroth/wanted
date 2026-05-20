@@ -1,5 +1,5 @@
 import { calculatePayout } from "./gameUtils";
-import type { CentralbankUser, Transaction } from "../types/CentralBank";
+import type { CentralbankUser, Transaction, ApiError } from "../types/CentralBank";
 
 const BASE_URL = import.meta.env.VITE_CENTRALBANK_URL;
 const API_KEY = import.meta.env.VITE_CENTRALBANK_API_KEY;
@@ -10,8 +10,10 @@ const headers = {
 
 export async function getIdentity(token: string): Promise<CentralbankUser> {
   const res = await fetch(`${BASE_URL}/identity-tokens/${token}`, { headers });
-  if (res.status === 401) throw { type: "TOKEN_EXPIRED" };
-  if (!res.ok) throw { type: "NETWORK_ERROR", message: "Could not verify identity" };
+  if (!res.ok) {
+    const error: ApiError = { message: "Could not verify identity", status: res.status };
+    throw error;
+  }
   const data = await res.json();
   return data.user;
 }
@@ -22,11 +24,9 @@ export async function createTransaction(identityToken: string): Promise<Transact
     headers,
     body: JSON.stringify({ identity_token: identityToken, amount: 2, api_key: API_KEY }),
   });
-  if (res.status === 401) throw { type: "TOKEN_EXPIRED" };
   if (!res.ok) {
-    const errorData = await res.json().catch(() => ({}));
-    console.error("Transaction failed:", res.status, errorData);
-    throw { type: "TRANSACTION_FAILED" };
+    const error: ApiError = { message: "Transaction failed", status: res.status };
+    throw error;
   }
   return res.json();
 }
@@ -41,10 +41,8 @@ export async function sendPayout(transactionId: string, levelsCleared: number): 
     headers,
     body: JSON.stringify({ amount, api_key: API_KEY }),
   });
-  if (res.status === 401) throw { type: "TOKEN_EXPIRED" };
   if (!res.ok) {
-    const errorData = await res.json().catch(() => ({}));
-    console.error("Payout failed:", res.status, errorData);
-    throw { type: "PAYOUT_FAILED" };
+    const error: ApiError = { message: "Payout failed", status: res.status };
+    throw error;
   }
 }

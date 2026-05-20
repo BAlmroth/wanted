@@ -1,11 +1,11 @@
-import Rune from "../assets/Rune.png";
-import RedRune from "../assets/RedRune.png";
-import ReallyRedRune from "../assets/ReallyRedRune.png";
-import WhiteRune from "../assets/WhiteRune.png";
-import BlackRune from "../assets/BlackRune.png";
-
 const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL;
 const SUPABASE_ANON_KEY = import.meta.env.VITE_SUPABASE_ANON_KEY;
+
+import HappyRune from "../assets/HappyRune.png";
+import DeadRune from "../assets/DeadRune.png";
+import LoveRune from "../assets/LoveRune.png";
+import MadRune from "../assets/MadRune.png";
+import SadRune from "../assets/SadRune.png";
 
 export type GridCharacter = {
   id: number;
@@ -55,23 +55,16 @@ export async function validateClick(
   return res.json();
 }
 
-// figure help
+const FIGURE_IMAGES: Record<string, string> = {
+  happyrune: HappyRune,
+  deadrune: DeadRune,
+  loverune: LoveRune,
+  madrune: MadRune,
+  sadrune: SadRune,
+};
+
 export function resolveFigure(figure: string): string {
-  const key = figure.toLowerCase();
-  switch (key) {
-    case "rune":
-      return Rune;
-    case "redrune":
-      return RedRune;
-    case "reallyredrune":
-      return ReallyRedRune;
-    case "whiterune":
-      return WhiteRune;
-    case "blackrune":
-      return BlackRune;
-    default:
-      return figure;
-  }
+  return FIGURE_IMAGES[figure.trim().toLowerCase()] ?? figure;
 }
 
 export function isImage(figure: string): boolean {
@@ -83,13 +76,13 @@ export function isImage(figure: string): boolean {
   );
 }
 
-// prize for player 
+// prize for player
 export function calculatePayout(levelsCleared: number): number {
   if (levelsCleared > 15) return 3.0;
   if (levelsCleared > 13) return 2.0;
   if (levelsCleared > 10) return 1.8;
-  if (levelsCleared > 7)  return 1.5;
-  if (levelsCleared > 4)  return 1.0;
-  if (levelsCleared > 1)  return 0.5;
+  if (levelsCleared > 7) return 1.5;
+  if (levelsCleared > 4) return 1.0;
+  if (levelsCleared > 1) return 0.5;
   return 0;
 }

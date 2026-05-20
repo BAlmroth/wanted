@@ -9,9 +9,9 @@ const headers = {
   Authorization: `Bearer ${SUPABASE_ANON_KEY}`,
 };
 
-export async function getTopFive(): Promise<LeaderboardEntry[]> {
+export async function getTopFive(limit: number = 5): Promise<LeaderboardEntry[]> {
   const res = await fetch(
-    `${SUPABASE_URL}/rest/v1/leaderboard?select=id,name,score&order=score.desc&limit=5`,
+    `${SUPABASE_URL}/rest/v1/leaderboard?select=id,name,score&order=score.desc&limit=${limit}`,
     { headers }
   );
   const data = await res.json();

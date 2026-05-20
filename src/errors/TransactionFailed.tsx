@@ -1,18 +1,19 @@
 import styles from "./error.module.css";
 
-export default function TokenExpired() {
+export default function TransactionFailed({
+  onRetry,
+}: {
+  onRetry: () => void;
+}) {
   const tivoliUrl = import.meta.env.VITE_TIVOLI_URL ?? "/";
-
   return (
     <div className={styles.errorWrapper}>
-      <h1>Session expired</h1>
-      <h2>
-        Your token has already been used or has expired (they last 5 minutes).
-      </h2>
+      <h1>Payment failed</h1>
+      <h2>Something went wrong when processing your payment.</h2>
       <div style={{ display: "flex", gap: "1rem", alignItems: "center" }}>
-        <a href="/">← Back to Tivoli</a>
+        <button onClick={onRetry}>Try again</button>
         <button onClick={() => (window.location.href = tivoliUrl)}>
-          Back to Tivoli (external)
+          Back to Tivoli
         </button>
       </div>
     </div>

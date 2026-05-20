@@ -1,7 +1,15 @@
 import { useState, useEffect } from "react";
-import { getIdentity, createTransaction, sendPayout } from "../utils/centralbank";
-import type { CentralbankUser, Transaction, CentralbankError } from "../types/CentralBank";
-
+import {
+  getIdentity,
+  createTransaction,
+  sendPayout,
+} from "../utils/centralbank";
+import type {
+  CentralbankUser,
+  Transaction,
+  CentralbankError,
+  ApiError,
+} from "../types/CentralBank";
 
 export function useCentralbank() {
   const [user, setUser] = useState<CentralbankUser | null>(null);
@@ -16,12 +24,11 @@ export function useCentralbank() {
 
     if (token) {
       setIdentityToken(token);
-      // getIdentity is optional - try to fetch it but don't block if it fails
       getIdentity(token)
         .then(setUser)
-        .catch(() => {
-          // Silently ignore getIdentity failures - it's optional
-          console.debug("getIdentity failed (optional endpoint)");
+        .catch((e: ApiError) => {
+          // getIdentity is optional per the API spec, so just log it
+          console.debug("getIdentity failed (optional):", e.message);
         });
     }
   }, []);
@@ -29,13 +36,20 @@ export function useCentralbank() {
   async function startGame() {
     try {
       if (!identityToken) {
-        throw { type: "NETWORK_ERROR", message: "No identity token provided" };
+        const error: CentralbankError = { type: "TOKEN_EXPIRED" };
+        setError(error);
+        throw error;
       }
       const txn = await createTransaction(identityToken);
       setTransaction(txn);
       return txn.stamp;
     } catch (e) {
-      setError(e as CentralbankError);
+      const err = e as ApiError;
+      if (err.status === 401) {
+        setError({ type: "TOKEN_EXPIRED" });
+      } else {
+        setError({ type: "TRANSACTION_FAILED" });
+      }
       throw e;
     }
   }
@@ -46,9 +60,18 @@ export function useCentralbank() {
         await sendPayout(transaction.id, levelsCleared);
       }
     } catch (e) {
-      setError(e as CentralbankError);
+      const err = e as ApiError;
+      if (err.status === 401) {
+        setError({ type: "TOKEN_EXPIRED" });
+      } else {
+        setError({ type: "PAYOUT_FAILED" });
+      }
     }
   }
 
-  return { user, startGame, endGame, transaction, error };
+  function clearError() {
+    setError(null);
+  }
+
+  return { user, startGame, endGame, transaction, error, clearError };
 }
