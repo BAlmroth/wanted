@@ -24,6 +24,7 @@ export default function Game() {
     transaction,
     error,
     resetToIdle,
+    isWin,
   } = useGameLogic();
 
   if (error?.type === "TOKEN_EXPIRED") return <TokenExpired />;
@@ -62,6 +63,7 @@ export default function Game() {
           currentLevel={currentLevel}
           onPlayAgain={startGame}
           transaction={transaction}
+          resultType={isWin ? "win" : "gameover"}
         />
       )}
     </>
