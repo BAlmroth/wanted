@@ -262,15 +262,23 @@
 .playBtn {
   background-color: #7ed267;
   padding: 0 2rem;
+  min-width: 44px;
+  min-height: 44px;
 }
 
 .rewardBtn {
   background-color: var(--yrgoRed);
   color: #ffee00;
+  /* min-width: 170px; */
+  min-width: 44px;
+  min-height: 44px;
 }
 
 .tivoliBtn {
   background-color: #7fb0c7;
+  /* min-width: 170px; */
+  min-width: 44px;
+  min-height: 44px;
 }
 
 .infoButtons {

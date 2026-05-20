@@ -38,7 +38,7 @@ const Timer = forwardRef<TimerHandle, TimerProps>(({ initialTime, onTimeUp }, re
     }
   }, [timeLeft, onTimeUp]);
 
-return <p className={styles.timer}>Time: {timeLeft}</p>;
+return <p className={styles.timer} aria-live="polite" aria-label={`Time remaining: ${timeLeft} seconds`}>Time: {timeLeft}</p>;
 });
 
 export default Timer;

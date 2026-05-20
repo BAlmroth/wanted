@@ -44,7 +44,11 @@ export function Idle({ onStartGame, userName }: IdleProps): ReactNode {
             <Instructions />
             <Leaderboard />
           </section>
-          <Navigation onStartGame={openInfoForPlay} onInfoClick={openInfo} />
+          <Navigation
+            onStartGame={openInfoForPlay}
+            onInfoClick={openInfo}
+            tivoliUrl={import.meta.env.VITE_TIVOLI_URL}
+          />
         </div>
       </div>
 
