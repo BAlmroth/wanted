@@ -32,17 +32,20 @@ export function Idle({ onStartGame, userName }: IdleProps): ReactNode {
   return (
     <>
       <div className={styles.idleContainer}>
-        <h1>WANTED</h1>
-        <h2>
-          AT <span className={styles.yrgo}>YRGO</span>!
-        </h2>
+        <div className={styles.titleWrap}>
+          <h1>WANTED</h1>
+          <h2>
+            AT <span className={styles.yrgo}>YRGO</span>!
+          </h2>
+        </div>
 
-        <section className={styles.infoBoxes}>
-          <Instructions />
-          <Leaderboard />
-        </section>
-
-        <Navigation onStartGame={openInfoForPlay} onInfoClick={openInfo} />
+        <div className={styles.pageContent}>
+          <section className={styles.infoBoxes}>
+            <Instructions />
+            <Leaderboard />
+          </section>
+          <Navigation onStartGame={openInfoForPlay} onInfoClick={openInfo} />
+        </div>
       </div>
 
       <Info
