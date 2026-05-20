@@ -12,11 +12,94 @@
 }
 
 .titleGameOver {
+  display: flex;
   color: var(--yrgoRed);
+  white-space: nowrap;
+  transform: translateY(30vh);
+  animation: titleMoveToTop 0.7s cubic-bezier(0.76, 0, 0.24, 1) forwards 1s;
 }
 
 .titleWinner {
+  display: flex;
   color: #2ecc71;
+  white-space: nowrap;
+  transform: translateY(30vh);
+  animation: titleMoveToTop 0.7s cubic-bezier(0.76, 0, 0.24, 1) forwards 1s;
+}
+
+@keyframes titleMoveToTop {
+  from { transform: translateY(30vh); }
+  to   { transform: translateY(0); }
+}
+
+.titleGameOver span {
+  display: inline-block;
+  opacity: 0;
+  animation: letterDrop 0.5s cubic-bezier(0.36, 0.07, 0.19, 0.97) forwards;
+}
+
+.titleGameOver span:nth-child(1)  { animation-delay: 0.30s; }
+.titleGameOver span:nth-child(2)  { animation-delay: 0.37s; }
+.titleGameOver span:nth-child(3)  { animation-delay: 0.44s; }
+.titleGameOver span:nth-child(4)  { animation-delay: 0.51s; }
+.titleGameOver span:nth-child(5)  { animation-delay: 0.58s; }
+.titleGameOver span:nth-child(6)  { animation-delay: 0.65s; }
+.titleGameOver span:nth-child(7)  { animation-delay: 0.72s; }
+.titleGameOver span:nth-child(8)  { animation-delay: 0.79s; }
+.titleGameOver span:nth-child(9)  { animation-delay: 0.86s; }
+
+@keyframes letterDrop {
+  0%   { opacity: 0; transform: translateY(-60px) rotate(-15deg); }
+  60%  { opacity: 1; transform: translateY(6px) rotate(3deg); }
+  80%  { transform: translateY(-3px) rotate(-1deg); }
+  100% { opacity: 1; transform: translateY(0) rotate(0deg); }
+}
+
+.titleWinner span {
+  display: inline-block;
+  opacity: 0;
+}
+
+.titleWinner span:nth-child(1) { animation: winnerSpin 1s cubic-bezier(0.22, 1, 0.36, 1) forwards 0.00s, winnerFloat 2s ease-in-out infinite 1.80s; }
+.titleWinner span:nth-child(2) { animation: winnerSpin 1s cubic-bezier(0.22, 1, 0.36, 1) forwards 0.06s, winnerFloat 2s ease-in-out infinite 1.9s; }
+.titleWinner span:nth-child(3) { animation: winnerSpin 1s cubic-bezier(0.22, 1, 0.36, 1) forwards 0.12s, winnerFloat 2s ease-in-out infinite 2s; }
+.titleWinner span:nth-child(4) { animation: winnerSpin 1s cubic-bezier(0.22, 1, 0.36, 1) forwards 0.18s, winnerFloat 2s ease-in-out infinite 2.1s; }
+.titleWinner span:nth-child(5) { animation: winnerSpin 1s cubic-bezier(0.22, 1, 0.36, 1) forwards 0.24s, winnerFloat 2s ease-in-out infinite 2.2s; }
+.titleWinner span:nth-child(6) { animation: winnerSpin 1s cubic-bezier(0.22, 1, 0.36, 1) forwards 0.30s, winnerFloat 2s ease-in-out infinite 2.3s; }
+
+@keyframes winnerSpin {
+  0%   { opacity: 0; transform: rotate(-540deg) scale(0); }
+  70%  { opacity: 1; transform: rotate(20deg) scale(1.1); }
+  85%  { transform: rotate(-8deg) scale(0.97); }
+  100% { opacity: 1; transform: rotate(0deg) scale(1); }
+}
+
+@keyframes winnerFloat {
+  0%, 100% { transform: translateY(0px); }
+  50%       { transform: translateY(-6px); }
+}
+
+.pageContent {
+  opacity: 0;
+  animation: fadeUp 0.4s ease forwards 1.5s;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.pageContentGameover {
+  opacity: 0;
+  animation: fadeUp 0.4s ease forwards 1.5s;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: translateY(0); }
 }
 
 .statsBox {
@@ -71,7 +154,6 @@
   align-items: center;
 }
 
-
 .rewardContent {
   background-color: #ffeeaa;
   border-radius: 8px;
@@ -80,7 +162,6 @@
   display: flex;
   align-items: center;
   justify-content: center;
-
   width: 100%;
 }
 
@@ -110,7 +191,6 @@
   border-radius: 12px;
   padding: 1.5rem;
   max-width: 520px;
-
   box-shadow: inset 0 0 6px 4px rgba(0, 0, 0, 0.25);
 }
 
@@ -166,7 +246,6 @@
   margin-bottom: 1rem;
 }
 
-
 .infoBoxes {
   max-width: 80%;
 }
@@ -188,12 +267,10 @@
 .rewardBtn {
   background-color: var(--yrgoRed);
   color: #ffee00;
-  /* min-width: 170px; */
 }
 
 .tivoliBtn {
   background-color: #7fb0c7;
-  /* min-width: 170px; */
 }
 
 .infoButtons {
