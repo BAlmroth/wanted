@@ -23,15 +23,15 @@ export function Navigation({
   return (
     <section className={styles.infoButtons}>
       {showPlayButton && (
-        <button className={styles.playBtn} onClick={onStartGame}>
+        <button className={styles.playBtn} onClick={onStartGame} aria-label="Start playing the game">
           PLAY
         </button>
       )}
       <div>
-        <button className={styles.tivoliBtn} onClick={handleTivoliClick}>
+        <button className={styles.tivoliBtn} onClick={handleTivoliClick} aria-label="Go to Tivoli website">
           TO TIVOLI
         </button>
-        <button className={styles.rewardBtn} onClick={onInfoClick}>
+        <button className={styles.rewardBtn} onClick={onInfoClick} aria-label="View game information">
           Game Info
         </button>
       </div>
