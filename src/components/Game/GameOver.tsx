@@ -34,12 +34,14 @@ export function GameOver({
   );
 
   const resultText = resultType === "win" ? "WINNER" : "GAME OVER";
+  const subtitleText = resultType === "win" ? "Congratulations! You cleared all levels" : "Thanks for playing.. Try again for a chance to win the jackpot";
   const containerClassName = resultType === "win" ? styles.winContainer : styles.overContainer;
   const titleClassName = resultType === "win" ? styles.titleWinner : styles.titleGameOver;
 
   return (
     <div className={containerClassName}>
       <h1 className={titleClassName}>{resultText}</h1>
+      <h2>{subtitleText}</h2>
 
       <section className={styles.infoBoxes}>
         <div className={styles.box}>
