@@ -10,6 +10,7 @@ import {
 import { saveScore } from "../../utils/leaderboard";
 import { useCentralbank } from "../../hooks/useCentralbank";
 import { TIVOLI_MODE } from "../../config";
+import type { ApiError } from "../../types/CentralBank";
 
 export function useGameLogic() {
   const [gameState, setGameState] = useState<"idle" | "playing" | "gameover">(
@@ -47,19 +48,26 @@ export function useGameLogic() {
 
   const currentLevel = LEVELS[levelIndex];
 
-  async function loadLevel(index: number) {
+  async function loadLevel(index: number): Promise<void> {
     setLoading(true);
     setMessage("");
-    const data = await generateLevel(LEVELS[index].gridCount);
-    setSessionId(data.sessionId);
-    setTargetFigure(resolveFigure(data.targetFigure));
-    setCharacters(
-      data.grid.map((character) => ({
-        ...character,
-        figure: resolveFigure(character.figure),
-      })),
-    );
-    setLoading(false);
+    try {
+      const data = await generateLevel(LEVELS[index].gridCount);
+      setSessionId(data.sessionId);
+      setTargetFigure(resolveFigure(data.targetFigure));
+      setCharacters(
+        data.grid.map((character) => ({
+          ...character,
+          figure: resolveFigure(character.figure),
+        })),
+      );
+    } catch (err) {
+      const apiError = err as ApiError;
+      console.error("Failed to load level:", apiError.message);
+      setMessage("Failed to load level. Please try again.");
+    } finally {
+      setLoading(false);
+    }
   }
 
   async function startGame() {
@@ -112,19 +120,20 @@ export function useGameLogic() {
 
       const nextIndex = levelIndex + 1;
       if (nextIndex >= LEVELS.length) {
-        // Game completed - save score and end game
         gameEndedRef.current = true;
         setScore(newScore);
         setIsWin(true);
-        await endGame(currentLevel.level);
-        if (user?.name) {
-          try {
+        try {
+          await endGame(currentLevel.level);
+          if (user?.name) {
             await saveScore(user.name, newScore);
-          } catch (err) {
-            console.error("Failed to save score:", err);
           }
+        } catch (err) {
+          const apiError = err as ApiError;
+          console.error("Failed to end game:", apiError.message);
+        } finally {
+          setGameState("gameover");
         }
-        setGameState("gameover");
       } else {
         setScore(newScore);
         setLevelIndex(nextIndex);
@@ -136,22 +145,21 @@ export function useGameLogic() {
     }
   }
 
-  async function handleTimeUp() {
-    // Time's up - end game with current level and save score
-    if (gameEndedRef.current) {
-      return;
-    }
+  async function handleTimeUp(): Promise<void> {
+    if (gameEndedRef.current) return;
     gameEndedRef.current = true;
 
-    await endGame(currentLevel.level);
-    if (user?.name && score > 0) {
-      try {
+    try {
+      await endGame(currentLevel.level);
+      if (user?.name && score > 0) {
         await saveScore(user.name, score);
-      } catch (err) {
-        console.error("Failed to save score:", err);
       }
+    } catch (err) {
+      const apiError = err as ApiError;
+      console.error("Error ending game:", apiError.message);
+    } finally {
+      setGameState("gameover");
     }
-    setGameState("gameover");
   }
 
   return {
