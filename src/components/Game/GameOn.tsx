@@ -17,7 +17,6 @@ export function GameOn({
   message,
   score,
   loading,
-  timerKey,
   timerRef,
   onCharacterClick,
   onTimeUp,
@@ -25,6 +24,15 @@ export function GameOn({
   const playfieldRef = useRef<HTMLDivElement>(null);
   const roRef = useRef<ResizeObserver | null>(null);
   const [rowCount, setRowCount] = useState(5);
+  const [isAnimating, setIsAnimating] = useState(true);
+
+  useEffect(() => {
+    // Pause timer for 2.8 seconds while animation plays
+    const timer = setTimeout(() => {
+      setIsAnimating(false);
+    }, 2800);
+    return () => clearTimeout(timer);
+  }, []);
 
   useEffect(() => {
     const node = playfieldRef.current;
@@ -50,6 +58,10 @@ export function GameOn({
   return (
 
     <div className={styles.wrapper}>
+      <div className={styles.timerRow}>
+        <Timer ref={timerRef} initialTime={10} onTimeUp={onTimeUp} isPaused={isAnimating} />
+      </div>
+
     <div className={styles.header}>
         <h1 className={styles.title}>Wanted</h1>
 
@@ -59,7 +71,7 @@ export function GameOn({
             <span className={styles.statValue}>{score}</span>
           </div>
 
-          <div className={styles.targetBox}>
+          <div className={styles.targetBox} key={`target-${currentLevel.level}`}>
             {isImage(targetFigure) ? (
               <img src={targetFigure} alt="target" className={styles.targetImg} />
             ) : (
@@ -73,17 +85,13 @@ export function GameOn({
           </div>
         </div>
 
-        <div className={styles.timerRow}>
-          <Timer key={timerKey} ref={timerRef} initialTime={10} onTimeUp={onTimeUp} />
-        </div>
-
         <div className={styles.messageBox}>
           {message && <p className={styles.message}>{message}</p>}
         </div>
       </div>
 
-        <div className={styles.infoSection}>
-          <div className={styles.sideInfo}>
+           <div className={styles.infoSection}>
+            <div className={styles.sideInfo}>
         <Instructions />
           </div>
 

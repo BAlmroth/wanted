@@ -15,6 +15,7 @@ export type GameState = {
 export type TimerProps = {
   initialTime: number;
   onTimeUp: () => void;
+  isPaused?: boolean;
 };
 
 export interface GameOnProps {
@@ -24,7 +25,6 @@ export interface GameOnProps {
   message: string;
   score: number;
   loading: boolean;
-  timerKey: number;
   timerRef: React.RefObject<TimerHandle | null>;
   onCharacterClick: (character: GridCharacter) => void;
   onTimeUp: () => void;
