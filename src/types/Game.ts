@@ -15,6 +15,7 @@ export type GameState = {
 export type TimerProps = {
   initialTime: number;
   onTimeUp: () => void;
+  isPaused?: boolean;
 };
 
 export interface GameOnProps {

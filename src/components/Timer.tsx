@@ -6,7 +6,7 @@ export type TimerHandle = {
   addTime: (seconds: number) => void;
 };
 
-const Timer = forwardRef<TimerHandle, TimerProps>(({ initialTime, onTimeUp }, ref) => {
+const Timer = forwardRef<TimerHandle, TimerProps>(({ initialTime, onTimeUp, isPaused }, ref) => {
   const [timeLeft, setTimeLeft] = useState(initialTime);
 
   useImperativeHandle(ref, () => ({
@@ -25,12 +25,16 @@ const Timer = forwardRef<TimerHandle, TimerProps>(({ initialTime, onTimeUp }, re
       return;
     }
 
+    if (isPaused) {
+      return;
+    }
+
     const interval = setInterval(() => {
       setTimeLeft((prev) => prev - 1);
     }, 1000);
 
     return () => clearInterval(interval);
-  }, [timeLeft, onTimeUp]);
+  }, [timeLeft, onTimeUp, isPaused]);
 
   useEffect(() => {
     if (timeLeft === 0) {

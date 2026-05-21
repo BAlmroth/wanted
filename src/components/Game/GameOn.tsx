@@ -24,6 +24,18 @@ export function GameOn({
   const playfieldRef = useRef<HTMLDivElement>(null);
   const roRef = useRef<ResizeObserver | null>(null);
   const [rowCount, setRowCount] = useState(5);
+  const [isAnimating, setIsAnimating] = useState(true);
+
+  useEffect(() => {
+    // Reset animating state when level changes
+    setIsAnimating(true);
+    
+    // Timer paused for 2.8 seconds while animation plays
+    const timer = setTimeout(() => {
+      setIsAnimating(false);
+    }, 2800);
+    return () => clearTimeout(timer);
+  }, [currentLevel.level]);
 
   useEffect(() => {
     const node = playfieldRef.current;
@@ -78,7 +90,9 @@ export function GameOn({
       </div>
 
         <div className={styles.timerRowAnimated}>
-          <Timer ref={timerRef} initialTime={10} onTimeUp={onTimeUp} />
+          <div className={styles.timerPauseWrapper}>
+            <Timer ref={timerRef} initialTime={10} onTimeUp={onTimeUp} isPaused={isAnimating} />
+          </div>
         </div>
 
            <div className={styles.infoSection} key={`info-${currentLevel.level}`}>
