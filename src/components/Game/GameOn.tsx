@@ -50,7 +50,7 @@ export function GameOn({
   return (
 
     <div className={styles.wrapper}>
-    <div className={styles.header}>
+    <div className={styles.header} key={`header-${currentLevel.level}`}>
         <h1 className={styles.title}>Wanted</h1>
 
         <div className={styles.infoRow}>
@@ -82,8 +82,8 @@ export function GameOn({
         </div>
       </div>
 
-        <div className={styles.infoSection}>
-          <div className={styles.sideInfo}>
+           <div className={styles.infoSection} key={`info-${currentLevel.level}`}>
+            <div className={styles.sideInfo}>
         <Instructions />
           </div>
 
