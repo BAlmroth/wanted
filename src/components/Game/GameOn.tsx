@@ -27,15 +27,12 @@ export function GameOn({
   const [isAnimating, setIsAnimating] = useState(true);
 
   useEffect(() => {
-    // Reset animating state when level changes
-    setIsAnimating(true);
-    
-    // Timer paused for 2.8 seconds while animation plays
+    // Pause timer for 2.8 seconds while animation plays
     const timer = setTimeout(() => {
       setIsAnimating(false);
     }, 2800);
     return () => clearTimeout(timer);
-  }, [currentLevel.level]);
+  }, []);
 
   useEffect(() => {
     const node = playfieldRef.current;
@@ -65,7 +62,7 @@ export function GameOn({
         <Timer ref={timerRef} initialTime={10} onTimeUp={onTimeUp} isPaused={isAnimating} />
       </div>
 
-    <div className={styles.header} key={`header-${currentLevel.level}`}>
+    <div className={styles.header}>
         <h1 className={styles.title}>Wanted</h1>
 
         <div className={styles.infoRow}>
@@ -74,7 +71,7 @@ export function GameOn({
             <span className={styles.statValue}>{score}</span>
           </div>
 
-          <div className={styles.targetBox}>
+          <div className={styles.targetBox} key={`target-${currentLevel.level}`}>
             {isImage(targetFigure) ? (
               <img src={targetFigure} alt="target" className={styles.targetImg} />
             ) : (
@@ -93,7 +90,7 @@ export function GameOn({
         </div>
       </div>
 
-           <div className={styles.infoSection} key={`info-${currentLevel.level}`}>
+           <div className={styles.infoSection}>
             <div className={styles.sideInfo}>
         <Instructions />
           </div>
