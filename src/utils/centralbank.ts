@@ -15,9 +15,7 @@ const headers = {
 };
 
 export async function getIdentity(token: string): Promise<CentralbankUser> {
-  if (!TIVOLI_MODE) {
-    return mockCentralbank.getIdentity(token);
-  }
+  if (!TIVOLI_MODE) return mockCentralbank.getIdentity(token);
   const res = await fetch(`${BASE_URL}/identity-tokens/${token}`, { headers });
   if (!res.ok) {
     const error: ApiError = {
@@ -33,9 +31,7 @@ export async function getIdentity(token: string): Promise<CentralbankUser> {
 export async function createTransaction(
   identityToken: string,
 ): Promise<Transaction> {
-  if (!TIVOLI_MODE) {
-    return mockCentralbank.createTransaction(identityToken);
-  }
+  if (!TIVOLI_MODE) return mockCentralbank.createTransaction(identityToken);
   const res = await fetch(`${BASE_URL}/transactions`, {
     method: "POST",
     headers,
@@ -52,7 +48,7 @@ export async function createTransaction(
     };
     throw error;
   }
-  return res.json();
+  return res.json() as Promise<Transaction>;
 }
 
 export async function sendPayout(
@@ -61,11 +57,11 @@ export async function sendPayout(
 ): Promise<void> {
   const amount = calculatePayout(levelsCleared);
   if (amount === 0) {
+    // No payout for level 0-1
     return;
   }
-  if (!TIVOLI_MODE) {
+  if (!TIVOLI_MODE)
     return mockCentralbank.sendPayout(transactionId, levelsCleared);
-  }
   const res = await fetch(`${BASE_URL}/transactions/${transactionId}/payout`, {
     method: "POST",
     headers,
