@@ -10,6 +10,7 @@ import type {
   Transaction,
   CentralbankError,
   ApiError,
+  Stamp,
 } from "../types/CentralBank";
 
 export function useCentralbank() {
@@ -41,16 +42,13 @@ export function useCentralbank() {
     }
   }, []);
 
-  async function startGame() {
+  async function startGame(): Promise<Stamp> {
     try {
       if (!TIVOLI_MODE) {
-        // Standalone mode - create transaction without token
         const txn = await createTransaction("");
         setTransaction(txn);
         return txn.stamp;
       }
-
-      // Tivoli mode - require token
       if (!identityToken) {
         const error: CentralbankError = { type: "TOKEN_EXPIRED" };
         setError(error);
@@ -70,7 +68,7 @@ export function useCentralbank() {
     }
   }
 
-  async function endGame(levelsCleared: number) {
+  async function endGame(levelsCleared: number): Promise<void> {
     try {
       if (transaction?.id) {
         await sendPayout(transaction.id, levelsCleared);

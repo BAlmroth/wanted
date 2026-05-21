@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { getTopFive } from "../utils/leaderboard";
 import type { LeaderboardEntry } from "../types/Leaderboard";
 import styles from "./InfoBoxes.module.css";
+import type { ApiError } from "../types/CentralBank";
 
 export function Leaderboard() {
   const [entries, setEntries] = useState<LeaderboardEntry[]>([]);
@@ -9,17 +10,26 @@ export function Leaderboard() {
   useEffect(() => {
     let timeoutId: ReturnType<typeof setTimeout>;
 
-    const handleResize = () => {
+    const fetchEntries = (limit: number): void => {
+      getTopFive(limit)
+        .then(setEntries)
+        .catch((err: ApiError) => {
+          console.warn("Leaderboard unavailable:", err.message);
+        });
+    };
+
+    const handleResize = (): void => {
       clearTimeout(timeoutId);
       timeoutId = setTimeout(() => {
         const limit = window.innerWidth >= 768 ? 10 : 5;
-        getTopFive(limit).then(setEntries);
+        fetchEntries(limit);
       }, 250);
     };
 
     const limit = window.innerWidth >= 768 ? 10 : 5;
-    getTopFive(limit).then(setEntries); // Initial fetch
+    fetchEntries(limit);
     window.addEventListener("resize", handleResize);
+
     return () => {
       clearTimeout(timeoutId);
       window.removeEventListener("resize", handleResize);
