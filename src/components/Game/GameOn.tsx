@@ -17,7 +17,6 @@ export function GameOn({
   message,
   score,
   loading,
-  timerKey,
   timerRef,
   onCharacterClick,
   onTimeUp,
@@ -73,14 +72,14 @@ export function GameOn({
           </div>
         </div>
 
-        <div className={styles.timerRow}>
-          <Timer key={timerKey} ref={timerRef} initialTime={10} onTimeUp={onTimeUp} />
-        </div>
-
         <div className={styles.messageBox}>
           {message && <p className={styles.message}>{message}</p>}
         </div>
       </div>
+
+        <div className={styles.timerRowAnimated}>
+          <Timer ref={timerRef} initialTime={10} onTimeUp={onTimeUp} />
+        </div>
 
            <div className={styles.infoSection} key={`info-${currentLevel.level}`}>
             <div className={styles.sideInfo}>

@@ -16,7 +16,7 @@
   max-width: 425px;
   box-sizing: border-box;
   opacity: 0;
-  animation: headerPopIn 1.4s cubic-bezier(0.76, 0, 0.24, 1) forwards 0.2s;
+  animation: headerPopIn 2.5s cubic-bezier(0.76, 0, 0.24, 1) forwards 0.2s;
   transform-origin: center center;
 }
 
@@ -82,6 +82,13 @@
   margin: 6px 0 0;
 }
 
+.timerRowAnimated {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 6px 0 0;
+}
+
 .messageBox {
   min-height: 1.5rem;
   margin: 2px 0;
@@ -107,7 +114,7 @@
   position: relative;
   max-height: 550px;
   opacity: 0;
-  animation: fadeUp 0.5s ease forwards 1.8s;
+  animation: fadeUp 0.5s ease forwards 2.8s;
 }
 
 @media (min-width: 401px) {
@@ -160,7 +167,7 @@
   gap: 2rem;
   padding: 1rem;
   opacity: 0;
-  animation: fadeUp 0.5s ease forwards 1.8s;
+  animation: fadeUp 0.5s ease forwards 2.8s;
 }
 
 .sideInfo {
@@ -171,8 +178,9 @@
 
 @keyframes headerPopIn {
   0%   { opacity: 0;  transform: translateY(40vh) scale(0.5); }
-  40%  { opacity: 1;  transform: translateY(40vh) scale(2.1); }
-  70%  { opacity: 1;  transform: translateY(40vh) scale(2.0); }
+  35%  { opacity: 1;  transform: translateY(40vh) scale(2.1); }
+  50%  { opacity: 1;  transform: translateY(40vh) scale(2.1); }
+  65%  { opacity: 1;  transform: translateY(40vh) scale(2.0); }
   100% { opacity: 1;  transform: translateY(0)    scale(1);   }
 }
 
