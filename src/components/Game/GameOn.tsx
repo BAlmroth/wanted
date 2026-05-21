@@ -61,6 +61,10 @@ export function GameOn({
   return (
 
     <div className={styles.wrapper}>
+      <div className={styles.timerRow}>
+        <Timer ref={timerRef} initialTime={10} onTimeUp={onTimeUp} isPaused={isAnimating} />
+      </div>
+
     <div className={styles.header} key={`header-${currentLevel.level}`}>
         <h1 className={styles.title}>Wanted</h1>
 
@@ -88,12 +92,6 @@ export function GameOn({
           {message && <p className={styles.message}>{message}</p>}
         </div>
       </div>
-
-        <div className={styles.timerRowAnimated}>
-          <div className={styles.timerPauseWrapper}>
-            <Timer ref={timerRef} initialTime={10} onTimeUp={onTimeUp} isPaused={isAnimating} />
-          </div>
-        </div>
 
            <div className={styles.infoSection} key={`info-${currentLevel.level}`}>
             <div className={styles.sideInfo}>
