@@ -13,7 +13,7 @@ export function Idle({ onStartGame, userName }: IdleProps): ReactNode {
   const [showStartButton, setShowStartButton] = useState(false);
 
   const openInfoForPlay = () => {
-    setShowCautionOnly(!userName);
+    setShowCautionOnly(!!userName);
     setShowStartButton(true);
     setIsOpen(true);
   };
