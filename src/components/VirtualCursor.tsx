@@ -1,3 +1,4 @@
+import { createPortal } from "react-dom";
 import { useEffect, useRef, useState, type ReactNode } from "react";
 import styles from "./VirtualCursor.module.css";
 
@@ -32,7 +33,7 @@ export function VirtualCursor(): ReactNode {
           setCursorVisible(true);
           cursorRef.current.y = Math.min(
             window.innerHeight - 10,
-            cursorRef.current.y + CURSOR_SPEED
+            cursorRef.current.y + CURSOR_SPEED,
           );
           moved = true;
           break;
@@ -47,7 +48,7 @@ export function VirtualCursor(): ReactNode {
           setCursorVisible(true);
           cursorRef.current.x = Math.min(
             window.innerWidth - 10,
-            cursorRef.current.x + CURSOR_SPEED
+            cursorRef.current.x + CURSOR_SPEED,
           );
           moved = true;
           break;
@@ -55,21 +56,23 @@ export function VirtualCursor(): ReactNode {
         case " ":
           e.preventDefault();
           // Temporarily hide cursor to find element underneath
-          const cursorElement = document.querySelector(`.${styles.virtualCursor}`) as HTMLElement;
+          const cursorElement = document.querySelector(
+            `.${styles.virtualCursor}`,
+          ) as HTMLElement;
           if (cursorElement) {
-            cursorElement.style.display = 'none';
+            cursorElement.style.display = "none";
           }
-          
+
           const element = document.elementFromPoint(
             cursorRef.current.x,
-            cursorRef.current.y
+            cursorRef.current.y,
           ) as HTMLElement;
-          
+
           // Show cursor again
           if (cursorElement) {
-            cursorElement.style.display = 'block';
+            cursorElement.style.display = "block";
           }
-          
+
           // Click the button or its parent if it's an image inside a button
           let targetButton: HTMLButtonElement | null = null;
           if (element && element.tagName === "BUTTON") {
@@ -77,7 +80,7 @@ export function VirtualCursor(): ReactNode {
           } else if (element && element.closest("button")) {
             targetButton = element.closest("button") as HTMLButtonElement;
           }
-          
+
           if (targetButton) {
             targetButton.click();
           }
@@ -98,15 +101,16 @@ export function VirtualCursor(): ReactNode {
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, []);
 
-  return (
+  return createPortal(
     <div
       className={styles.virtualCursor}
       style={{
         left: `${cursorPos.x}px`,
         top: `${cursorPos.y}px`,
         opacity: cursorVisible ? 1 : 0,
-        transition: 'opacity 0.2s ease',
+        transition: "opacity 0.2s ease",
       }}
-    />
+    />,
+    document.body,
   );
 }
