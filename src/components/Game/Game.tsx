@@ -29,7 +29,7 @@ export default function Game() {
 
   if (error?.type === "TOKEN_EXPIRED") return <TokenExpired />;
   if (error?.type === "PAYOUT_FAILED")
-    return <PayoutFailed transactionId={transaction?.id} />;
+    return <PayoutFailed transactionId={transaction?.transaction_id?.toString()} />;
   if (error?.type === "TRANSACTION_FAILED")
     return <TransactionFailed onRetry={resetToIdle} />;
 

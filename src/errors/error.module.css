@@ -28,3 +28,16 @@
     background-color: #7ED267;
     
 }
+
+.buttonContainer {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+  margin-top: 1rem;
+}
+
+.subtitle {
+  color: white;
+  -webkit-text-stroke: 2px black;
+  paint-order: stroke fill;
+}

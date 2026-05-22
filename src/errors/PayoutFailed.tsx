@@ -16,7 +16,7 @@ export default function PayoutFailed({ transactionId }: PayoutFailedProps) {
           Transaction ID: <strong>{transactionId}</strong>
         </h2>
       )}
-      <div style={{ marginTop: 16 }}>
+      <div className={styles.buttonContainer}>
         <button onClick={() => (window.location.href = tivoliUrl)}>
           Back to Tivoli
         </button>

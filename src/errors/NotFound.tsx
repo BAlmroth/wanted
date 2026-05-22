@@ -8,7 +8,7 @@ export default function NotFound() {
     <div className={styles.errorWrapper}>
       <h1>404</h1>
       <h2>PAGE NOT FOUND</h2>
-      <div style={{ display: "flex", gap: "1rem", alignItems: "center" }}>
+      <div className={styles.buttonContainer}>
         <button onClick={() => navigate("/")}>Go back home</button>
         <button onClick={() => (window.location.href = tivoliUrl)}>
           Back to Tivoli
