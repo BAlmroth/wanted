@@ -16,7 +16,6 @@ export default function Game() {
     message,
     score,
     loading,
-    timerKey,
     timerRef,
     startGame,
     handleClick,
@@ -54,7 +53,6 @@ export default function Game() {
           message={message}
           score={score}
           loading={loading}
-          timerKey={timerKey}
           timerRef={timerRef}
           onCharacterClick={handleClick}
           onTimeUp={handleTimeUp}
