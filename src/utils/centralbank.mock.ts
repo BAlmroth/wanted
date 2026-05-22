@@ -2,46 +2,35 @@ import type { CentralbankUser, Transaction } from "../types/CentralBank";
 import { calculatePayout } from "./gameUtils";
 
 // Mock stamps database
-const MOCK_STAMPS = [
+const MOCK_STAMPS: Array<{
+  animal: string;
+  metal: string | null;
+  image_url: string;
+}> = [
   {
-    id: "mock-stamp-1",
-    animal: "eagle",
-    metal: "gold",
-    image_url: "",
-    created_at: new Date().toISOString(),
-    updated_at: new Date().toISOString(),
-  },
-  {
-    id: "mock-stamp-2",
     animal: "lion",
-    metal: "silver",
-    image_url: "",
-    created_at: new Date().toISOString(),
-    updated_at: new Date().toISOString(),
-  },
-  {
-    id: "mock-stamp-3",
-    animal: "bear",
-    metal: "bronze",
-    image_url: "",
-    created_at: new Date().toISOString(),
-    updated_at: new Date().toISOString(),
-  },
-  {
-    id: "mock-stamp-4",
-    animal: "wolf",
     metal: "gold",
     image_url: "",
-    created_at: new Date().toISOString(),
-    updated_at: new Date().toISOString(),
   },
   {
-    id: "mock-stamp-5",
-    animal: "raven",
+    animal: "dolphin",
     metal: "silver",
     image_url: "",
-    created_at: new Date().toISOString(),
-    updated_at: new Date().toISOString(),
+  },
+  {
+    animal: "toucan",
+    metal: "platinum",
+    image_url: "",
+  },
+  {
+    animal: "beetlebug",
+    metal: "gold",
+    image_url: "",
+  },
+  {
+    animal: "snake",
+    metal: null,
+    image_url: "",
   },
 ];
 
@@ -51,15 +40,16 @@ function getRandomMockStamp() {
 
 export async function getIdentity(_token: string): Promise<CentralbankUser> {
   console.log("[MOCK] getIdentity called - returning guest user");
-  return { id: "guest-123", name: "guest" };
+  return { id: 123, name: "guest" };
 }
 
 export async function createTransaction(
   _identityToken: string,
 ): Promise<Transaction> {
   const mockStamp = getRandomMockStamp();
-  const txn = {
-    id: `mock-txn-${Date.now()}-${Math.random().toString(36).substring(7)}`,
+  const txn: Transaction = {
+    transaction_id: Math.floor(Math.random() * 10000),
+    amount: 2.0,
     stamp: mockStamp,
   };
   console.log(

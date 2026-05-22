@@ -1,20 +1,23 @@
 export type CentralbankUser = {
-  id: string;
+  id: number;
   name: string;
 };
 
 export type Stamp = {
-  id: string;
   animal: string;
-  metal: string;
+  metal: string | null;
   image_url: string;
-  created_at: string;
-  updated_at: string;
 };
 
 export type Transaction = {
-  id: string;
-  stamp: Stamp;
+  transaction_id: number;
+  amount: number;
+  stamp: Stamp | null;
+};
+
+export type PayoutResponse = {
+  transaction_id: number;
+  amount: number;
 };
 
 export type CentralbankError =
