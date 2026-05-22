@@ -37,7 +37,6 @@ export async function createTransaction(
     headers,
     body: JSON.stringify({
       identity_token: identityToken,
-      amount: 2.0,
       api_key: API_KEY,
     }),
   });
@@ -48,7 +47,7 @@ export async function createTransaction(
     };
     throw error;
   }
-  const data = await res.json() as Transaction;
+  const data = (await res.json()) as Transaction;
   console.log("[API] createTransaction response:", data);
   return data;
 }
