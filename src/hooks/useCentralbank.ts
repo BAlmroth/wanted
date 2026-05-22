@@ -42,7 +42,7 @@ export function useCentralbank() {
     }
   }, []);
 
-  async function startGame(): Promise<Stamp> {
+  async function startGame(): Promise<Stamp | null> {
     try {
       if (!TIVOLI_MODE) {
         const txn = await createTransaction("");
