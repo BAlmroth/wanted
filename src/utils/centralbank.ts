@@ -48,7 +48,9 @@ export async function createTransaction(
     };
     throw error;
   }
-  return res.json() as Promise<Transaction>;
+  const data = await res.json() as Transaction;
+  console.log("[API] createTransaction response:", data);
+  return data;
 }
 
 export async function sendPayout(
