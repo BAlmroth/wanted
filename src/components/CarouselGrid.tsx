@@ -16,7 +16,35 @@ const CarouselGrid = memo(function CarouselGrid({
   gap = 20,
   shakiness = 0,
   sameDirection = false,
+  vertical = false,
 }: CarouselProps) {
+
+  if (vertical) {
+    const columns: Character[][] = Array.from({ length: cols }, () => []);
+    characters.forEach((char, i) => columns[i % cols].push(char));
+
+    return (
+      <div className={styles.carouselGridVertical}>
+        {columns.map((col, colIndex) => {
+          let direction: "up" | "down" = colIndex % 2 === 0 ? "up" : "down";
+          if (sameDirection) direction = direction === "up" ? "down" : "up";
+
+          return (
+            <CarouselColumn
+              key={colIndex}
+              items={col}
+              direction={direction}
+              onCharacterClick={onCharacterClick}
+              speed={speed}
+              gap={gap}
+              shakiness={shakiness}
+            />
+          );
+        })}
+      </div>
+    );
+  }
+
   const rows: Character[][] = [];
   for (let i = 0; i < characters.length; i += cols) {
     rows.push(characters.slice(i, i + cols));
@@ -25,14 +53,9 @@ const CarouselGrid = memo(function CarouselGrid({
   return (
     <div className={styles.carouselGrid}>
       {rows.map((row, rowIndex) => {
-        // Nomral direction: left/right
         let direction: "left" | "right" = rowIndex % 2 === 0 ? "left" : "right";
-        
-        // If sameDirection is true, switch all directions
-        if (sameDirection) {
-          direction = direction === "left" ? "right" : "left";
-        }
-        
+        if (sameDirection) direction = direction === "left" ? "right" : "left";
+
         return (
           <CarouselRow
             key={rowIndex}
@@ -82,7 +105,6 @@ function CarouselRow({
     (_, i) => items[i % items.length]
   );
 
-  // Handle keyboard navigation
   const handleKeyDown = (e: React.KeyboardEvent<HTMLButtonElement>, index: number) => {
     if (e.key === "ArrowLeft") {
       e.preventDefault();
@@ -99,7 +121,6 @@ function CarouselRow({
   };
 
   useEffect(() => {
-    // Left moves negative, right starts at -oneSetW and moves positive back toward 0
     offsetRef.current = direction === "right" ? -oneSetW : 0;
     lastTsRef.current = null;
 
@@ -136,17 +157,118 @@ function CarouselRow({
 
   return (
     <div className={styles.track}>
-      <div
-        ref={stripRef}
-        className={styles.strip}
-        style={{ width: totalW }}
-      >
+      <div ref={stripRef} className={styles.strip} style={{ width: totalW }}>
         {repeated.map((char, i) => (
           <div key={i} className={styles.slot} style={{ width: slotW }}>
             <button
-              ref={(el) => {
-                buttonRefs.current[i % items.length] = el;
-              }}
+              ref={(el) => { buttonRefs.current[i % items.length] = el; }}
+              className={styles.item}
+              style={{ width: ITEM_W, height: ITEM_H }}
+              onClick={() => onCharacterClick(items[i % items.length])}
+              onKeyDown={(e) => handleKeyDown(e, i)}
+              aria-label={`Character ${i % items.length + 1}`}
+            >
+              {isImage(char.figure) ? (
+                <img src={char.figure} alt="character" className={styles.img} />
+              ) : (
+                <span className={styles.emoji}>{char.figure}</span>
+              )}
+            </button>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function CarouselColumn({
+  items,
+  direction,
+  onCharacterClick,
+  speed,
+  gap,
+  shakiness,
+}: {
+  items: Character[];
+  direction: "up" | "down";
+  onCharacterClick: (c: Character) => void;
+  speed: number;
+  gap: number;
+  shakiness: number;
+}) {
+  const stripRef = useRef<HTMLDivElement>(null);
+  const offsetRef = useRef(0);
+  const lastTsRef = useRef<number | null>(null);
+  const rafRef = useRef(0);
+  const buttonRefs = useRef<(HTMLButtonElement | null)[]>([]);
+
+  const slotH = ITEM_H + gap;
+  const oneSetH = items.length * slotH;
+  const copiesNeeded = Math.ceil((MAX_TRACK + oneSetH) / oneSetH) + 1;
+  const totalH = copiesNeeded * oneSetH;
+
+  const repeated = Array.from(
+    { length: copiesNeeded * items.length },
+    (_, i) => items[i % items.length]
+  );
+
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLButtonElement>, index: number) => {
+    if (e.key === "ArrowUp") {
+      e.preventDefault();
+      const prevIndex = (index - 1 + items.length) % items.length;
+      buttonRefs.current[prevIndex]?.focus();
+    } else if (e.key === "ArrowDown") {
+      e.preventDefault();
+      const nextIndex = (index + 1) % items.length;
+      buttonRefs.current[nextIndex]?.focus();
+    } else if (e.key === "Enter" || e.key === " ") {
+      e.preventDefault();
+      onCharacterClick(items[index % items.length]);
+    }
+  };
+
+  useEffect(() => {
+    offsetRef.current = direction === "down" ? -oneSetH : 0;
+    lastTsRef.current = null;
+
+    function tick(ts: number) {
+      if (lastTsRef.current === null) lastTsRef.current = ts;
+      const delta = (ts - lastTsRef.current) / 1000;
+      lastTsRef.current = ts;
+
+      if (direction === "up") {
+        offsetRef.current -= speed * delta;
+        if (offsetRef.current <= -oneSetH) offsetRef.current += oneSetH;
+      } else {
+        offsetRef.current += speed * delta;
+        if (offsetRef.current >= 0) offsetRef.current -= oneSetH;
+      }
+
+      const shakeAmount = shakiness * 8;
+      const shakeX = (Math.random() - 0.5) * shakeAmount;
+      const shakeY = (Math.random() - 0.5) * shakeAmount;
+
+      if (stripRef.current) {
+        stripRef.current.style.transform = `translateX(${shakeX}px) translateY(${offsetRef.current + shakeY}px)`;
+      }
+
+      rafRef.current = requestAnimationFrame(tick);
+    }
+
+    rafRef.current = requestAnimationFrame(tick);
+    return () => {
+      cancelAnimationFrame(rafRef.current);
+      lastTsRef.current = null;
+    };
+  }, [direction, speed, oneSetH, shakiness]);
+
+  return (
+    <div className={styles.columnTrack}>
+      <div ref={stripRef} className={styles.columnStrip} style={{ height: totalH }}>
+        {repeated.map((char, i) => (
+          <div key={i} className={styles.columnSlot} style={{ height: slotH }}>
+            <button
+              ref={(el) => { buttonRefs.current[i % items.length] = el; }}
               className={styles.item}
               style={{ width: ITEM_W, height: ITEM_H }}
               onClick={() => onCharacterClick(items[i % items.length])}

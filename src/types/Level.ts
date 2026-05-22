@@ -9,6 +9,7 @@ export type LevelConfig = {
   carouselCols?: number;
   carouselShakiness?: number; // 0-1, greater = more skakning
   carouselSameDirection?: boolean; 
+  carouselVertical?: boolean;
 };
 
 export type CarouselProps = {
@@ -19,6 +20,7 @@ export type CarouselProps = {
   gap?: number;
   shakiness?: number; // 0-1, greater = more skakning
   sameDirection?: boolean;
+  vertical?: boolean;
 };
 
 export type CarouselRowProps = {

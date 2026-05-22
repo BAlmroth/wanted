@@ -1,4 +1,10 @@
-import { useCallback, useRef, useState, useEffect, type ReactNode } from "react";
+import {
+  useCallback,
+  useRef,
+  useState,
+  useEffect,
+  type ReactNode,
+} from "react";
 import Timer from "../Timer";
 import CarouselGrid from "../CarouselGrid";
 import Instructions from "../Instructions";
@@ -27,7 +33,6 @@ export function GameOn({
   const [isAnimating, setIsAnimating] = useState(true);
 
   useEffect(() => {
-    // Pause timer for 2.8 seconds while animation plays
     const timer = setTimeout(() => {
       setIsAnimating(false);
     }, 2800);
@@ -46,23 +51,19 @@ export function GameOn({
   }, []);
 
   const cols = currentLevel.carousel
-  ? currentLevel.carouselCols ?? Math.ceil(characters.length / rowCount)
-  : Math.round(Math.sqrt(currentLevel.gridCount));
+    ? (currentLevel.carouselCols ?? Math.ceil(characters.length / rowCount))
+    : Math.round(Math.sqrt(currentLevel.gridCount));
+
   const stableClickRef = useRef(onCharacterClick);
   stableClickRef.current = onCharacterClick;
   const stableClick = useCallback(
     (c: Parameters<typeof onCharacterClick>[0]) => stableClickRef.current(c),
-    []
+    [],
   );
 
   return (
-
     <div className={styles.wrapper}>
-      <div className={styles.timerRow}>
-        <Timer ref={timerRef} initialTime={10} onTimeUp={onTimeUp} isPaused={isAnimating} />
-      </div>
-
-    <div className={styles.header}>
+      <div className={styles.header}>
         <h1 className={styles.title}>Wanted</h1>
 
         <div className={styles.infoRow}>
@@ -85,56 +86,61 @@ export function GameOn({
           </div>
         </div>
 
+        <div className={styles.timerRow}>
+          <Timer ref={timerRef} initialTime={10} onTimeUp={onTimeUp} isPaused={isAnimating} />
+        </div>
+
         <div className={styles.messageBox}>
           {message && <p className={styles.message}>{message}</p>}
         </div>
       </div>
 
-           <div className={styles.infoSection}>
-            <div className={styles.sideInfo}>
-        <Instructions />
-          </div>
+      <div className={styles.infoSection}>
+        <div className={styles.sideInfo}>
+          <Instructions />
+        </div>
 
-      <div className={styles.playfield} ref={playfieldRef}>
-        {loading ? (
-          <p className={styles.loading}>Loading...</p>
-        ) : currentLevel.carousel ? (
-          <CarouselGrid
-          characters={characters}
-          cols={cols}
-          onCharacterClick={stableClick}
-          speed={currentLevel.carouselSpeed ?? 60}
-          gap={currentLevel.carouselGap ?? 20}
-          shakiness={currentLevel.carouselShakiness ?? 0}
-          sameDirection={currentLevel.carouselSameDirection ?? false}
-          />
-        ) : (
-          <div className={`${styles.grid} ${styles[`grid${cols}`]}`}>
-            {characters.map((c, index) => (
-              <button
-              key={c.id}
-              data-index={index}
-              onClick={() => onCharacterClick(c)}
-              className={styles.characterButton}
-              aria-label={`Character ${index + 1}`}
-              tabIndex={-1}
-              >
-                {isImage(c.figure) ? (
-                  <img src={c.figure} alt="figure" className={styles.characterImg} />
-                ) : (
-                  c.figure
-                )}
-              </button>
-            ))}
-          </div>
-        )}
-        <VirtualCursor />
-      </div>
-<div className={styles.sideInfo}>
+        <div className={styles.playfield} ref={playfieldRef}>
+          {loading ? (
+            <p className={styles.loading}>Loading...</p>
+          ) : currentLevel.carousel ? (
+            <CarouselGrid
+              characters={characters}
+              cols={cols}
+              onCharacterClick={stableClick}
+              speed={currentLevel.carouselSpeed ?? 60}
+              gap={currentLevel.carouselGap ?? 20}
+              shakiness={currentLevel.carouselShakiness ?? 0}
+              sameDirection={currentLevel.carouselSameDirection ?? false}
+              vertical={currentLevel.carouselVertical ?? false}
+            />
+          ) : (
+            <div className={`${styles.grid} ${styles[`grid${cols}`]}`}>
+              {characters.map((c, index) => (
+                <button
+                  key={c.id}
+                  data-index={index}
+                  onClick={() => onCharacterClick(c)}
+                  className={styles.characterButton}
+                  aria-label={`Character ${index + 1}`}
+                  tabIndex={-1}
+                >
+                  {isImage(c.figure) ? (
+                    <img src={c.figure} alt="figure" className={styles.characterImg} />
+                  ) : (
+                    c.figure
+                  )}
+                </button>
+              ))}
+            </div>
+          )}
+          <VirtualCursor />
+        </div>
 
-        <Leaderboard />
-</div>
+        <div className={styles.sideInfo}>
+          <Leaderboard />
+        </div>
       </div>
-      </div>
+    </div>
   );
 }
