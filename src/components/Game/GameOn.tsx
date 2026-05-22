@@ -86,7 +86,7 @@ export function GameOn({
           <Timer
             key={timerKey}
             ref={timerRef}
-            initialTime={100}
+            initialTime={200}
             onTimeUp={onTimeUp}
           />
         </div>
