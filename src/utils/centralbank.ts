@@ -37,6 +37,7 @@ export async function createTransaction(
     headers,
     body: JSON.stringify({
       identity_token: identityToken,
+      amount: 2.0,
       api_key: API_KEY,
     }),
   });
