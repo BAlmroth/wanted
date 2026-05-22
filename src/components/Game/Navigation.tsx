@@ -1,5 +1,6 @@
 import type { ReactNode } from "react";
 import type { IdleProps } from "../../types/Game";
+import { TIVOLI_MODE } from "../../config";
 import styles from "./Idle.module.css";
 
 interface NavigationProps extends IdleProps {
@@ -14,8 +15,15 @@ export function Navigation({
   showPlayButton = true,
   tivoliUrl,
 }: NavigationProps): ReactNode {
+  const isMockMode = !TIVOLI_MODE;
+  const hideTivoliButton = isMockMode && showPlayButton;
+  const tivoliButtonLabel =
+    isMockMode && !showPlayButton ? "MAIN PAGE" : "TO TIVOLI";
+
   const handleTivoliClick = () => {
-    if (tivoliUrl) {
+    if (isMockMode) {
+      window.location.href = "/";
+    } else if (tivoliUrl) {
       window.location.href = tivoliUrl;
     }
   };
@@ -23,18 +31,32 @@ export function Navigation({
   return (
     <section className={styles.infoButtons}>
       {showPlayButton && (
-        <button className={styles.playBtn} onClick={onStartGame} aria-label="Start playing the game">
+        <button
+          className={styles.playBtn}
+          onClick={onStartGame}
+          aria-label="Start playing the game"
+        >
           PLAY
         </button>
       )}
       <div>
-        <button className={styles.tivoliBtn} onClick={handleTivoliClick} aria-label="Go to Tivoli website">
-          TO TIVOLI
-        </button>
-        <button className={styles.rewardBtn} onClick={onInfoClick} aria-label="View game information">
+        {!hideTivoliButton && (
+          <button
+            className={styles.tivoliBtn}
+            onClick={handleTivoliClick}
+            aria-label={tivoliButtonLabel}
+          >
+            {tivoliButtonLabel}
+          </button>
+        )}
+        <button
+          className={styles.rewardBtn}
+          onClick={onInfoClick}
+          aria-label="View game information"
+        >
           Game Info
         </button>
       </div>
     </section>
   );
-}   
+}
