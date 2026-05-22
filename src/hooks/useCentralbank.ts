@@ -22,7 +22,7 @@ export function useCentralbank() {
   useEffect(() => {
     if (!TIVOLI_MODE) {
       // Standalone mode - set guest user immediately
-      setUser({ id: "guest-123", name: "guest" });
+      setUser({ id: 123, name: "guest" });
       return;
     }
 
@@ -70,8 +70,8 @@ export function useCentralbank() {
 
   async function endGame(levelsCleared: number): Promise<void> {
     try {
-      if (transaction?.id) {
-        await sendPayout(transaction.id, levelsCleared);
+      if (transaction?.transaction_id) {
+        await sendPayout(transaction.transaction_id.toString(), levelsCleared);
       }
     } catch (e) {
       const err = e as ApiError;
