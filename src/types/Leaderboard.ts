@@ -1,5 +1,5 @@
 export type LeaderboardEntry = {
-  id: number;
-  name: string;
-  score: number;
+  readonly id: number;
+  readonly name: string;
+  readonly score: number;
 };

@@ -1,18 +1,36 @@
+export const StampAnimal = {
+  Lion: "lion",
+  Dolphin: "dolphin",
+  Toucan: "toucan",
+  Beetlebug: "beetlebug",
+  Snake: "snake",
+} as const;
+
+export type StampAnimal = typeof StampAnimal[keyof typeof StampAnimal];
+
+export const StampMetal = {
+  Silver: "silver",
+  Gold: "gold",
+  Platinum: "platinum",
+} as const;
+
+export type StampMetal = typeof StampMetal[keyof typeof StampMetal];
+
 export type CentralbankUser = {
-  id: number;
-  name: string;
+  readonly id: number;
+  readonly name: string;
 };
 
 export type Stamp = {
-  animal: string;
-  metal: string | null;
-  image_url: string;
+  readonly animal: StampAnimal;
+  readonly metal: StampMetal | null;
+  readonly image_url: string;
 };
 
 export type Transaction = {
-  transaction_id: number;
-  amount: number;
-  stamp: Stamp | null;
+  readonly transaction_id: number;
+  readonly amount: number;
+  readonly stamp: Stamp | null;
 };
 
 export type PayoutResponse = {

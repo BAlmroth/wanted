@@ -1,5 +1,5 @@
 import { useState } from "react";
-import type { GameOverProps } from "../../types/Game";
+import type { GameOverProps, ResultType } from "../../types/Game";
 import styles from "./GameOver.module.css";
 import { Leaderboard } from "../Leaderboard";
 import { Navigation } from "./Navigation";
@@ -7,7 +7,7 @@ import Info from "../Info";
 import { calculatePayout } from "../../utils/gameUtils";
 
 interface GameOverWithTypeProps extends GameOverProps {
-  resultType?: "gameover" | "win";
+  resultType?: ResultType;
 }
 
 export function GameOver({

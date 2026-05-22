@@ -6,4 +6,4 @@
  * - false: Standalone mode, uses mock data, no Tivoli connection needed
  */
 
-export const TIVOLI_MODE = true; // Change to false for standalone mode
+export const TIVOLI_MODE = false; // Change to false for standalone mode

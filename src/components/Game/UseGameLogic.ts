@@ -11,11 +11,10 @@ import { saveScore } from "../../utils/leaderboard";
 import { useCentralbank } from "../../hooks/useCentralbank";
 import { TIVOLI_MODE } from "../../config";
 import type { ApiError } from "../../types/CentralBank";
+import type { GamePhase } from "../../types/Game";
 
 export function useGameLogic() {
-  const [gameState, setGameState] = useState<"idle" | "playing" | "gameover">(
-    "idle",
-  );
+const [gameState, setGameState] = useState<GamePhase>("idle");
   const [levelIndex, setLevelIndex] = useState(0);
   const [targetFigure, setTargetFigure] = useState("");
   const [characters, setCharacters] = useState<GridCharacter[]>([]);

@@ -34,11 +34,11 @@ export async function generateLevel(count: number): Promise<LevelData> {
     },
     body: JSON.stringify({ count }),
   });
-  const data = await res.json();
+  const data: Record<string, unknown> = await res.json();
   return {
-    sessionId: data.sessionId,
-    targetFigure: data.targetFigure,
-    grid: data.grid.map((figure: string, i: number) => ({ id: i, figure })),
+    sessionId: data.sessionId as string,
+    targetFigure: data.targetFigure as string,
+    grid: (data.grid as string[]).map((figure: string, i: number) => ({ id: i, figure })),
   };
 }
 
