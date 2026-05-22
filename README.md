@@ -4,19 +4,6 @@ An interactive web application where you race against time to find the correct c
 
  **Play the game here:** [https://wantedatyrgo.vercel.app/](https://wantedatyrgo.vercel.app/)
 
-##  Table of Contents
-
-- [About the Game](#-about-the-game)
-- [How to Play](#-how-to-play)
-- [Game Instructions & Warnings](#-game-instructions--warnings)
-- [Tivoli Integration](#-tivoli-integration)
-- [Installation & Setup](#-installation--setup)
-- [Development](#-development)
-- [Build & Deployment](#-build--deployment)
-- [Tech Stack](#-tech-stack)
-- [Project Structure](#-project-structure)
-- [Contributing](#-contributing)
-
 ## About the Game
 
 **WANTED AT YRGO** is a fast-paced game where you must recognize and click on the correct characters based on emotional expressions. The game is divided into progressive levels:
