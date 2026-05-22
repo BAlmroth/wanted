@@ -1,6 +1,6 @@
 #  WANTED AT YRGO
 
-An interactive web application where you race against time to find the correct characters based on emotional expressions. The game increases in difficulty through multiple levels with different emotions (happy, sad, angry, loving, and dead runes. Rune is a red panda from Yrgo).
+An interactive web application where you race against time to find the correct characters based on emotional expressions. The game increases in difficulty through multiple levels with different emotions (happy, sad, angry, loving, and dead Rune. Rune is a red panda from Yrgo).
 
  **Play the game here:** [https://wantedatyrgo.vercel.app/](https://wantedatyrgo.vercel.app/)
 
@@ -30,11 +30,12 @@ An interactive web application where you race against time to find the correct c
 ## How to Play
 
 1. **Start the Game** - Click "Start" from the main screen
-2. **Read Instructions** - See which Rune you need to find
-3. **Click Quickly** - Find and click the correct character before time runs out
-4. **Advance** - If you find the correct character, you advance to the next level
-5. **Earn Points** - The faster you are, the more points you earn
-6. **Complete All Levels** - Finish all levels to win
+2. **Read Instructions** - See how to play
+3. **Game starting** - See which Rune you need to find
+4. **Click Quickly** - Find and click the correct character before time runs out
+5. **Advance** - If you find the correct character, you advance to the next level
+6. **Earn Points** - The faster you are, the more points you earn (based on levels)
+7. **Complete All Levels** - Finish all levels to win
 
 ## Game Instructions & Warnings
 
@@ -46,25 +47,52 @@ You can always review these instructions by clicking the **"Game Info"** from th
 
 ## Tivoli Integration
 
-**IMPORTANT:** To play this game, you must access it from the **Tivoli website**.
+This game can run in two modes, allowing flexible deployment for both production and development environments.
 
-This game is part of the Tivoli experience, and you need to come from the main Tivoli application to authenticate and play. Find Wanted at Yrgo in the Tivloi and play.
+### Tivoli Mode (Production)
 
- **Access Tivoli here:** [https://frontend-main-1ac7.up.railway.app/](https://frontend-main-1ac7.up.railway.app/)
+In **Tivoli mode**, the game is fully integrated with the Tivoli platform:
+- **Requires authentication** via Tivoli identity token from the main Tivoli application
+- **Real leaderboard** - Scores are saved to Supabase and ranked globally
+- **Payment integration** - Uses Centralbank API for transactions and payouts
+- Players earn actual rewards for high scores
 
-> **Note:** This requirement may be removed in future versions when standalone access becomes available.
+To play in production, access the game through Tivoli:
+- **Access Tivoli here:** [https://loopland.se/](https://loopland.se/)
+- Find "Wanted at Yrgo" in the Tivoli platform and start playing
+
+### Standalone Mode (Development)
+
+In **standalone mode**, the game runs independently without external dependencies:
+- **No authentication required** - Perfect for local testing and development
+- **Mock data** - Simulated leaderboard and game sessions
+- **No payment integration** - Gameplay without transaction handling
+- **Great for demos** - Show off the game without backend setup
+
+### Switching Modes
+
+To switch between modes, edit `src/config.ts`:
+
+```typescript
+// For Tivoli mode (default - production):
+export const TIVOLI_MODE = true;
+
+// For Standalone mode:
+export const TIVOLI_MODE = false;
+```
+
+When standalone mode is enabled (`TIVOLI_MODE = false`), the application will automatically use mock implementations for all backend services.
 
 ## Installation & Setup
 
 ### Requirements
-You need to have installed:
 - **Node.js** (version 18 or later) - [Download here](https://nodejs.org/)
-- **npm** (comes with Node.js) or **yarn**
+- **npm** or **yarn** (comes with Node.js)
 - **Git** (to clone the project) - [Download here](https://git-scm.com/)
 
-### Step-by-Step Guide
+### Quick Start
 
-#### 1. Clone the Project
+#### 1. Clone the Repository
 ```bash
 git clone https://github.com/wilmareistad/wanted.git
 cd wanted
@@ -75,30 +103,32 @@ cd wanted
 npm install
 ```
 
-Or if you use yarn:
+Or with yarn:
 ```bash
 yarn install
 ```
 
-#### 3. Configuration (Optional)
-If you need to connect to backend services (Supabase for leaderboard), make sure you have the correct environment variables configured.
+#### 3. Choose Your Mode
 
-## Development
+By default, the game runs in **Tivoli mode**. To develop or test locally in **standalone mode**, edit `src/config.ts`:
 
-### Start Development Server
+```typescript
+export const TIVOLI_MODE = false; // Set to false for standalone development
+```
+
+#### 4. Start the Development Server
 ```bash
 npm run dev
 ```
 
-The application automatically opens at `http://localhost:5173`
+The game opens automatically at `http://localhost:5173`
 
-### Environment Variables
-Copy `.env.example` to `.env` and configure:
+### Backend Configuration (Tivoli Mode Only)
 
-Add your configuration for:
-- **Supabase** - For leaderboard functionality
-- **Centralbank API** - For payment/transaction handling
-- **Tivoli** - For authentication integration
+If running in Tivoli mode, ensure these services are configured:
+- **Supabase** - Database and leaderboard
+- **Centralbank API** - Payment processing
+- **Tivoli Identity Token** - Passed from the main Tivoli platform
 
 ## Build & Deployment
 
