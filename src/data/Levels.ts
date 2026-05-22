@@ -5,7 +5,7 @@ export const LEVELS: LevelConfig[] = [
   { level: 2, gridCount: 9 },
   { level: 3, gridCount: 16 },
   { level: 4, gridCount: 25 },
-  { level: 5, gridCount: 36 },
+{ level: 5, gridCount: 30, gridCols: 6 },
   { level: 6,  gridCount: 24, carousel: true, carouselSpeed: 80,  carouselGap: 44, carouselCols: 4, carouselShakiness: 0,   carouselSameDirection: false },
   { level: 7,  gridCount: 28, carousel: true, carouselSpeed: 100, carouselGap: 30, carouselCols: 5, carouselShakiness: 0.1, carouselSameDirection: true  },
   { level: 8,  gridCount: 34, carousel: true, carouselSpeed: 120, carouselGap: 18, carouselCols: 6, carouselShakiness: 0.2, carouselSameDirection: false },

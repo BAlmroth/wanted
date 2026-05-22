@@ -52,7 +52,7 @@ export function GameOn({
 
   const cols = currentLevel.carousel
     ? (currentLevel.carouselCols ?? Math.ceil(characters.length / rowCount))
-    : Math.round(Math.sqrt(currentLevel.gridCount));
+: (currentLevel.gridCols ?? Math.round(Math.sqrt(currentLevel.gridCount)));
 
   const stableClickRef = useRef(onCharacterClick);
   stableClickRef.current = onCharacterClick;
@@ -87,7 +87,7 @@ export function GameOn({
         </div>
 
         <div className={styles.timerRow}>
-          <Timer ref={timerRef} initialTime={10} onTimeUp={onTimeUp} isPaused={isAnimating} />
+          <Timer ref={timerRef} initialTime={100} onTimeUp={onTimeUp} isPaused={isAnimating} />
         </div>
 
         <div className={styles.messageBox}>
