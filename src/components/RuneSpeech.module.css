@@ -8,7 +8,17 @@
   gap: 0;
   z-index: 10;
   width: 220px;
-  height: 120px;
+  /* height: 120px; */
+  animation: bounce 2s ease-in-out infinite;
+}
+
+@keyframes bounce {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
 }
 
 .speechBubble {
@@ -33,7 +43,7 @@
 }
 
 .happyRune {
-  width: 80px;
+  width: 100px;
   height: auto;
   grid-column: 1;
   grid-row: 2;
