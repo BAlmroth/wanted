@@ -145,4 +145,4 @@ This project is licensed under the MIT License.
 
 ---
 
-**Have fun playing!**
+**By Benita Almroth and Wilma Reistad**
