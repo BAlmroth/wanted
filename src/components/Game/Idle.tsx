@@ -6,6 +6,7 @@ import { Leaderboard } from "../Leaderboard";
 import { Navigation } from "./Navigation";
 import Instructions from "../Instructions";
 import Info from "../Info";
+import { RuneSpeech } from "../RuneSpeech";
 
 export function Idle({ onStartGame, userName }: IdleProps): ReactNode {
   const [isOpen, setIsOpen] = useState(false);
@@ -51,6 +52,8 @@ export function Idle({ onStartGame, userName }: IdleProps): ReactNode {
           />
         </div>
       </div>
+
+      <RuneSpeech />
 
       <Info
         isOpen={isOpen}

@@ -1,0 +1,47 @@
+.welcomeCard {
+  position: fixed;
+  bottom: 3rem;
+  left: 3rem;
+  display: grid;
+  grid-template-columns: 100px 120px;
+  grid-template-rows: auto auto;
+  gap: 0;
+  z-index: 10;
+  width: 220px;
+  height: 120px;
+}
+
+.speechBubble {
+  width: 120px;
+  height: auto;
+  pointer-events: none;
+  grid-column: 2;
+  grid-row: 1;
+  justify-self: end;
+}
+
+.welcomeText {
+  position: absolute;
+  top: 20%;
+  left: 50%;
+  font-size: 1.2rem;
+  font-weight: bold;
+  margin: 0;
+  color: var(--yrgoRed);
+  pointer-events: none;
+  white-space: nowrap;
+}
+
+.happyRune {
+  width: 80px;
+  height: auto;
+  grid-column: 1;
+  grid-row: 2;
+  align-self: end;
+}
+
+@media (max-width: 920px) {
+  .welcomeCard {
+    display: none;
+  }
+}
