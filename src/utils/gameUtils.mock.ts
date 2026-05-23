@@ -1,4 +1,4 @@
-import type { LevelData } from "./gameUtils";
+import type { LevelData } from "../types/Level";
 
 // Mock figures database
 const MOCK_FIGURES = [

@@ -1,8 +1,5 @@
 import styles from "./error.module.css";
-
-interface PayoutFailedProps {
-  transactionId?: string;
-}
+import type { PayoutFailedProps } from "../types/PayoutFailed";
 
 export default function PayoutFailed({ transactionId }: PayoutFailedProps) {
   const tivoliUrl = import.meta.env.VITE_TIVOLI_URL ?? "/";

@@ -6,7 +6,7 @@ export const StampAnimal = {
   Snake: "snake",
 } as const;
 
-export type StampAnimal = typeof StampAnimal[keyof typeof StampAnimal];
+export type StampAnimal = (typeof StampAnimal)[keyof typeof StampAnimal];
 
 export const StampMetal = {
   Silver: "silver",
@@ -14,7 +14,7 @@ export const StampMetal = {
   Platinum: "platinum",
 } as const;
 
-export type StampMetal = typeof StampMetal[keyof typeof StampMetal];
+export type StampMetal = (typeof StampMetal)[keyof typeof StampMetal];
 
 export type CentralbankUser = {
   readonly id: number;
@@ -48,3 +48,12 @@ export interface ApiError {
   message: string;
   status?: number;
 }
+
+export type UseCentralbankReturn = {
+  user: CentralbankUser | null;
+  startGame: () => Promise<Stamp | null>;
+  endGame: (levelsCleared: number) => Promise<void>;
+  transaction: Transaction | null;
+  error: CentralbankError | null;
+  clearError: () => void;
+};

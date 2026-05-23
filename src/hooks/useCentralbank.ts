@@ -11,16 +11,8 @@ import type {
   CentralbankError,
   ApiError,
   Stamp,
+  UseCentralbankReturn,
 } from "../types/CentralBank";
-
-type UseCentralbankReturn = {
-  user: CentralbankUser | null;
-  startGame: () => Promise<Stamp | null>;
-  endGame: (levelsCleared: number) => Promise<void>;
-  transaction: Transaction | null;
-  error: CentralbankError | null;
-  clearError: () => void;
-};
 
 export function useCentralbank(): UseCentralbankReturn {
   const [user, setUser] = useState<CentralbankUser | null>(null);

@@ -1,4 +1,4 @@
-import type { Character } from "./Character";
+import type { Character, GridCharacter } from "./Character";
 
 export type LevelConfig = {
   readonly level: number;
@@ -9,7 +9,7 @@ export type LevelConfig = {
   readonly carouselCols?: number;
   readonly gridCols?: number;
   readonly carouselShakiness?: number;
-  readonly carouselSameDirection?: boolean; 
+  readonly carouselSameDirection?: boolean;
   readonly carouselVertical?: boolean;
 };
 
@@ -28,4 +28,10 @@ export type CarouselRowProps = {
   row: Character[];
   direction: "left" | "right";
   onCharacterClick: (c: Character) => void;
+};
+
+export type LevelData = {
+  sessionId: string;
+  targetFigure: string;
+  grid: GridCharacter[];
 };

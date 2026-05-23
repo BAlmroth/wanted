@@ -1,7 +1,7 @@
 import type { LEVELS } from "../data/Levels";
-import type { GridCharacter } from "../utils/gameUtils";
+import type { GridCharacter } from "./Character";
 import type { Character } from "./Character";
-import type { TimerHandle } from "../components/Timer";
+import type { TimerHandle } from "./Timer";
 import type { Transaction } from "./CentralBank";
 
 export type GamePhase = "idle" | "playing" | "gameover";
