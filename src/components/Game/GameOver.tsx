@@ -5,6 +5,7 @@ import { Leaderboard } from "../Leaderboard";
 import { Navigation } from "./Navigation";
 import Info from "../Info";
 import { calculatePayout } from "../../utils/gameUtils";
+import { RuneSpeech } from "../RuneSpeech";
 
 interface GameOverWithTypeProps extends GameOverProps {
   resultType?: "gameover" | "win";
@@ -95,6 +96,7 @@ export function GameOver({
         onStartGame={handleStartFromInfo}
         showStartButton={infoMode === "play"}
       />
+      <RuneSpeech variant="gameover" />
     </div>
   );
 }
