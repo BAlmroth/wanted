@@ -3,7 +3,7 @@
   bottom: 2rem;
   left: 2rem;
   z-index: 10;
-  width: 300px;
+  width: 250px;
   opacity: 0;
   animation:
     fadeIn 0.6s ease forwards 1.9s,
