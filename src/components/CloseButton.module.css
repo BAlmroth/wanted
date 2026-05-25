@@ -1,7 +1,7 @@
 .closeButton {
   position: fixed;
-  top: 10px;
-  left: 10px;
+  top: 0;
+  left: 0;
   opacity: 0.8;
   transition: opacity 0.2s ease-in-out;
   margin: 0;
