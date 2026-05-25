@@ -21,13 +21,12 @@ export async function getTopFive(
     `${SUPABASE_URL}/rest/v1/leaderboard?select=id,name,score&order=score.desc&limit=${limit}`,
     { headers },
   );
-  const data = await res.json();
-  // Ensure we only return the fields we expect
+  const data: unknown = await res.json();
   return Array.isArray(data)
-    ? data.map((entry: any) => ({
-        id: entry.id,
-        name: entry.name,
-        score: entry.score,
+    ? data.map((entry: Record<string, unknown>) => ({
+        id: entry.id as number,
+        name: entry.name as string,
+        score: entry.score as number,
       }))
     : [];
 }
@@ -42,7 +41,6 @@ export async function saveScore(name: string, score: number): Promise<void> {
     headers,
     body: JSON.stringify({ name, score }),
   });
-  // Just check if successful, don't return the response data
   if (!res.ok) {
     throw new Error(`Failed to save score: ${res.statusText}`);
   }

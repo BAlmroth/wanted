@@ -1,37 +1,14 @@
-import type { CentralbankUser, Transaction } from "../types/CentralBank";
+import type { CentralbankUser, Transaction, Stamp } from "../types/CentralBank";
 import { calculatePayout } from "./gameUtils";
+import { StampAnimal, StampMetal } from "../types/CentralBank";
 
 // Mock stamps database
-const MOCK_STAMPS: Array<{
-  animal: string;
-  metal: string | null;
-  image_url: string;
-}> = [
-  {
-    animal: "lion",
-    metal: "gold",
-    image_url: "",
-  },
-  {
-    animal: "dolphin",
-    metal: "silver",
-    image_url: "",
-  },
-  {
-    animal: "toucan",
-    metal: "platinum",
-    image_url: "",
-  },
-  {
-    animal: "beetlebug",
-    metal: "gold",
-    image_url: "",
-  },
-  {
-    animal: "snake",
-    metal: null,
-    image_url: "",
-  },
+const MOCK_STAMPS: Stamp[] = [
+  { animal: StampAnimal.Lion,      metal: StampMetal.Gold,     image_url: "" },
+  { animal: StampAnimal.Dolphin,   metal: StampMetal.Silver,   image_url: "" },
+  { animal: StampAnimal.Toucan,    metal: StampMetal.Platinum, image_url: "" },
+  { animal: StampAnimal.Beetlebug, metal: StampMetal.Gold,     image_url: "" },
+  { animal: StampAnimal.Snake,     metal: null,                image_url: "" },
 ];
 
 function getRandomMockStamp() {

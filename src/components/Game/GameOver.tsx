@@ -7,17 +7,13 @@ import Info from "../Info";
 import { calculatePayout } from "../../utils/gameUtils";
 import { RuneSpeech } from "../RuneSpeech";
 
-interface GameOverWithTypeProps extends GameOverProps {
-  resultType?: "gameover" | "win";
-}
-
 export function GameOver({
   score,
   currentLevel,
   onPlayAgain,
   transaction,
   resultType = "gameover",
-}: GameOverWithTypeProps) {
+}: GameOverProps) {
   const [infoMode, setInfoMode] = useState<null | "play" | "info">(null);
 
   const openInfoForPlay = () => setInfoMode("play");
@@ -30,28 +26,42 @@ export function GameOver({
 
   const stampImageUrl = transaction?.stamp?.image_url?.replace(
     /^http:\/\//,
-    "https://"
+    "https://",
   );
 
-  const containerClassName = resultType === "win" ? styles.winContainer : styles.overContainer;
+  const containerClassName =
+    resultType === "win" ? styles.winContainer : styles.overContainer;
 
   return (
     <div className={containerClassName}>
       {resultType === "win" ? (
         <h1 className={styles.titleWinner}>
-          {'WINNER'.split('').map((l, i) => <span key={i}>{l}</span>)}
+          {"WINNER".split("").map((l, i) => (
+            <span key={i}>{l}</span>
+          ))}
         </h1>
       ) : (
         <h1 className={styles.titleGameOver}>
-          {'GAME OVER'.split('').map((l, i) => (
-            <span key={i} style={l === ' ' ? { display: 'inline-block', width: '0.4em' } : undefined}>
+          {"GAME OVER".split("").map((l, i) => (
+            <span
+              key={i}
+              style={
+                l === " "
+                  ? { display: "inline-block", width: "0.4em" }
+                  : undefined
+              }
+            >
               {l}
             </span>
           ))}
         </h1>
       )}
 
-      <div className={resultType === 'win' ? styles.pageContent : styles.pageContentGameover}>
+      <div
+        className={
+          resultType === "win" ? styles.pageContent : styles.pageContentGameover
+        }
+      >
         <section className={styles.infoBoxes}>
           <div className={styles.box}>
             <div className={styles.statsRow}>
@@ -72,7 +82,11 @@ export function GameOver({
                 Stamp: {transaction?.stamp?.animal} {transaction?.stamp?.metal}
               </p>
               {transaction?.stamp?.image_url && (
-                <img className={styles.stamp} src={stampImageUrl} alt="Your stamp" />
+                <img
+                  className={styles.stamp}
+                  src={stampImageUrl}
+                  alt="Your stamp"
+                />
               )}
             </div>
           </div>

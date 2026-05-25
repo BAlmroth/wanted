@@ -1,13 +1,7 @@
 import type { ReactNode } from "react";
-import type { IdleProps } from "../../types/Game";
+import type { NavigationProps } from "../../types/Navigation";
 import { TIVOLI_MODE } from "../../config";
-import styles from "./Idle.module.css";
-
-interface NavigationProps extends IdleProps {
-  onInfoClick?: () => void;
-  showPlayButton?: boolean;
-  tivoliUrl?: string;
-}
+import styles from "./Navigation.module.css";
 
 export function Navigation({
   onStartGame,
