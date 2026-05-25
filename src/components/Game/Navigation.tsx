@@ -1,7 +1,7 @@
 import type { ReactNode } from "react";
 import type { NavigationProps } from "../../types/Navigation";
 import { TIVOLI_MODE } from "../../config";
-import styles from "./Idle.module.css";
+import styles from "./Navigation.module.css";
 
 export function Navigation({
   onStartGame,
