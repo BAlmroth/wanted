@@ -110,7 +110,7 @@ export function GameOver({
         onStartGame={handleStartFromInfo}
         showStartButton={infoMode === "play"}
       />
-      <RuneSpeech variant="gameover" />
+      <RuneSpeech variant={resultType === "win" ? "winner" : "gameover"} />
     </div>
   );
 }
