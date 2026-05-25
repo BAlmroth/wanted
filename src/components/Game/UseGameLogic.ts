@@ -28,6 +28,7 @@ export function useGameLogic() {
   const gameEndedRef = useRef(false);
   const [timerRunning, setTimerRunning] = useState(false);
   const timeLeftRef = useRef(INITIAL_TIME);
+  const scoreRef = useRef(0);
   const introTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const {
     startGame: startCentralbankGame,
@@ -78,6 +79,10 @@ export function useGameLogic() {
       }
     };
   }, [gameState]);
+
+  useEffect(() => {
+    scoreRef.current = score;
+  }, [score]);
 
   useEffect(() => {
     if (gameState !== "playing" || gameEndedRef.current || !timerRunning) {
@@ -221,17 +226,17 @@ export function useGameLogic() {
       introTimeoutRef.current = null;
     }
 
-    console.log("[TIME UP] Time's up! Current score:", score);
+    console.log("[TIME UP] Time's up! Current score:", scoreRef.current);
     console.log("[TIME UP] User info:", user);
     try {
       await endGame(currentLevel.level);
       console.log("[TIME UP] endGame completed successfully");
-      if (user?.name && score > 0) {
-        console.log("[TIME UP] About to save score for user:", user.name, "Score:", score);
-        await saveScore(user.name, score);
+      if (user?.name && scoreRef.current > 0) {
+        console.log("[TIME UP] About to save score for user:", user.name, "Score:", scoreRef.current);
+        await saveScore(user.name, scoreRef.current);
         console.log("[TIME UP] Score saved successfully to Supabase");
       } else {
-        console.warn("[TIME UP] Score not saved - User name missing or score is 0. User:", user, "Score:", score);
+        console.warn("[TIME UP] Score not saved - User name missing or score is 0. User:", user, "Score:", scoreRef.current);
       }
     } catch (err) {
       const apiError = err as ApiError;
