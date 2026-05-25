@@ -94,7 +94,7 @@ export function GameOn({
         </div>
 
         <div className={styles.timerRow}>
-          <Timer ref={timerRef} initialTime={10} onTimeUp={onTimeUp} isPaused={isAnimating} />
+          <Timer ref={timerRef} initialTime={100} onTimeUp={onTimeUp} isPaused={isAnimating} />
         </div>
 
         <div className={styles.messageBox}>
