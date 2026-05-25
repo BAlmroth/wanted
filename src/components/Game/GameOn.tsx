@@ -22,22 +22,13 @@ export function GameOn({
   characters,
   message,
   score,
+  timeLeft,
   loading,
-  timerRef,
   onCharacterClick,
-  onTimeUp,
 }: GameOnProps): ReactNode {
   const playfieldRef = useRef<HTMLDivElement>(null);
   const roRef = useRef<ResizeObserver | null>(null);
   const [rowCount, setRowCount] = useState(5);
-  const [isAnimating, setIsAnimating] = useState(true);
-
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setIsAnimating(false);
-    }, 2800);
-    return () => clearTimeout(timer);
-  }, []);
 
   useEffect(() => {
     const node = playfieldRef.current;
@@ -94,7 +85,7 @@ export function GameOn({
         </div>
 
         <div className={styles.timerRow}>
-          <Timer ref={timerRef} initialTime={10} onTimeUp={onTimeUp} isPaused={isAnimating} />
+          <Timer timeLeft={timeLeft} />
         </div>
 
         <div className={styles.messageBox}>

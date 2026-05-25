@@ -15,8 +15,8 @@ export default function Game() {
     characters,
     message,
     score,
+    timeLeft,
     loading,
-    timerRef,
     startGame,
     handleClick,
     handleTimeUp,
@@ -54,10 +54,9 @@ export default function Game() {
           characters={characters}
           message={message}
           score={score}
+          timeLeft={timeLeft}
           loading={loading}
-          timerRef={timerRef}
           onCharacterClick={handleClick}
-          onTimeUp={handleTimeUp}
         />
       )}
       {gameState === "gameover" && (
