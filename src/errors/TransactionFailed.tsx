@@ -14,7 +14,7 @@ export default function TransactionFailed({
         <button onClick={onRetry}>Try again</button>
         <button
           onClick={() =>
-            window.parent.postMessage({ type: "AMUSEMENT_CLOSE" }, "")
+            window.parent.postMessage({ type: "AMUSEMENT_CLOSE" }, "*")
           }
         >
           Back to Loopland

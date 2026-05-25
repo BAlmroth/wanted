@@ -15,7 +15,7 @@ export default function PayoutFailed({ transactionId }: PayoutFailedProps) {
       <div className={styles.buttonContainer}>
         <button
           onClick={() =>
-            window.parent.postMessage({ type: "AMUSEMENT_CLOSE" }, "")
+            window.parent.postMessage({ type: "AMUSEMENT_CLOSE" }, "*")
           }
         >
           Back to Loopland

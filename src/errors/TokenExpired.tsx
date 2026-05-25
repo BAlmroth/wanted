@@ -11,7 +11,7 @@ export default function TokenExpired() {
         <a href="/">← Back to Loopland</a>
         <button
           onClick={() =>
-            window.parent.postMessage({ type: "AMUSEMENT_CLOSE" }, "")
+            window.parent.postMessage({ type: "AMUSEMENT_CLOSE" }, "*")
           }
         >
           Back to Loopland

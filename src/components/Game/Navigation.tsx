@@ -17,7 +17,7 @@ export function Navigation({
     if (isMockMode) {
       window.location.href = "/";
     } else {
-      window.parent.postMessage({ type: "AMUSEMENT_CLOSE" }, "");
+      window.parent.postMessage({ type: "AMUSEMENT_CLOSE" }, "*");
     }
   };
 

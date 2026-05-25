@@ -11,7 +11,7 @@ export default function NotFound() {
         <button onClick={() => navigate("/")}>Go back home</button>
         <button
           onClick={() =>
-            window.parent.postMessage({ type: "AMUSEMENT_CLOSE" }, "")
+            window.parent.postMessage({ type: "AMUSEMENT_CLOSE" }, "*")
           }
         >
           Back to Loopland
