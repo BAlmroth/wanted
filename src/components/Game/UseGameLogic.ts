@@ -12,7 +12,7 @@ import type { ApiError } from "../../types/CentralBank";
 import type { GamePhase } from "../../types/Game";
 import type { GridCharacter } from "../../types/Character";
 
-const INITIAL_TIME = 10;
+const INITIAL_TIME = 100;
 
 export function useGameLogic() {
   const [gameState, setGameState] = useState<GamePhase>("idle");
@@ -28,6 +28,7 @@ export function useGameLogic() {
   const gameEndedRef = useRef(false);
   const [timerRunning, setTimerRunning] = useState(false);
   const timeLeftRef = useRef(INITIAL_TIME);
+  const scoreRef = useRef(0);
   const introTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const {
     startGame: startCentralbankGame,
@@ -78,6 +79,10 @@ export function useGameLogic() {
       }
     };
   }, [gameState]);
+
+  useEffect(() => {
+    scoreRef.current = score;
+  }, [score]);
 
   useEffect(() => {
     if (gameState !== "playing" || gameEndedRef.current || !timerRunning) {
@@ -216,8 +221,8 @@ export function useGameLogic() {
 
     try {
       await endGame(currentLevel.level);
-      if (user?.name && score > 0) {
-        await saveScore(user.name, score);
+      if (user?.name && scoreRef.current > 0) {
+        await saveScore(user.name, scoreRef.current);
       }
     } catch (err) {
       const apiError = err as ApiError;
