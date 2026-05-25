@@ -3,8 +3,26 @@
 An interactive web application where you race against time to find the wanted character in a sea of different characters. Created as a part of the school project **Tivoli** consisting of small games integrated in a collective tivoli site and api.
 
 After the schoolproject ends 27th of may the game will be a standalone game playable below.
- **Play the game here:** [WANTED AT YRGO](https://wantedatyrgo.vercel.app/)
- **Tivoli site:** [LOOPLAND](https://loopland.se/)
+
+**Play the game here:** [WANTED AT YRGO](https://wantedatyrgo.vercel.app/)
+**Tivoli site:** [LOOPLAND](https://loopland.se/)
+
+---
+
+## Table of Contents
+
+- [About the Game](#about-the-game)
+- [How to Play](#how-to-play)
+- [Game Instructions & Warnings](#game-instructions--warnings)
+- [Tivoli Integration](#tivoli-integration)
+- [Installation & Setup](#installation--setup)
+- [Environment Variables](#environment-variables)
+- [Database (Supabase)](#database-supabase)
+- [Build & Deployment](#build--deployment)
+- [Tech Stack](#tech-stack)
+- [License](#license)
+
+---
 
 ## About the Game
 
@@ -119,7 +137,6 @@ If running in Tivoli mode, ensure these services are configured:
 - **Centralbank API** - Payment processing
 - **Tivoli Identity Token** - Passed from the main Tivoli platform
 
-
 ## Environment Variables
 
 ```env
@@ -134,10 +151,8 @@ VITE_CENTRALBANK_API_KEY=your-centralbank-api-key
 # Tivoli host (used for "Back to Tivoli" links)
 VITE_TIVOLI_URL=https://loopland.se
 ```
-## Important:
 
-- Variables must start with VITE_ to be available in the frontend (Vite requirement).
-- If you run standalone mode (TIVOLI_MODE = false in config.ts), backend integrations are mocked and external APIs/Supabase are not required.
+> **Note:** Variables must start with `VITE_` to be available in the frontend (Vite requirement). If you run standalone mode (`TIVOLI_MODE = false`), backend integrations are mocked and external APIs/Supabase are not required.
 
 ## Database (Supabase)
 
@@ -145,7 +160,7 @@ The game uses Supabase for secure level generation and click validation. The cor
 
 ### Tables
 
-- **`figures`** – Stores all possible characters in the game grid.
+- **`figures`** – Stores all possible characters in the game grid (Rune + emojis). Public read access via RLS.
 - **`game_sessions`** – Stores the secret target index for each generated level. Not accessible from the client.
 
 ### Functions
