@@ -7,18 +7,17 @@ export function Navigation({
   onStartGame,
   onInfoClick,
   showPlayButton = true,
-  tivoliUrl,
 }: NavigationProps): ReactNode {
   const isMockMode = !TIVOLI_MODE;
   const hideTivoliButton = isMockMode && showPlayButton;
-  const tivoliButtonLabel =
-    isMockMode && !showPlayButton ? "MAIN PAGE" : "TO TIVOLI";
+  const looplandButtonLabel =
+    isMockMode && !showPlayButton ? "MAIN PAGE" : "TO LOOPLAND";
 
-  const handleTivoliClick = () => {
+  const handleLooplandClick = () => {
     if (isMockMode) {
       window.location.href = "/";
-    } else if (tivoliUrl) {
-      window.location.href = tivoliUrl;
+    } else {
+      window.parent.postMessage({ type: "AMUSEMENT_CLOSE" }, "*");
     }
   };
 
@@ -37,10 +36,10 @@ export function Navigation({
         {!hideTivoliButton && (
           <button
             className={styles.tivoliBtn}
-            onClick={handleTivoliClick}
-            aria-label={tivoliButtonLabel}
+            onClick={handleLooplandClick}
+            aria-label={looplandButtonLabel}
           >
-            {tivoliButtonLabel}
+            {looplandButtonLabel}
           </button>
         )}
         <button
