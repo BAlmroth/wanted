@@ -179,7 +179,7 @@ export function useGameLogic() {
 
     if (correct) {
       const newScore = score + 1;
-      timeLeftRef.current += 2;
+      timeLeftRef.current += 3;
       setTimeLeft(timeLeftRef.current);
 
       const nextIndex = levelIndex + 1;
