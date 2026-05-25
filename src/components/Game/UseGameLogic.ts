@@ -1,5 +1,4 @@
-import { useState, useRef } from "react";
-import type { TimerHandle } from "../../types/Timer";
+import { useState, useRef, useEffect } from "react";
 import { LEVELS } from "../../data/Levels";
 import {
   generateLevel,
@@ -13,6 +12,8 @@ import type { ApiError } from "../../types/CentralBank";
 import type { GamePhase } from "../../types/Game";
 import type { GridCharacter } from "../../types/Character";
 
+const INITIAL_TIME = 10;
+
 export function useGameLogic() {
   const [gameState, setGameState] = useState<GamePhase>("idle");
   const [levelIndex, setLevelIndex] = useState(0);
@@ -21,11 +22,13 @@ export function useGameLogic() {
   const [sessionId, setSessionId] = useState<string | null>(null);
   const [message, setMessage] = useState("");
   const [score, setScore] = useState(0);
-  const [timerKey, setTimerKey] = useState(0);
+  const [timeLeft, setTimeLeft] = useState(INITIAL_TIME);
   const [loading, setLoading] = useState(false);
   const [isWin, setIsWin] = useState(false);
   const gameEndedRef = useRef(false);
-  const timerRef = useRef<TimerHandle>(null);
+  const [timerRunning, setTimerRunning] = useState(false);
+  const timeLeftRef = useRef(INITIAL_TIME);
+  const introTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const {
     startGame: startCentralbankGame,
     endGame,
@@ -37,13 +40,62 @@ export function useGameLogic() {
 
   function resetToIdle() {
     clearError();
+    if (introTimeoutRef.current) {
+      //timerlogic needed in this file to minimize cheating
+      clearTimeout(introTimeoutRef.current);
+      introTimeoutRef.current = null;
+    }
     setGameState("idle");
     setCharacters([]);
     setTargetFigure("");
     setScore(0);
     setLevelIndex(0);
+    setTimerRunning(false);
+    timeLeftRef.current = INITIAL_TIME;
+    setTimeLeft(INITIAL_TIME);
     setIsWin(false);
   }
+
+  useEffect(() => {
+    if (gameState !== "playing") {
+      return;
+    }
+
+    if (introTimeoutRef.current) {
+      clearTimeout(introTimeoutRef.current);
+    }
+
+    setTimerRunning(false);
+    introTimeoutRef.current = setTimeout(() => {
+      setTimerRunning(true);
+      introTimeoutRef.current = null;
+    }, 2800);
+
+    return () => {
+      if (introTimeoutRef.current) {
+        clearTimeout(introTimeoutRef.current);
+        introTimeoutRef.current = null;
+      }
+    };
+  }, [gameState]);
+
+  useEffect(() => {
+    if (gameState !== "playing" || gameEndedRef.current || !timerRunning) {
+      return;
+    }
+
+    const interval = setInterval(() => {
+      timeLeftRef.current -= 1;
+      setTimeLeft(timeLeftRef.current);
+
+      if (timeLeftRef.current <= 0) {
+        clearInterval(interval);
+        void handleTimeUp();
+      }
+    }, 1000);
+
+    return () => clearInterval(interval);
+  }, [gameState, timerRunning]);
 
   const currentLevel = LEVELS[levelIndex];
 
@@ -73,8 +125,15 @@ export function useGameLogic() {
     setScore(0);
     setLevelIndex(0);
     setMessage("");
-    setTimerKey((k) => k + 1);
+    setTimerRunning(false);
+    timeLeftRef.current = INITIAL_TIME;
+    setTimeLeft(INITIAL_TIME);
     gameEndedRef.current = false;
+
+    if (introTimeoutRef.current) {
+      clearTimeout(introTimeoutRef.current);
+      introTimeoutRef.current = null;
+    }
 
     try {
       await startCentralbankGame();
@@ -82,8 +141,8 @@ export function useGameLogic() {
       return;
     }
 
-    setGameState("playing");
     await loadLevel(0);
+    setGameState("playing");
   }
 
   async function handleClick(character: GridCharacter) {
@@ -115,7 +174,8 @@ export function useGameLogic() {
 
     if (correct) {
       const newScore = score + 1;
-      timerRef.current?.addTime(2);
+      timeLeftRef.current += 2;
+      setTimeLeft(timeLeftRef.current);
 
       const nextIndex = levelIndex + 1;
       if (nextIndex >= LEVELS.length) {
@@ -147,6 +207,12 @@ export function useGameLogic() {
   async function handleTimeUp(): Promise<void> {
     if (gameEndedRef.current) return;
     gameEndedRef.current = true;
+    setTimerRunning(false);
+
+    if (introTimeoutRef.current) {
+      clearTimeout(introTimeoutRef.current);
+      introTimeoutRef.current = null;
+    }
 
     try {
       await endGame(currentLevel.level);
@@ -170,8 +236,7 @@ export function useGameLogic() {
     message,
     score,
     loading,
-    timerKey,
-    timerRef,
+    timeLeft,
     startGame,
     handleClick,
     handleTimeUp,

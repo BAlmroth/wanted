@@ -1,7 +1,6 @@
 import type { LEVELS } from "../data/Levels";
 import type { GridCharacter } from "./Character";
 import type { Character } from "./Character";
-import type { TimerHandle } from "./Timer";
 import type { Transaction } from "./CentralBank";
 
 export type GamePhase = "idle" | "playing" | "gameover";
@@ -16,9 +15,7 @@ export type GameState = {
 };
 
 export type TimerProps = {
-  readonly initialTime: number;
-  readonly onTimeUp: () => void;
-  readonly isPaused?: boolean;
+  readonly timeLeft: number;
 };
 
 export interface GameOnProps {
@@ -28,9 +25,8 @@ export interface GameOnProps {
   readonly message: string;
   readonly score: number;
   readonly loading: boolean;
-  readonly timerRef: React.RefObject<TimerHandle | null>;
+  readonly timeLeft: number;
   readonly onCharacterClick: (character: GridCharacter) => void;
-  readonly onTimeUp: () => void;
 }
 
 export interface GameOverProps {
