@@ -11,22 +11,21 @@ import type {
   CentralbankError,
   ApiError,
   Stamp,
+  UseCentralbankReturn,
 } from "../types/CentralBank";
 
-export function useCentralbank() {
+export function useCentralbank(): UseCentralbankReturn {
   const [user, setUser] = useState<CentralbankUser | null>(null);
   const [identityToken, setIdentityToken] = useState<string | null>(null);
   const [transaction, setTransaction] = useState<Transaction | null>(null);
   const [error, setError] = useState<CentralbankError | null>(null);
 
-  useEffect(() => {
+  useEffect((): void => {
     if (!TIVOLI_MODE) {
-      // Standalone mode - set guest user immediately
       setUser({ id: 123, name: "guest" });
       return;
     }
 
-    // Tivoli mode - get token from URL
     const params = new URLSearchParams(window.location.search);
     const token = params.get("identity_token");
     history.replaceState({}, "", window.location.pathname);
@@ -36,7 +35,6 @@ export function useCentralbank() {
       getIdentity(token)
         .then(setUser)
         .catch((e: ApiError) => {
-          // getIdentity is optional per the API spec, so just log it
           console.debug("getIdentity failed (optional):", e.message);
         });
     }
@@ -50,9 +48,9 @@ export function useCentralbank() {
         return txn.stamp;
       }
       if (!identityToken) {
-        const error: CentralbankError = { type: "TOKEN_EXPIRED" };
-        setError(error);
-        throw error;
+        const cbError: CentralbankError = { type: "TOKEN_EXPIRED" };
+        setError(cbError);
+        throw cbError;
       }
       const txn = await createTransaction(identityToken);
       setTransaction(txn);
@@ -83,7 +81,7 @@ export function useCentralbank() {
     }
   }
 
-  function clearError() {
+  function clearError(): void {
     setError(null);
   }
 

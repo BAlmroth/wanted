@@ -1,21 +1,20 @@
 import { useState, useRef } from "react";
-import type { TimerHandle } from "../Timer";
+import type { TimerHandle } from "../../types/Timer";
 import { LEVELS } from "../../data/Levels";
 import {
   generateLevel,
   validateClick,
   resolveFigure,
-  type GridCharacter,
 } from "../../utils/gameUtils";
 import { saveScore } from "../../utils/leaderboard";
 import { useCentralbank } from "../../hooks/useCentralbank";
 import { TIVOLI_MODE } from "../../config";
 import type { ApiError } from "../../types/CentralBank";
+import type { GamePhase } from "../../types/Game";
+import type { GridCharacter } from "../../types/Character";
 
 export function useGameLogic() {
-  const [gameState, setGameState] = useState<"idle" | "playing" | "gameover">(
-    "idle",
-  );
+  const [gameState, setGameState] = useState<GamePhase>("idle");
   const [levelIndex, setLevelIndex] = useState(0);
   const [targetFigure, setTargetFigure] = useState("");
   const [characters, setCharacters] = useState<GridCharacter[]>([]);

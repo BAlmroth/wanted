@@ -52,7 +52,7 @@ export function GameOn({
 
   const cols = currentLevel.carousel
     ? (currentLevel.carouselCols ?? Math.ceil(characters.length / rowCount))
-: (currentLevel.gridCols ?? Math.round(Math.sqrt(currentLevel.gridCount)));
+    : (currentLevel.gridCols ?? Math.round(Math.sqrt(currentLevel.gridCount)));
 
   const stableClickRef = useRef(onCharacterClick);
   stableClickRef.current = onCharacterClick;
@@ -72,9 +72,16 @@ export function GameOn({
             <span className={styles.statValue}>{score}</span>
           </div>
 
-          <div className={styles.targetBox} key={`target-${currentLevel.level}`}>
+          <div
+            className={styles.targetBox}
+            key={`target-${currentLevel.level}`}
+          >
             {isImage(targetFigure) ? (
-              <img src={targetFigure} alt="target" className={styles.targetImg} />
+              <img
+                src={targetFigure}
+                alt="target"
+                className={styles.targetImg}
+              />
             ) : (
               <span className={styles.targetEmoji}>{targetFigure}</span>
             )}
@@ -87,7 +94,7 @@ export function GameOn({
         </div>
 
         <div className={styles.timerRow}>
-          <Timer ref={timerRef} initialTime={100} onTimeUp={onTimeUp} isPaused={isAnimating} />
+          <Timer ref={timerRef} initialTime={10} onTimeUp={onTimeUp} isPaused={isAnimating} />
         </div>
 
         <div className={styles.messageBox}>
@@ -126,7 +133,11 @@ export function GameOn({
                   tabIndex={-1}
                 >
                   {isImage(c.figure) ? (
-                    <img src={c.figure} alt="figure" className={styles.characterImg} />
+                    <img
+                      src={c.figure}
+                      alt="figure"
+                      className={styles.characterImg}
+                    />
                   ) : (
                     c.figure
                   )}
