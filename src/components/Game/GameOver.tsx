@@ -94,13 +94,12 @@ export function GameOver({
           <Leaderboard />
         </section>
 
-        {/* out commented Nav and wrote it without play again button, will be changed if tvoli choose to have the functionality yo play again, right now you have to go back to tivoli for play again */}
+        {/* out commented Nav and wrote it without play again button, will be changed if tvoli choose to have the functionality yo play again, right now you have to go back to loopland for play again */}
         {/* <Navigation onStartGame={openInfoForPlay} onInfoClick={openInfo} /> */}
         <Navigation
           onStartGame={openInfoForPlay}
           onInfoClick={openInfo}
           showPlayButton={false}
-          tivoliUrl={import.meta.env.VITE_TIVOLI_URL}
         />
       </div>
 
