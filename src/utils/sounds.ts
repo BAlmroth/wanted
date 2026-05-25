@@ -85,4 +85,12 @@ try {
   (globalThis as any).isSfxMuted = isSfxMuted;
 } catch (e) {}
 
-export { playSound, startSoundtrack, stopSoundtrack, setSoundtrackMuted, setSfxMuted, isSoundtrackMuted, isSfxMuted };
+export {
+  playSound,
+  startSoundtrack,
+  stopSoundtrack,
+  setSoundtrackMuted,
+  setSfxMuted,
+  isSoundtrackMuted,
+  isSfxMuted,
+};

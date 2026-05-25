@@ -42,7 +42,9 @@ export function SoundProvider({ children }: { children: React.ReactNode }) {
     const handler = (e: Event) => {
       const target = e.target as HTMLElement | null;
       if (!target) return;
-      const btn = target.closest ? target.closest("button, [role=\"button\"]") : null;
+      const btn = target.closest
+        ? target.closest('button, [role="button"]')
+        : null;
       if (btn) {
         try {
           playSound("press");
@@ -51,7 +53,8 @@ export function SoundProvider({ children }: { children: React.ReactNode }) {
     };
 
     document.addEventListener("click", handler, { capture: true });
-    return () => document.removeEventListener("click", handler, { capture: true });
+    return () =>
+      document.removeEventListener("click", handler, { capture: true });
   }, []);
 
   const toggleSoundtrack = () => {

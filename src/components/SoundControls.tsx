@@ -10,7 +10,9 @@ export default function SoundControls() {
         className={styles.btn}
         onClick={toggleSoundtrack}
         aria-pressed={soundtrackMuted}
-        aria-label={soundtrackMuted ? "Unmute background music" : "Mute background music"}
+        aria-label={
+          soundtrackMuted ? "Unmute background music" : "Mute background music"
+        }
         title={soundtrackMuted ? "Unmute music" : "Mute music"}
       >
         {soundtrackMuted ? "🔈" : "🎵"}
