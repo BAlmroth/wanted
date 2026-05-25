@@ -12,6 +12,8 @@ import type { ApiError } from "../../types/CentralBank";
 import type { GamePhase } from "../../types/Game";
 import type { GridCharacter } from "../../types/Character";
 
+const INITIAL_TIME = 10;
+
 export function useGameLogic() {
   const [gameState, setGameState] = useState<GamePhase>("idle");
   const [levelIndex, setLevelIndex] = useState(0);
@@ -20,12 +22,12 @@ export function useGameLogic() {
   const [sessionId, setSessionId] = useState<string | null>(null);
   const [message, setMessage] = useState("");
   const [score, setScore] = useState(0);
-  const [timeLeft, setTimeLeft] = useState(10);
+  const [timeLeft, setTimeLeft] = useState(INITIAL_TIME);
   const [loading, setLoading] = useState(false);
   const [isWin, setIsWin] = useState(false);
   const gameEndedRef = useRef(false);
   const [timerRunning, setTimerRunning] = useState(false);
-  const timeLeftRef = useRef(10);
+  const timeLeftRef = useRef(INITIAL_TIME);
   const introTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const {
     startGame: startCentralbankGame,
@@ -38,7 +40,8 @@ export function useGameLogic() {
 
   function resetToIdle() {
     clearError();
-    if (introTimeoutRef.current) { //timerlogic needed in this file to minimize cheating
+    if (introTimeoutRef.current) {
+      //timerlogic needed in this file to minimize cheating
       clearTimeout(introTimeoutRef.current);
       introTimeoutRef.current = null;
     }
@@ -48,8 +51,8 @@ export function useGameLogic() {
     setScore(0);
     setLevelIndex(0);
     setTimerRunning(false);
-    timeLeftRef.current = 10;
-    setTimeLeft(10);
+    timeLeftRef.current = INITIAL_TIME;
+    setTimeLeft(INITIAL_TIME);
     setIsWin(false);
   }
 
@@ -123,8 +126,8 @@ export function useGameLogic() {
     setLevelIndex(0);
     setMessage("");
     setTimerRunning(false);
-    timeLeftRef.current = 10;
-    setTimeLeft(10);
+    timeLeftRef.current = INITIAL_TIME;
+    setTimeLeft(INITIAL_TIME);
     gameEndedRef.current = false;
 
     if (introTimeoutRef.current) {

@@ -19,7 +19,6 @@ export default function Game() {
     loading,
     startGame,
     handleClick,
-    handleTimeUp,
     transaction,
     error,
     resetToIdle,
