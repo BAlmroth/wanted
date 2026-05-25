@@ -184,19 +184,15 @@ export function useGameLogic() {
         setIsWin(true);
         try {
           await endGame(currentLevel.level);
+          if (user?.name) {
+            await saveScore(user.name, newScore);
+          }
         } catch (err) {
           const apiError = err as ApiError;
           console.error("Failed to end game:", apiError.message);
+        } finally {
+          setGameState("gameover");
         }
-        if (user?.name) {
-          try {
-            await saveScore(user.name, newScore);
-          } catch (err) {
-            const apiError = err as ApiError;
-            console.error("Failed to save score:", apiError.message);
-          }
-        }
-        setGameState("gameover");
       } else {
         setScore(newScore);
         setLevelIndex(nextIndex);
@@ -220,19 +216,15 @@ export function useGameLogic() {
 
     try {
       await endGame(currentLevel.level);
+      if (user?.name && score > 0) {
+        await saveScore(user.name, score);
+      }
     } catch (err) {
       const apiError = err as ApiError;
       console.error("Error ending game:", apiError.message);
+    } finally {
+      setGameState("gameover");
     }
-    if (user?.name && score > 0) {
-      try {
-        await saveScore(user.name, score);
-      } catch (err) {
-        const apiError = err as ApiError;
-        console.error("Failed to save score:", apiError.message);
-      }
-    }
-    setGameState("gameover");
   }
 
   return {
