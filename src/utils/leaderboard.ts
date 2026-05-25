@@ -36,19 +36,12 @@ export async function saveScore(name: string, score: number): Promise<void> {
     logMockScore(name, score);
     return;
   }
-  console.log("[LEADERBOARD] saveScore called with name:", name, "score:", score);
-  console.log("[LEADERBOARD] TIVOLI_MODE:", TIVOLI_MODE);
-  console.log("[LEADERBOARD] SUPABASE_URL:", SUPABASE_URL);
   const res = await fetch(`${SUPABASE_URL}/rest/v1/leaderboard`, {
     method: "POST",
     headers,
     body: JSON.stringify({ name, score }),
   });
-  console.log("[LEADERBOARD] Response status:", res.status, res.statusText);
   if (!res.ok) {
-    const errorBody = await res.text();
-    console.error("[LEADERBOARD] Error response body:", errorBody);
     throw new Error(`Failed to save score: ${res.statusText}`);
   }
-  console.log("[LEADERBOARD] Score saved successfully");
 }

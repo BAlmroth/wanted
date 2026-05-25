@@ -12,7 +12,7 @@ import type { ApiError } from "../../types/CentralBank";
 import type { GamePhase } from "../../types/Game";
 import type { GridCharacter } from "../../types/Character";
 
-const INITIAL_TIME = 10;
+const INITIAL_TIME = 100;
 
 export function useGameLogic() {
   const [gameState, setGameState] = useState<GamePhase>("idle");
@@ -187,17 +187,10 @@ export function useGameLogic() {
         gameEndedRef.current = true;
         setScore(newScore);
         setIsWin(true);
-        console.log("[GAME WIN] Game completed! Score:", newScore);
-        console.log("[GAME WIN] User info:", user);
         try {
           await endGame(currentLevel.level);
-          console.log("[GAME WIN] endGame completed successfully");
           if (user?.name) {
-            console.log("[GAME WIN] About to save score for user:", user.name, "Score:", newScore);
             await saveScore(user.name, newScore);
-            console.log("[GAME WIN] Score saved successfully to Supabase");
-          } else {
-            console.warn("[GAME WIN] No user name available! User:", user);
           }
         } catch (err) {
           const apiError = err as ApiError;
@@ -226,17 +219,10 @@ export function useGameLogic() {
       introTimeoutRef.current = null;
     }
 
-    console.log("[TIME UP] Time's up! Current score:", scoreRef.current);
-    console.log("[TIME UP] User info:", user);
     try {
       await endGame(currentLevel.level);
-      console.log("[TIME UP] endGame completed successfully");
       if (user?.name && scoreRef.current > 0) {
-        console.log("[TIME UP] About to save score for user:", user.name, "Score:", scoreRef.current);
         await saveScore(user.name, scoreRef.current);
-        console.log("[TIME UP] Score saved successfully to Supabase");
-      } else {
-        console.warn("[TIME UP] Score not saved - User name missing or score is 0. User:", user, "Score:", scoreRef.current);
       }
     } catch (err) {
       const apiError = err as ApiError;
