@@ -182,7 +182,7 @@ export function useGameLogic() {
         (globalThis as any).playSound?.("correct");
       } catch {}
       const newScore = score + 1;
-      timeLeftRef.current += 2;
+      timeLeftRef.current += 3;
       setTimeLeft(timeLeftRef.current);
 
       const nextIndex = levelIndex + 1;
