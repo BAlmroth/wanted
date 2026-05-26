@@ -9,7 +9,7 @@ import { RuneSpeech } from "../RuneSpeech";
 
 export function GameOver({
   score,
-  currentLevel,
+  currentLevel: _currentLevel,
   onPlayAgain,
   transaction,
   resultType = "gameover",
@@ -22,7 +22,7 @@ export function GameOver({
     setInfoMode(null);
     onPlayAgain();
   };
-  const euro = calculatePayout(currentLevel.level);
+  const euro = calculatePayout(score);
 
   const stampImageUrl = transaction?.stamp?.image_url?.replace(
     /^http:\/\//,

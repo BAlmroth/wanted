@@ -197,7 +197,7 @@ export function useGameLogic() {
           play("victory");
         } catch {}
         try {
-          await endGame(currentLevel.level);
+          await endGame(newScore);
           if (user?.name) {
             await saveScore(user.name, newScore);
           }
@@ -232,7 +232,7 @@ export function useGameLogic() {
     }
 
     try {
-      await endGame(currentLevel.level);
+      await endGame(scoreRef.current);
       if (user?.name && scoreRef.current > 0) {
         await saveScore(user.name, scoreRef.current);
       }
