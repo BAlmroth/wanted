@@ -49,7 +49,7 @@ export default function InfoContent() {
             <li>7+ levels: €1.50</li>
             <li>10+ levels: €1.80</li>
             <li>13+ levels: €2.00</li>
-            <li>15+ levels: €3.00</li>
+            <li>16 levels: €3.00</li>
           </ul>
         </div>
       </div>

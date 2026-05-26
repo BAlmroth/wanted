@@ -10,12 +10,12 @@ import { useCentralbank } from "../../hooks/useCentralbank";
 import { TIVOLI_MODE } from "../../config";
 import { useSound } from "../../contexts/SoundContext";
 import type { ApiError } from "../../types/CentralBank";
-import type { GamePhase } from "../../types/Game";
+import type { GamePhase, UseGameLogicReturn } from "../../types/Game";
 import type { GridCharacter } from "../../types/Character";
 
 const INITIAL_TIME = 10;
 
-export function useGameLogic() {
+export function useGameLogic(): UseGameLogicReturn {
   const [gameState, setGameState] = useState<GamePhase>("idle");
   const [levelIndex, setLevelIndex] = useState(0);
   const [targetFigure, setTargetFigure] = useState("");
@@ -42,7 +42,7 @@ export function useGameLogic() {
 
   const { play } = useSound();
 
-  function resetToIdle() {
+  function resetToIdle(): void {
     clearError();
     if (introTimeoutRef.current) {
       //timerlogic needed in this file to minimize cheating
@@ -60,7 +60,7 @@ export function useGameLogic() {
     setIsWin(false);
   }
 
-  useEffect(() => {
+  useEffect((): void | (() => void) => {
     if (gameState !== "playing") {
       return;
     }
@@ -70,7 +70,7 @@ export function useGameLogic() {
     }
 
     setTimerRunning(false);
-    introTimeoutRef.current = setTimeout(() => {
+    introTimeoutRef.current = setTimeout((): void => {
       setTimerRunning(true);
       introTimeoutRef.current = null;
     }, 2800);
@@ -83,16 +83,16 @@ export function useGameLogic() {
     };
   }, [gameState]);
 
-  useEffect(() => {
+  useEffect((): void => {
     scoreRef.current = score;
   }, [score]);
 
-  useEffect(() => {
+  useEffect((): void | (() => void) => {
     if (gameState !== "playing" || gameEndedRef.current || !timerRunning) {
       return;
     }
 
-    const interval = setInterval(() => {
+    const interval = setInterval((): void => {
       timeLeftRef.current -= 1;
       setTimeLeft(timeLeftRef.current);
 
@@ -115,7 +115,7 @@ export function useGameLogic() {
       setSessionId(data.sessionId);
       setTargetFigure(resolveFigure(data.targetFigure));
       setCharacters(
-        data.grid.map((character) => ({
+        data.grid.map((character: GridCharacter) => ({
           ...character,
           figure: resolveFigure(character.figure),
         })),
@@ -129,7 +129,7 @@ export function useGameLogic() {
     }
   }
 
-  async function startGame() {
+  async function startGame(): Promise<void> {
     setScore(0);
     setLevelIndex(0);
     setMessage("");
@@ -146,7 +146,10 @@ export function useGameLogic() {
     try {
       await startCentralbankGame();
     } catch (err) {
-      console.warn("[Game] Failed to start centralbank game:", err instanceof Error ? err.message : String(err));
+      console.warn(
+        "[Game] Failed to start centralbank game:",
+        err instanceof Error ? err.message : String(err),
+      );
       return;
     }
 
@@ -154,7 +157,7 @@ export function useGameLogic() {
     setGameState("playing");
   }
 
-  async function handleClick(character: GridCharacter) {
+  async function handleClick(character: GridCharacter): Promise<void> {
     if (
       gameState !== "playing" ||
       !sessionId ||
@@ -176,7 +179,10 @@ export function useGameLogic() {
       try {
         correct = await validateClick(sessionId, character.id);
       } catch (err) {
-        console.warn("[Game] Validation failed:", err instanceof Error ? err.message : String(err));
+        console.warn(
+          "[Game] Validation failed:",
+          err instanceof Error ? err.message : String(err),
+        );
         setMessage("Connection error, try clicking again.");
         return;
       }
@@ -186,7 +192,10 @@ export function useGameLogic() {
       try {
         play("correct");
       } catch (err) {
-        console.warn("[Sound] Failed to play 'correct':", err instanceof Error ? err.message : String(err));
+        console.warn(
+          "[Sound] Failed to play 'correct':",
+          err instanceof Error ? err.message : String(err),
+        );
       }
       const newScore = score + 1;
       timeLeftRef.current += 3;
@@ -200,7 +209,10 @@ export function useGameLogic() {
         try {
           play("victory");
         } catch (err) {
-          console.warn("[Sound] Failed to play 'victory':", err instanceof Error ? err.message : String(err));
+          console.warn(
+            "[Sound] Failed to play 'victory':",
+            err instanceof Error ? err.message : String(err),
+          );
         }
         try {
           await endGame(newScore);
@@ -223,9 +235,12 @@ export function useGameLogic() {
       try {
         play("wrong");
       } catch (err) {
-        console.warn("[Sound] Failed to play 'wrong':", err instanceof Error ? err.message : String(err));
+        console.warn(
+          "[Sound] Failed to play 'wrong':",
+          err instanceof Error ? err.message : String(err),
+        );
       }
-      setTimeout(() => setMessage(""), 3000);
+      setTimeout((): void => setMessage(""), 3000);
     }
   }
 
@@ -251,7 +266,10 @@ export function useGameLogic() {
       try {
         play("gameover");
       } catch (err) {
-        console.warn("[Sound] Failed to play 'gameover':", err instanceof Error ? err.message : String(err));
+        console.warn(
+          "[Sound] Failed to play 'gameover':",
+          err instanceof Error ? err.message : String(err),
+        );
       }
       setGameState("gameover");
     }

@@ -18,14 +18,15 @@ const CarouselGrid = memo(function CarouselGrid({
   sameDirection = false,
   vertical = false,
 }: CarouselProps) {
-
   if (vertical) {
     const columns: Character[][] = Array.from({ length: cols }, () => []);
-    characters.forEach((char, i) => columns[i % cols].push(char));
+    characters.forEach((char: Character, i: number) =>
+      columns[i % cols].push(char),
+    );
 
     return (
       <div className={styles.carouselGridVertical}>
-        {columns.map((col, colIndex) => {
+        {columns.map((col: Character[], colIndex: number) => {
           let direction: "up" | "down" = colIndex % 2 === 0 ? "up" : "down";
           if (sameDirection) direction = direction === "up" ? "down" : "up";
 
@@ -52,7 +53,7 @@ const CarouselGrid = memo(function CarouselGrid({
 
   return (
     <div className={styles.carouselGrid}>
-      {rows.map((row, rowIndex) => {
+      {rows.map((row: Character[], rowIndex: number) => {
         let direction: "left" | "right" = rowIndex % 2 === 0 ? "left" : "right";
         if (sameDirection) direction = direction === "left" ? "right" : "left";
 
@@ -102,10 +103,13 @@ function CarouselRow({
 
   const repeated = Array.from(
     { length: copiesNeeded * items.length },
-    (_, i) => items[i % items.length]
+    (_: unknown, i: number) => items[i % items.length],
   );
 
-  const handleKeyDown = (e: React.KeyboardEvent<HTMLButtonElement>, index: number) => {
+  const handleKeyDown = (
+    e: React.KeyboardEvent<HTMLButtonElement>,
+    index: number,
+  ): void => {
     if (e.key === "ArrowLeft") {
       e.preventDefault();
       const prevIndex = (index - 1 + items.length) % items.length;
@@ -120,11 +124,11 @@ function CarouselRow({
     }
   };
 
-  useEffect(() => {
+  useEffect((): (() => void) => {
     offsetRef.current = direction === "right" ? -oneSetW : 0;
     lastTsRef.current = null;
 
-    function tick(ts: number) {
+    function tick(ts: number): void {
       if (lastTsRef.current === null) lastTsRef.current = ts;
       const delta = (ts - lastTsRef.current) / 1000;
       lastTsRef.current = ts;
@@ -158,15 +162,19 @@ function CarouselRow({
   return (
     <div className={styles.track}>
       <div ref={stripRef} className={styles.strip} style={{ width: totalW }}>
-        {repeated.map((char, i) => (
+        {repeated.map((char: Character, i: number) => (
           <div key={i} className={styles.slot} style={{ width: slotW }}>
             <button
-              ref={(el) => { buttonRefs.current[i % items.length] = el; }}
+              ref={(el: HTMLButtonElement | null) => {
+                buttonRefs.current[i % items.length] = el;
+              }}
               className={styles.item}
               style={{ width: ITEM_W, height: ITEM_H }}
               onClick={() => onCharacterClick(items[i % items.length])}
-              onKeyDown={(e) => handleKeyDown(e, i)}
-              aria-label={`Character ${i % items.length + 1}`}
+              onKeyDown={(e: React.KeyboardEvent<HTMLButtonElement>) =>
+                handleKeyDown(e, i)
+              }
+              aria-label={`Character ${(i % items.length) + 1}`}
             >
               {isImage(char.figure) ? (
                 <img src={char.figure} alt="character" className={styles.img} />
@@ -209,10 +217,13 @@ function CarouselColumn({
 
   const repeated = Array.from(
     { length: copiesNeeded * items.length },
-    (_, i) => items[i % items.length]
+    (_: unknown, i: number) => items[i % items.length],
   );
 
-  const handleKeyDown = (e: React.KeyboardEvent<HTMLButtonElement>, index: number) => {
+  const handleKeyDown = (
+    e: React.KeyboardEvent<HTMLButtonElement>,
+    index: number,
+  ): void => {
     if (e.key === "ArrowUp") {
       e.preventDefault();
       const prevIndex = (index - 1 + items.length) % items.length;
@@ -227,11 +238,11 @@ function CarouselColumn({
     }
   };
 
-  useEffect(() => {
+  useEffect((): (() => void) => {
     offsetRef.current = direction === "down" ? -oneSetH : 0;
     lastTsRef.current = null;
 
-    function tick(ts: number) {
+    function tick(ts: number): void {
       if (lastTsRef.current === null) lastTsRef.current = ts;
       const delta = (ts - lastTsRef.current) / 1000;
       lastTsRef.current = ts;
@@ -264,16 +275,24 @@ function CarouselColumn({
 
   return (
     <div className={styles.columnTrack}>
-      <div ref={stripRef} className={styles.columnStrip} style={{ height: totalH }}>
-        {repeated.map((char, i) => (
+      <div
+        ref={stripRef}
+        className={styles.columnStrip}
+        style={{ height: totalH }}
+      >
+        {repeated.map((char: Character, i: number) => (
           <div key={i} className={styles.columnSlot} style={{ height: slotH }}>
             <button
-              ref={(el) => { buttonRefs.current[i % items.length] = el; }}
+              ref={(el: HTMLButtonElement | null) => {
+                buttonRefs.current[i % items.length] = el;
+              }}
               className={styles.item}
               style={{ width: ITEM_W, height: ITEM_H }}
               onClick={() => onCharacterClick(items[i % items.length])}
-              onKeyDown={(e) => handleKeyDown(e, i)}
-              aria-label={`Character ${i % items.length + 1}`}
+              onKeyDown={(e: React.KeyboardEvent<HTMLButtonElement>) =>
+                handleKeyDown(e, i)
+              }
+              aria-label={`Character ${(i % items.length) + 1}`}
             >
               {isImage(char.figure) ? (
                 <img src={char.figure} alt="character" className={styles.img} />

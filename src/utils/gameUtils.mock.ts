@@ -24,7 +24,7 @@ export function generateMockLevel(count: number): LevelData {
       figures.push(targetFigure);
     } else {
       // choose a figure that is not the target so target appears only once
-      const options = MOCK_FIGURES.filter((f) => f !== targetFigure);
+      const options = MOCK_FIGURES.filter((f: string) => f !== targetFigure);
       figures.push(options[Math.floor(Math.random() * options.length)]);
     }
   }
@@ -36,6 +36,6 @@ export function generateMockLevel(count: number): LevelData {
   return {
     sessionId: `mock-session-${Date.now()}-${Math.random().toString(36).substring(7)}`,
     targetFigure,
-    grid: figures.map((figure, i) => ({ id: i, figure })),
+    grid: figures.map((figure: string, i: number) => ({ id: i, figure })),
   };
 }
