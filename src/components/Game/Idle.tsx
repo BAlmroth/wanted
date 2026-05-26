@@ -1,5 +1,4 @@
 import { useState } from "react";
-import type { ReactNode } from "react";
 import type { IdleProps } from "../../types/Game";
 import styles from "./Idle.module.css";
 import { Leaderboard } from "../Leaderboard";
@@ -8,7 +7,7 @@ import Instructions from "../Instructions";
 import Info from "../Info";
 import { RuneSpeech } from "../RuneSpeech";
 
-export function Idle({ onStartGame, userName }: IdleProps): ReactNode {
+export function Idle({ onStartGame, userName }: IdleProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [showCautionOnly, setShowCautionOnly] = useState(false);
   const [showStartButton, setShowStartButton] = useState(false);

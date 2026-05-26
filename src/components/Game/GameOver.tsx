@@ -16,9 +16,9 @@ export function GameOver({
 }: GameOverProps) {
   const [infoMode, setInfoMode] = useState<null | "play" | "info">(null);
 
-  const openInfoForPlay = () => setInfoMode("play");
-  const openInfo = () => setInfoMode("info");
-  const handleStartFromInfo = () => {
+  const openInfoForPlay = (): void => setInfoMode("play");
+  const openInfo = (): void => setInfoMode("info");
+  const handleStartFromInfo = (): void => {
     setInfoMode(null);
     onPlayAgain();
   };
@@ -36,13 +36,13 @@ export function GameOver({
     <div className={containerClassName}>
       {resultType === "win" ? (
         <h1 className={styles.titleWinner}>
-          {"WINNER".split("").map((l, i) => (
+          {"WINNER".split("").map((l: string, i: number) => (
             <span key={i}>{l}</span>
           ))}
         </h1>
       ) : (
         <h1 className={styles.titleGameOver}>
-          {"GAME OVER".split("").map((l, i) => (
+          {"GAME OVER".split("").map((l: string, i: number) => (
             <span
               key={i}
               style={
@@ -105,7 +105,7 @@ export function GameOver({
 
       <Info
         isOpen={infoMode !== null}
-        onClose={() => setInfoMode(null)}
+        onClose={(): void => setInfoMode(null)}
         onStartGame={handleStartFromInfo}
         showStartButton={infoMode === "play"}
       />
