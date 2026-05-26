@@ -120,6 +120,18 @@
   }
 }
 
+/* smaller phones (< 390px width) – no gap */
+@media (max-width: 390px) {
+  .grid{
+    gap: 0 !important;
+  }
+
+  .characterButton {
+    min-width: 50px;
+    min-height: 50px;
+  }
+}
+
 .loading {
   text-align: center;
   color: white;
