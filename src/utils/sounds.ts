@@ -9,6 +9,7 @@ const _sounds: Record<string, HTMLAudioElement> = {
 
 _sounds.soundtrack.loop = true;
 _sounds.soundtrack.volume = 0.5;
+_sounds.soundtrack.muted = true;
 
 function playSound(name: string) {
   const s = _sounds[name];
@@ -22,7 +23,7 @@ function playSound(name: string) {
 }
 
 let _sfxMuted = false;
-let _soundtrackMuted = false;
+let _soundtrackMuted = true;
 
 function setSoundtrackMuted(muted: boolean) {
   _soundtrackMuted = muted;
