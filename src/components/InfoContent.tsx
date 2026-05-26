@@ -15,7 +15,7 @@ export default function InfoContent() {
           </li>
           <li>Find that rune among the characters</li>
           <li>Click or tap the correct rune to catch them</li>
-          <li>Each correct catch adds 2 seconds to your time</li>
+          <li>Each correct catch adds 4 seconds to your time</li>
           <li>Progress through all the levels to complete the game</li>
           <li>Complete more levels to earn bigger rewards!</li>
         </ul>

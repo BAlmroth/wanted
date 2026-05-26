@@ -29,7 +29,7 @@ After the schoolproject ends 27th of may the game will be a standalone game play
 **WANTED AT YRGO** is a fast-paced game where you must recognize and click on the correct characters based on emotional expressions. The game is divided into progressive levels:
 
 - **Levels**: Starting with a static grid and progressing to animated carousel-style gameplay
-- **Time Limits**: You start with 10 seconds that counts down, and for every level you clear you get 2 extra seconds
+- **Time Limits**: You start with 10 seconds that counts down, and for every level you clear you get 4 extra seconds
 - **Dynamic Animations**: Later levels include carousel animations with varying speeds, direction, and "shakiness" effects
 - **Leaderboard**: Earn points and climb the leaderboard rankings
 - **Emotions**: Find happy, sad, angry, loving or dead Rune
