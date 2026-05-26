@@ -7,6 +7,7 @@ export function Navigation({
   onStartGame,
   onInfoClick,
   showPlayButton = true,
+  ariaDescribedBy,
 }: NavigationProps): ReactNode {
   const isMockMode = !TIVOLI_MODE;
   const hideTivoliButton = isMockMode && showPlayButton;
@@ -28,6 +29,7 @@ export function Navigation({
           className={styles.playBtn}
           onClick={onStartGame}
           aria-label="Start playing the game"
+          aria-describedby={ariaDescribedBy}
         >
           PLAY
         </button>
