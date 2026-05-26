@@ -163,7 +163,7 @@ export default function Info({
               disabled={!hasEverScrolledToBottom}
               aria-disabled={!hasEverScrolledToBottom}
             >
-              {showCautionOnly ? "Start game 2€" : "Ready? - Start game 2€"}
+              {showCautionOnly ? "Start game" : "Ready? - Start game 2€"}
             </button>
           ) : (
             <button className={styles.closeButtonBottom} onClick={onClose}>
