@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import type { ReactNode } from "react";
 import type { IdleProps } from "../../types/Game";
 import styles from "./Idle.module.css";
@@ -8,15 +8,27 @@ import Instructions from "../Instructions";
 import Info from "../Info";
 import { RuneSpeech } from "../RuneSpeech";
 
-export function Idle({ onStartGame, userName }: IdleProps): ReactNode {
+const HAS_SEEN_INSTRUCTIONS_KEY = "wanted_has_seen_instructions";
+
+export function Idle({ onStartGame }: IdleProps): ReactNode {
   const [isOpen, setIsOpen] = useState(false);
   const [showCautionOnly, setShowCautionOnly] = useState(false);
   const [showStartButton, setShowStartButton] = useState(false);
+  const [hasSeenInstructions, setHasSeenInstructions] = useState(false);
+
+  useEffect(() => {
+    const hasSeen = localStorage.getItem(HAS_SEEN_INSTRUCTIONS_KEY) === "true";
+    setHasSeenInstructions(hasSeen);
+  }, []);
 
   const openInfoForPlay = () => {
-    setShowCautionOnly(!!userName);
+    const showInstructionsOnly = !hasSeenInstructions;
+    setShowCautionOnly(!showInstructionsOnly);
     setShowStartButton(true);
     setIsOpen(true);
+    if (showInstructionsOnly) {
+      localStorage.setItem(HAS_SEEN_INSTRUCTIONS_KEY, "true");
+    }
   };
 
   const openInfo = () => {
