@@ -4,14 +4,14 @@ import { StampAnimal, StampMetal } from "../types/CentralBank";
 
 // Mock stamps database
 const MOCK_STAMPS: Stamp[] = [
-  { animal: StampAnimal.Lion,      metal: StampMetal.Gold,     image_url: "" },
-  { animal: StampAnimal.Dolphin,   metal: StampMetal.Silver,   image_url: "" },
-  { animal: StampAnimal.Toucan,    metal: StampMetal.Platinum, image_url: "" },
-  { animal: StampAnimal.Beetlebug, metal: StampMetal.Gold,     image_url: "" },
-  { animal: StampAnimal.Snake,     metal: null,                image_url: "" },
+  { animal: StampAnimal.Lion, metal: StampMetal.Gold, image_url: "" },
+  { animal: StampAnimal.Dolphin, metal: StampMetal.Silver, image_url: "" },
+  { animal: StampAnimal.Toucan, metal: StampMetal.Platinum, image_url: "" },
+  { animal: StampAnimal.Beetlebug, metal: StampMetal.Gold, image_url: "" },
+  { animal: StampAnimal.Snake, metal: null, image_url: "" },
 ];
 
-function getRandomMockStamp() {
+function getRandomMockStamp(): Stamp {
   return MOCK_STAMPS[Math.floor(Math.random() * MOCK_STAMPS.length)];
 }
 

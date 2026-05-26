@@ -60,6 +60,7 @@ export function Idle({ onStartGame }: IdleProps): ReactNode {
           <Navigation
             onStartGame={openInfoForPlay}
             onInfoClick={openInfo}
+            ariaDescribedBy="game-instructions game-caution"
           />
         </div>
       </div>

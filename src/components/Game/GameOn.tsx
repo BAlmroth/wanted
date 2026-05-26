@@ -1,10 +1,4 @@
-import {
-  useCallback,
-  useRef,
-  useState,
-  useEffect,
-  type ReactNode,
-} from "react";
+import { useCallback, useRef, useState, useEffect } from "react";
 import Timer from "../Timer";
 import CarouselGrid from "../CarouselGrid";
 import Instructions from "../Instructions";
@@ -25,7 +19,7 @@ export function GameOn({
   timeLeft,
   loading,
   onCharacterClick,
-}: GameOnProps): ReactNode {
+}: GameOnProps) {
   const playfieldRef = useRef<HTMLDivElement>(null);
   const roRef = useRef<ResizeObserver | null>(null);
   const [rowCount, setRowCount] = useState(5);
@@ -33,7 +27,7 @@ export function GameOn({
   useEffect(() => {
     const node = playfieldRef.current;
     if (!node) return;
-    roRef.current = new ResizeObserver((entries) => {
+    roRef.current = new ResizeObserver((entries: ResizeObserverEntry[]) => {
       const h = entries[0].contentRect.height;
       if (h > 0) setRowCount(Math.max(1, Math.floor(h / TRACK_H)));
     });
@@ -114,26 +108,28 @@ export function GameOn({
             />
           ) : (
             <div className={`${styles.grid} ${styles[`grid${cols}`]}`}>
-              {characters.map((c, index) => (
-                <button
-                  key={c.id}
-                  data-index={index}
-                  onClick={() => onCharacterClick(c)}
-                  className={styles.characterButton}
-                  aria-label={`Character ${index + 1}`}
-                  tabIndex={-1}
-                >
-                  {isImage(c.figure) ? (
-                    <img
-                      src={c.figure}
-                      alt="figure"
-                      className={styles.characterImg}
-                    />
-                  ) : (
-                    c.figure
-                  )}
-                </button>
-              ))}
+              {characters.map(
+                (c: GameOnProps["characters"][number], index: number) => (
+                  <button
+                    key={c.id}
+                    data-index={index}
+                    onClick={() => onCharacterClick(c)}
+                    className={styles.characterButton}
+                    aria-label={`Character ${index + 1}`}
+                    tabIndex={-1}
+                  >
+                    {isImage(c.figure) ? (
+                      <img
+                        src={c.figure}
+                        alt="figure"
+                        className={styles.characterImg}
+                      />
+                    ) : (
+                      c.figure
+                    )}
+                  </button>
+                ),
+              )}
             </div>
           )}
           <VirtualCursor />

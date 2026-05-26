@@ -1,4 +1,3 @@
-import type { ReactNode } from "react";
 import type { NavigationProps } from "../../types/Navigation";
 import { TIVOLI_MODE } from "../../config";
 import styles from "./Navigation.module.css";
@@ -7,7 +6,8 @@ export function Navigation({
   onStartGame,
   onInfoClick,
   showPlayButton = true,
-}: NavigationProps): ReactNode {
+  ariaDescribedBy,
+}: NavigationProps) {
   const isMockMode = !TIVOLI_MODE;
   const hideTivoliButton = isMockMode && showPlayButton;
   const looplandButtonLabel =
@@ -28,6 +28,7 @@ export function Navigation({
           className={styles.playBtn}
           onClick={onStartGame}
           aria-label="Start playing the game"
+          aria-describedby={ariaDescribedBy}
         >
           PLAY
         </button>

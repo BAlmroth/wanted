@@ -1,8 +1,8 @@
 import { createPortal } from "react-dom";
-import { useEffect, useRef, useState, type ReactNode } from "react";
+import { useEffect, useRef, useState } from "react";
 import styles from "./VirtualCursor.module.css";
 
-export function VirtualCursor(): ReactNode {
+export function VirtualCursor() {
   const [cursorPos, setCursorPos] = useState({ x: 0, y: 0 });
   const [cursorVisible, setCursorVisible] = useState(false);
   const cursorRef = useRef({ x: 0, y: 0 });

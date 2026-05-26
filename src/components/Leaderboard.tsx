@@ -40,7 +40,7 @@ export function Leaderboard() {
     <div className={styles.box}>
       <h3 className={styles.leaderboardH}>LEADERBOARD</h3>
       <ol className={styles.list}>
-        {entries.map((entry, index) => (
+        {entries.map((entry: LeaderboardEntry, index: number) => (
           <li key={entry.id} className={styles.entry}>
             <span className={styles.rank}>{index + 1}.</span>
             <span className={styles.name}>{entry.name}</span>
