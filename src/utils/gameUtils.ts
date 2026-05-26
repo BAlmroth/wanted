@@ -80,7 +80,7 @@ export function isImage(figure: string): boolean {
 
 // prize for player
 export function calculatePayout(levelsCleared: number): number {
-  if (levelsCleared > 16) return 3.0;
+  if (levelsCleared > 15) return 3.0;
   if (levelsCleared > 13) return 2.0;
   if (levelsCleared > 10) return 1.8;
   if (levelsCleared > 7) return 1.5;
