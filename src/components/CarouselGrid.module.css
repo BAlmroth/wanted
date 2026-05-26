@@ -7,9 +7,9 @@
 
 .track {
   width: 100%;
-  overflow: hidden;
   height: 76px;
   position: relative;
+  overflow: hidden;
 }
 
 .strip {
@@ -37,11 +37,11 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  padding: 4px;
+  box-sizing: border-box;
   background: none;
   border: none;
-  padding: 4px;
   cursor: pointer;
-  box-sizing: border-box;
   transition: all 0.2s ease;
 }
 
@@ -62,13 +62,6 @@
   line-height: 1;
 }
 
-/* smaller phones (< 390px width) – no gap */
-@media (max-width: 389px) {
-  .carouselGrid {
-    gap: 0 !important;
-  }
-}
-
 .carouselGridVertical {
   width: 100%;
   height: 100%;
@@ -80,9 +73,9 @@
 
 .columnTrack {
   flex: 1;
-  overflow: hidden;
-  position: relative;
   max-width: 76px;
+  position: relative;
+  overflow: hidden;
 }
 
 .columnStrip {
@@ -101,4 +94,10 @@
   display: flex;
   align-items: flex-start;
   justify-content: center;
+}
+
+@media (max-width: 389px) {
+  .carouselGrid {
+    gap: 0 !important;
+  }
 }

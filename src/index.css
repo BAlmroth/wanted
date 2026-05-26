@@ -8,14 +8,14 @@
 
 body {
   margin: 0;
+  font-family: var(--headerFont);
   background-color: black;
   background-image: url("/src/assets/BrickBg.png");
   background-size: auto 100%;
   background-position: center;
-  background-repeat:repeat;
+  background-repeat: repeat;
   background-attachment: fixed;
   letter-spacing: 5px;
-  font-family: var(--headerFont);
 }
 
 h1, h2 {
@@ -25,14 +25,14 @@ h1, h2 {
 }
 
 h1 {
-  font-size: 6rem;
-  margin-bottom: 0;
   margin-top: 1rem;
+  margin-bottom: 0;
+  font-size: 6rem;
 }
 
 h2 {
-  font-size: 4rem;
   margin: 0.5rem;
+  font-size: 4rem;
 }
 
 h3 {
@@ -48,20 +48,20 @@ h3 {
 }
 
 button {
+  padding: 0rem 1rem;
+  margin: 1rem;
   height: 80px;
-  font-size: 2rem;
+  border-radius: 5px;
   background: none;
   border: none;
   cursor: pointer;
+  transition: all 0.2s ease;
+  font-family: var(--headerFont);
+  font-size: 2rem;
   color: var(--textLight);
+  letter-spacing: 3px;
   -webkit-text-stroke: 4px black;
   paint-order: stroke fill;
-  font-family: var(--headerFont);
-  border-radius: 5px;
-  margin: 1rem;
-  padding: 0rem 1rem;
-  letter-spacing: 3px;
-  transition: all 0.2s ease;
 }
 
 button:focus-visible {
