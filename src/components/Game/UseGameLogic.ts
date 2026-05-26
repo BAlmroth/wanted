@@ -12,7 +12,7 @@ import type { ApiError } from "../../types/CentralBank";
 import type { GamePhase } from "../../types/Game";
 import type { GridCharacter } from "../../types/Character";
 
-const INITIAL_TIME = 10;
+const INITIAL_TIME = 100;
 
 export function useGameLogic() {
   const [gameState, setGameState] = useState<GamePhase>("idle");
