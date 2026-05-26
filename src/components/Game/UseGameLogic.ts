@@ -13,7 +13,7 @@ import type { ApiError } from "../../types/CentralBank";
 import type { GamePhase } from "../../types/Game";
 import type { GridCharacter } from "../../types/Character";
 
-const INITIAL_TIME = 100;
+const INITIAL_TIME = 10;
 
 export function useGameLogic() {
   const [gameState, setGameState] = useState<GamePhase>("idle");
@@ -185,7 +185,7 @@ export function useGameLogic() {
         play("correct");
       } catch {}
       const newScore = score + 1;
-      timeLeftRef.current += 3;
+      timeLeftRef.current += 4;
       setTimeLeft(timeLeftRef.current);
 
       const nextIndex = levelIndex + 1;
