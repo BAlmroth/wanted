@@ -9,6 +9,7 @@ const _sounds: Record<string, HTMLAudioElement> = {
 
 _sounds.soundtrack.loop = true;
 _sounds.soundtrack.volume = 0.5;
+_sounds.soundtrack.muted = true;
 
 function playSound(name: string) {
   const s = _sounds[name];
@@ -17,19 +18,17 @@ function playSound(name: string) {
     s.currentTime = 0;
     void s.play();
   } catch (e) {
-    // ignore play errors (autoplay policies)
   }
 }
 
 let _sfxMuted = false;
-let _soundtrackMuted = false;
+let _soundtrackMuted = true;
 
 function setSoundtrackMuted(muted: boolean) {
   _soundtrackMuted = muted;
   try {
     _sounds.soundtrack.muted = muted;
     if (!muted) {
-      // try to resume
       void _sounds.soundtrack.play();
     }
   } catch {}
@@ -38,9 +37,9 @@ function setSoundtrackMuted(muted: boolean) {
 function setSfxMuted(muted: boolean) {
   _sfxMuted = muted;
   try {
-    Object.keys(_sounds).forEach((k) => {
+    Object.entries(_sounds).forEach(([k, audio]) => {
       if (k === "soundtrack") return;
-      (_sounds as any)[k].muted = muted;
+      audio.muted = muted;
     });
   } catch {}
 }
@@ -73,17 +72,6 @@ function stopSoundtrack() {
     _sounds.soundtrack.currentTime = 0;
   } catch {}
 }
-
-// expose minimal globals so components can call e.g. window.playSound('press')
-try {
-  (globalThis as any).playSound = playSound;
-  (globalThis as any).startSoundtrack = startSoundtrack;
-  (globalThis as any).stopSoundtrack = stopSoundtrack;
-  (globalThis as any).setSoundtrackMuted = setSoundtrackMuted;
-  (globalThis as any).setSfxMuted = setSfxMuted;
-  (globalThis as any).isSoundtrackMuted = isSoundtrackMuted;
-  (globalThis as any).isSfxMuted = isSfxMuted;
-} catch (e) {}
 
 export {
   playSound,

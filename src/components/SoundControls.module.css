@@ -31,3 +31,9 @@
 .btn:active {
   transform: translateY(1px);
 }
+
+.icon {
+  width: 22px;
+  height: 22px;
+  display: block;
+}

@@ -3,11 +3,8 @@ import styles from "./RuneSpeech.module.css";
 import speechbubbleAndRune from "../assets/speechbubbleAndRune.png";
 import speechbubbleGameOver from "../assets/speechbubbleGameOver.png";
 import speechbubbleWinner from "../assets/speechbubbleWinner.png";
- 
-interface RuneSpeechProps {
-  variant?: "idle" | "gameover" | "winner";
-}
- 
+import type { RuneSpeechProps } from "../types/RuneSpeech";
+
 export function RuneSpeech({ variant = "idle" }: RuneSpeechProps): ReactNode {
   const image = variant === "gameover" ? speechbubbleGameOver : variant === "winner" ? speechbubbleWinner : speechbubbleAndRune;
  

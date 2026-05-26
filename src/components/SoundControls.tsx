@@ -1,5 +1,9 @@
 import { useSound } from "../contexts/SoundContext";
 import styles from "./SoundControls.module.css";
+import SFX from "../assets/SFX.png";
+import SFXMute from "../assets/SFXMute.png";
+import Sound from "../assets/Sound.png";
+import SoundMute from "../assets/SoundMute.png";
 
 export default function SoundControls() {
   const { soundtrackMuted, sfxMuted, toggleSoundtrack, toggleSfx } = useSound();
@@ -15,7 +19,11 @@ export default function SoundControls() {
         }
         title={soundtrackMuted ? "Unmute music" : "Mute music"}
       >
-        {soundtrackMuted ? "🔈" : "🎵"}
+        <img
+          src={soundtrackMuted ? SoundMute : Sound}
+          alt={soundtrackMuted ? "Music muted" : "Music"}
+          className={styles.icon}
+        />
       </button>
 
       <button
@@ -25,7 +33,11 @@ export default function SoundControls() {
         aria-label={sfxMuted ? "Unmute sound effects" : "Mute sound effects"}
         title={sfxMuted ? "Unmute SFX" : "Mute SFX"}
       >
-        {sfxMuted ? "🔇" : "🔊"}
+        <img
+          src={sfxMuted ? SFXMute : SFX}
+          alt={sfxMuted ? "SFX muted" : "SFX"}
+          className={styles.icon}
+        />
       </button>
     </div>
   );
