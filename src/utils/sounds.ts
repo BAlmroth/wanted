@@ -17,7 +17,8 @@ function playSound(name: string) {
   try {
     s.currentTime = 0;
     void s.play();
-  } catch (e) {
+  } catch (err) {
+    console.warn("[Sound] Failed to play sound:", err instanceof Error ? err.message : String(err));
   }
 }
 
@@ -31,7 +32,9 @@ function setSoundtrackMuted(muted: boolean) {
     if (!muted) {
       void _sounds.soundtrack.play();
     }
-  } catch {}
+  } catch (err) {
+    console.warn("[Sound] Failed to set soundtrack muted:", err instanceof Error ? err.message : String(err));
+  }
 }
 
 function setSfxMuted(muted: boolean) {
@@ -41,7 +44,9 @@ function setSfxMuted(muted: boolean) {
       if (k === "soundtrack") return;
       audio.muted = muted;
     });
-  } catch {}
+  } catch (err) {
+    console.warn("[Sound] Failed to set SFX muted:", err instanceof Error ? err.message : String(err));
+  }
 }
 
 function isSoundtrackMuted() {
@@ -55,11 +60,14 @@ function isSfxMuted() {
 function startSoundtrack() {
   try {
     void _sounds.soundtrack.play();
-  } catch (e) {
+  } catch (err) {
+    console.warn("[Sound] Initial soundtrack play failed, waiting for user interaction:", err instanceof Error ? err.message : String(err));
     const resume = () => {
       try {
         void _sounds.soundtrack.play();
-      } catch {}
+      } catch (playErr) {
+        console.warn("[Sound] Failed to resume soundtrack on user interaction:", playErr instanceof Error ? playErr.message : String(playErr));
+      }
     };
     document.addEventListener("pointerdown", resume, { once: true });
     document.addEventListener("touchstart", resume, { once: true });
@@ -70,7 +78,9 @@ function stopSoundtrack() {
   try {
     _sounds.soundtrack.pause();
     _sounds.soundtrack.currentTime = 0;
-  } catch {}
+  } catch (err) {
+    console.warn("[Sound] Failed to stop soundtrack:", err instanceof Error ? err.message : String(err));
+  }
 }
 
 export {

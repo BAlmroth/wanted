@@ -22,14 +22,16 @@ export function SoundProvider({ children }: { children: React.ReactNode }) {
   const [soundtrackMuted, setSoundtrackMutedState] = useState<boolean>(() => {
     try {
       return isSoundtrackMuted();
-    } catch {
+    } catch (err) {
+      console.warn("[Sound] Failed to get soundtrack muted state:", err instanceof Error ? err.message : String(err));
       return false;
     }
   });
   const [sfxMuted, setSfxMutedState] = useState<boolean>(() => {
     try {
       return isSfxMuted();
-    } catch {
+    } catch (err) {
+      console.warn("[Sound] Failed to get SFX muted state:", err instanceof Error ? err.message : String(err));
       return false;
     }
   });
@@ -37,7 +39,9 @@ export function SoundProvider({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     try {
       startSoundtrack();
-    } catch {}
+    } catch (err) {
+      console.warn("[Sound] Failed to start soundtrack:", err instanceof Error ? err.message : String(err));
+    }
 
     const handler = (e: Event) => {
       const target = e.target as HTMLElement | null;
@@ -48,7 +52,9 @@ export function SoundProvider({ children }: { children: React.ReactNode }) {
       if (btn) {
         try {
           playSound("press");
-        } catch {}
+        } catch (err) {
+          console.warn("[Sound] Failed to play press sound:", err instanceof Error ? err.message : String(err));
+        }
       }
     };
 
@@ -61,12 +67,16 @@ export function SoundProvider({ children }: { children: React.ReactNode }) {
     const next = !soundtrackMuted;
     try {
       setSoundtrackMuted(next);
-    } catch {}
+    } catch (err) {
+      console.warn("[Sound] Failed to set soundtrack muted state:", err instanceof Error ? err.message : String(err));
+    }
     setSoundtrackMutedState(next);
     if (!next) {
       try {
         startSoundtrack();
-      } catch {}
+      } catch (err) {
+        console.warn("[Sound] Failed to restart soundtrack:", err instanceof Error ? err.message : String(err));
+      }
     }
   };
 
@@ -74,7 +84,9 @@ export function SoundProvider({ children }: { children: React.ReactNode }) {
     const next = !sfxMuted;
     try {
       setSfxMuted(next);
-    } catch {}
+    } catch (err) {
+      console.warn("[Sound] Failed to set SFX muted state:", err instanceof Error ? err.message : String(err));
+    }
     setSfxMutedState(next);
   };
 
