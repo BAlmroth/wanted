@@ -1,40 +1,55 @@
 import type { ReactNode } from "react";
-import type { IdleProps } from "../../types/Game";
-import styles from "./Idle.module.css";
-
-interface NavigationProps extends IdleProps {
-  onInfoClick?: () => void;
-  showPlayButton?: boolean;
-  tivoliUrl?: string;
-}
+import type { NavigationProps } from "../../types/Navigation";
+import { TIVOLI_MODE } from "../../config";
+import styles from "./Navigation.module.css";
 
 export function Navigation({
   onStartGame,
   onInfoClick,
   showPlayButton = true,
-  tivoliUrl,
 }: NavigationProps): ReactNode {
-  const handleTivoliClick = () => {
-    if (tivoliUrl) {
-      window.location.href = tivoliUrl;
+  const isMockMode = !TIVOLI_MODE;
+  const hideTivoliButton = isMockMode && showPlayButton;
+  const looplandButtonLabel =
+    isMockMode && !showPlayButton ? "MAIN PAGE" : "TO LOOPLAND";
+
+  const handleLooplandClick = () => {
+    if (isMockMode) {
+      window.location.href = "/";
+    } else {
+      window.parent.postMessage({ type: "AMUSEMENT_CLOSE" }, "*");
     }
   };
 
   return (
     <section className={styles.infoButtons}>
       {showPlayButton && (
-        <button className={styles.playBtn} onClick={onStartGame}>
+        <button
+          className={styles.playBtn}
+          onClick={onStartGame}
+          aria-label="Start playing the game"
+        >
           PLAY
         </button>
       )}
       <div>
-        <button className={styles.tivoliBtn} onClick={handleTivoliClick}>
-          TO TIVOLI
-        </button>
-        <button className={styles.rewardBtn} onClick={onInfoClick}>
+        {!hideTivoliButton && (
+          <button
+            className={styles.tivoliBtn}
+            onClick={handleLooplandClick}
+            aria-label={looplandButtonLabel}
+          >
+            {looplandButtonLabel}
+          </button>
+        )}
+        <button
+          className={styles.rewardBtn}
+          onClick={onInfoClick}
+          aria-label="View game information"
+        >
           Game Info
         </button>
       </div>
     </section>
   );
-}   
+}

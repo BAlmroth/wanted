@@ -4,20 +4,28 @@ import {
   createTransaction,
   sendPayout,
 } from "../utils/centralbank";
+import { TIVOLI_MODE } from "../config";
 import type {
   CentralbankUser,
   Transaction,
   CentralbankError,
   ApiError,
+  Stamp,
+  UseCentralbankReturn,
 } from "../types/CentralBank";
 
-export function useCentralbank() {
+export function useCentralbank(): UseCentralbankReturn {
   const [user, setUser] = useState<CentralbankUser | null>(null);
   const [identityToken, setIdentityToken] = useState<string | null>(null);
   const [transaction, setTransaction] = useState<Transaction | null>(null);
   const [error, setError] = useState<CentralbankError | null>(null);
 
-  useEffect(() => {
+  useEffect((): void => {
+    if (!TIVOLI_MODE) {
+      setUser({ id: 123, name: "guest" });
+      return;
+    }
+
     const params = new URLSearchParams(window.location.search);
     const token = params.get("identity_token");
     history.replaceState({}, "", window.location.pathname);
@@ -27,18 +35,22 @@ export function useCentralbank() {
       getIdentity(token)
         .then(setUser)
         .catch((e: ApiError) => {
-          // getIdentity is optional per the API spec, so just log it
           console.debug("getIdentity failed (optional):", e.message);
         });
     }
   }, []);
 
-  async function startGame() {
+  async function startGame(): Promise<Stamp | null> {
     try {
+      if (!TIVOLI_MODE) {
+        const txn = await createTransaction("");
+        setTransaction(txn);
+        return txn.stamp;
+      }
       if (!identityToken) {
-        const error: CentralbankError = { type: "TOKEN_EXPIRED" };
-        setError(error);
-        throw error;
+        const cbError: CentralbankError = { type: "TOKEN_EXPIRED" };
+        setError(cbError);
+        throw cbError;
       }
       const txn = await createTransaction(identityToken);
       setTransaction(txn);
@@ -54,10 +66,10 @@ export function useCentralbank() {
     }
   }
 
-  async function endGame(levelsCleared: number) {
+  async function endGame(levelsCleared: number): Promise<void> {
     try {
-      if (transaction?.id) {
-        await sendPayout(transaction.id, levelsCleared);
+      if (transaction?.transaction_id) {
+        await sendPayout(transaction.transaction_id.toString(), levelsCleared);
       }
     } catch (e) {
       const err = e as ApiError;
@@ -69,7 +81,7 @@ export function useCentralbank() {
     }
   }
 
-  function clearError() {
+  function clearError(): void {
     setError(null);
   }
 

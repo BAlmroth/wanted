@@ -1,11 +1,7 @@
 import styles from "./error.module.css";
-
-interface PayoutFailedProps {
-  transactionId?: string;
-}
+import type { PayoutFailedProps } from "../types/PayoutFailed";
 
 export default function PayoutFailed({ transactionId }: PayoutFailedProps) {
-  const tivoliUrl = import.meta.env.VITE_TIVOLI_URL ?? "/";
   return (
     <div className={styles.errorWrapper}>
       <h1>Payout failed</h1>
@@ -16,9 +12,13 @@ export default function PayoutFailed({ transactionId }: PayoutFailedProps) {
           Transaction ID: <strong>{transactionId}</strong>
         </h2>
       )}
-      <div style={{ marginTop: 16 }}>
-        <button onClick={() => (window.location.href = tivoliUrl)}>
-          Back to Tivoli
+      <div className={styles.buttonContainer}>
+        <button
+          onClick={() =>
+            window.parent.postMessage({ type: "AMUSEMENT_CLOSE" }, "*")
+          }
+        >
+          Back to Loopland
         </button>
       </div>
     </div>

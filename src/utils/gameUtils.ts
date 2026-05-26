@@ -1,3 +1,7 @@
+import { TIVOLI_MODE } from "../config";
+import { generateMockLevel } from "./gameUtils.mock";
+import type { LevelData } from "../types/Level";
+
 const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL;
 const SUPABASE_ANON_KEY = import.meta.env.VITE_SUPABASE_ANON_KEY;
 
@@ -7,18 +11,10 @@ import LoveRune from "../assets/LoveRune.png";
 import MadRune from "../assets/MadRune.png";
 import SadRune from "../assets/SadRune.png";
 
-export type GridCharacter = {
-  id: number;
-  figure: string;
-};
-
-export type LevelData = {
-  sessionId: string;
-  targetFigure: string;
-  grid: GridCharacter[];
-};
-
 export async function generateLevel(count: number): Promise<LevelData> {
+  if (!TIVOLI_MODE) {
+    return generateMockLevel(count);
+  }
   const res = await fetch(`${SUPABASE_URL}/rest/v1/rpc/generate_level`, {
     method: "POST",
     headers: {
@@ -28,11 +24,14 @@ export async function generateLevel(count: number): Promise<LevelData> {
     },
     body: JSON.stringify({ count }),
   });
-  const data = await res.json();
+  const data: Record<string, unknown> = await res.json();
   return {
-    sessionId: data.sessionId,
-    targetFigure: data.targetFigure,
-    grid: data.grid.map((figure: string, i: number) => ({ id: i, figure })),
+    sessionId: data.sessionId as string,
+    targetFigure: data.targetFigure as string,
+    grid: (data.grid as string[]).map((figure: string, i: number) => ({
+      id: i,
+      figure,
+    })),
   };
 }
 
@@ -40,6 +39,9 @@ export async function validateClick(
   sessionId: string,
   clickedIndex: number,
 ): Promise<boolean> {
+  if (!TIVOLI_MODE) {
+    return true;
+  }
   const res = await fetch(`${SUPABASE_URL}/rest/v1/rpc/validate_click`, {
     method: "POST",
     headers: {

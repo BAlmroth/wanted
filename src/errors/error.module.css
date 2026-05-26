@@ -3,6 +3,18 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  padding: 1rem;
+  background-color: black;
+  margin: 2rem 3rem;
+  border-radius: 2rem;
+}
+
+.errorWrapper h1 {
+ color: var(--yrgoRed);
+}
+
+.errorWrapper h2 {
+  font-size: 2rem;
 }
 
 .toast {
@@ -19,12 +31,39 @@
   display: flex;
   align-items: center;
   gap: 1rem;
-    -webkit-text-stroke: 4px black;
+  -webkit-text-stroke: 4px black;
   paint-order: stroke fill;
 }
 
 .toast button {
-    border: 2px solid black;
-    background-color: #7ED267;
-    
+  border: 2px solid black;
+  background-color: #7ED267;
+}
+
+.buttonContainer {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+  margin-top: 1rem;
+}
+
+.buttonContainer button {
+  border: 3px dashed #FFEE00;
+  height: 110px;
+}
+
+.buttonContainer button:hover {
+  background-color: #FFEE00;
+}
+
+.subtitle {
+  color: #FFEE00;
+  -webkit-text-stroke: 2px black;
+  paint-order: stroke fill;
+}
+
+@media (min-width: 768px) {
+  .errorWrapper h2 {
+    font-size: 4rem;
+  }
 }

@@ -1,0 +1,22 @@
+.closeButton {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 1000;
+  margin: 0;
+  opacity: 0.8;
+  transition: opacity 0.2s ease-in-out;
+}
+
+.closeButton:hover {
+  opacity: 1;
+}
+
+.closeButton:active {
+  transform: scale(0.95);
+}
+
+.icon {
+  width: 44px;
+  height: 44px;
+}

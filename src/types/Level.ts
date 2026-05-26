@@ -1,14 +1,16 @@
-import type { Character } from "./Character";
+import type { Character, GridCharacter } from "./Character";
 
 export type LevelConfig = {
-  level: number;
-  gridCount: number;
-  carousel?: boolean;
-  carouselSpeed?: number;
-  carouselGap?: number;
-  carouselCols?: number;
-  carouselShakiness?: number; // 0-1, greater = more skakning
-  carouselSameDirection?: boolean; 
+  readonly level: number;
+  readonly gridCount: number;
+  readonly carousel?: boolean;
+  readonly carouselSpeed?: number;
+  readonly carouselGap?: number;
+  readonly carouselCols?: number;
+  readonly gridCols?: number;
+  readonly carouselShakiness?: number;
+  readonly carouselSameDirection?: boolean;
+  readonly carouselVertical?: boolean;
 };
 
 export type CarouselProps = {
@@ -17,12 +19,19 @@ export type CarouselProps = {
   onCharacterClick: (c: Character) => void;
   speed?: number;
   gap?: number;
-  shakiness?: number; // 0-1, greater = more skakning
+  shakiness?: number;
   sameDirection?: boolean;
+  vertical?: boolean;
 };
 
 export type CarouselRowProps = {
   row: Character[];
   direction: "left" | "right";
   onCharacterClick: (c: Character) => void;
+};
+
+export type LevelData = {
+  sessionId: string;
+  targetFigure: string;
+  grid: GridCharacter[];
 };

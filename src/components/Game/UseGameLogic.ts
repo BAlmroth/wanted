@@ -1,30 +1,36 @@
-import { useState, useRef } from "react";
-import type { TimerHandle } from "../Timer";
+import { useState, useRef, useEffect } from "react";
 import { LEVELS } from "../../data/Levels";
 import {
   generateLevel,
   validateClick,
   resolveFigure,
-  type GridCharacter,
 } from "../../utils/gameUtils";
 import { saveScore } from "../../utils/leaderboard";
 import { useCentralbank } from "../../hooks/useCentralbank";
+import { TIVOLI_MODE } from "../../config";
+import { useSound } from "../../contexts/SoundContext";
+import type { ApiError } from "../../types/CentralBank";
+import type { GamePhase } from "../../types/Game";
+import type { GridCharacter } from "../../types/Character";
+
+const INITIAL_TIME = 10;
 
 export function useGameLogic() {
-  const [gameState, setGameState] = useState<"idle" | "playing" | "gameover">(
-    "idle",
-  );
+  const [gameState, setGameState] = useState<GamePhase>("idle");
   const [levelIndex, setLevelIndex] = useState(0);
   const [targetFigure, setTargetFigure] = useState("");
   const [characters, setCharacters] = useState<GridCharacter[]>([]);
   const [sessionId, setSessionId] = useState<string | null>(null);
   const [message, setMessage] = useState("");
   const [score, setScore] = useState(0);
-  const [timerKey, setTimerKey] = useState(0);
+  const [timeLeft, setTimeLeft] = useState(INITIAL_TIME);
   const [loading, setLoading] = useState(false);
   const [isWin, setIsWin] = useState(false);
   const gameEndedRef = useRef(false);
-  const timerRef = useRef<TimerHandle>(null);
+  const [timerRunning, setTimerRunning] = useState(false);
+  const timeLeftRef = useRef(INITIAL_TIME);
+  const scoreRef = useRef(0);
+  const introTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const {
     startGame: startCentralbankGame,
     endGame,
@@ -34,39 +40,108 @@ export function useGameLogic() {
     user,
   } = useCentralbank();
 
+  const { play } = useSound();
+
   function resetToIdle() {
     clearError();
+    if (introTimeoutRef.current) {
+      //timerlogic needed in this file to minimize cheating
+      clearTimeout(introTimeoutRef.current);
+      introTimeoutRef.current = null;
+    }
     setGameState("idle");
     setCharacters([]);
     setTargetFigure("");
     setScore(0);
     setLevelIndex(0);
+    setTimerRunning(false);
+    timeLeftRef.current = INITIAL_TIME;
+    setTimeLeft(INITIAL_TIME);
     setIsWin(false);
   }
 
+  useEffect(() => {
+    if (gameState !== "playing") {
+      return;
+    }
+
+    if (introTimeoutRef.current) {
+      clearTimeout(introTimeoutRef.current);
+    }
+
+    setTimerRunning(false);
+    introTimeoutRef.current = setTimeout(() => {
+      setTimerRunning(true);
+      introTimeoutRef.current = null;
+    }, 2800);
+
+    return () => {
+      if (introTimeoutRef.current) {
+        clearTimeout(introTimeoutRef.current);
+        introTimeoutRef.current = null;
+      }
+    };
+  }, [gameState]);
+
+  useEffect(() => {
+    scoreRef.current = score;
+  }, [score]);
+
+  useEffect(() => {
+    if (gameState !== "playing" || gameEndedRef.current || !timerRunning) {
+      return;
+    }
+
+    const interval = setInterval(() => {
+      timeLeftRef.current -= 1;
+      setTimeLeft(timeLeftRef.current);
+
+      if (timeLeftRef.current <= 0) {
+        clearInterval(interval);
+        void handleTimeUp();
+      }
+    }, 1000);
+
+    return () => clearInterval(interval);
+  }, [gameState, timerRunning]);
+
   const currentLevel = LEVELS[levelIndex];
 
-  async function loadLevel(index: number) {
+  async function loadLevel(index: number): Promise<void> {
     setLoading(true);
     setMessage("");
-    const data = await generateLevel(LEVELS[index].gridCount);
-    setSessionId(data.sessionId);
-    setTargetFigure(resolveFigure(data.targetFigure));
-    setCharacters(
-      data.grid.map((character) => ({
-        ...character,
-        figure: resolveFigure(character.figure),
-      })),
-    );
-    setLoading(false);
+    try {
+      const data = await generateLevel(LEVELS[index].gridCount);
+      setSessionId(data.sessionId);
+      setTargetFigure(resolveFigure(data.targetFigure));
+      setCharacters(
+        data.grid.map((character) => ({
+          ...character,
+          figure: resolveFigure(character.figure),
+        })),
+      );
+    } catch (err) {
+      const apiError = err as ApiError;
+      console.error("Failed to load level:", apiError.message);
+      setMessage("Failed to load level. Please try again.");
+    } finally {
+      setLoading(false);
+    }
   }
 
   async function startGame() {
     setScore(0);
     setLevelIndex(0);
     setMessage("");
-    setTimerKey((k) => k + 1);
+    setTimerRunning(false);
+    timeLeftRef.current = INITIAL_TIME;
+    setTimeLeft(INITIAL_TIME);
     gameEndedRef.current = false;
+
+    if (introTimeoutRef.current) {
+      clearTimeout(introTimeoutRef.current);
+      introTimeoutRef.current = null;
+    }
 
     try {
       await startCentralbankGame();
@@ -74,8 +149,8 @@ export function useGameLogic() {
       return;
     }
 
-    setGameState("playing");
     await loadLevel(0);
+    setGameState("playing");
   }
 
   async function handleClick(character: GridCharacter) {
@@ -88,32 +163,50 @@ export function useGameLogic() {
       return;
 
     let correct: boolean;
-    try {
-      correct = await validateClick(sessionId, character.id);
-    } catch {
-      setMessage("Connection error, try clicking again.");
-      return;
+
+    if (!TIVOLI_MODE) {
+      // Standalone mode - check if clicked character matches target
+      correct = character.figure === targetFigure;
+      console.log(
+        `[STANDALONE MODE] Click validation: ${correct ? "Correct!" : "Wrong!"}`,
+      );
+    } else {
+      // Tivoli mode - validate on server
+      try {
+        correct = await validateClick(sessionId, character.id);
+      } catch {
+        setMessage("Connection error, try clicking again.");
+        return;
+      }
     }
 
     if (correct) {
+      try {
+        play("correct");
+      } catch {}
       const newScore = score + 1;
-      timerRef.current?.addTime(2);
+      timeLeftRef.current += 3;
+      setTimeLeft(timeLeftRef.current);
 
       const nextIndex = levelIndex + 1;
       if (nextIndex >= LEVELS.length) {
-        // Game completed - save score and end game
         gameEndedRef.current = true;
         setScore(newScore);
         setIsWin(true);
-        await endGame(currentLevel.level);
-        if (user?.name) {
-          try {
+        try {
+          play("victory");
+        } catch {}
+        try {
+          await endGame(newScore);
+          if (user?.name) {
             await saveScore(user.name, newScore);
-          } catch (err) {
-            console.error("Failed to save score:", err);
           }
+        } catch (err) {
+          const apiError = err as ApiError;
+          console.error("Failed to end game:", apiError.message);
+        } finally {
+          setGameState("gameover");
         }
-        setGameState("gameover");
       } else {
         setScore(newScore);
         setLevelIndex(nextIndex);
@@ -121,26 +214,37 @@ export function useGameLogic() {
       }
     } else {
       setMessage("Wrong!");
+      try {
+        play("wrong");
+      } catch {}
       setTimeout(() => setMessage(""), 3000);
     }
   }
 
-  async function handleTimeUp() {
-    // Time's up - end game with current level and save score
-    if (gameEndedRef.current) {
-      return;
-    }
+  async function handleTimeUp(): Promise<void> {
+    if (gameEndedRef.current) return;
     gameEndedRef.current = true;
+    setTimerRunning(false);
 
-    await endGame(currentLevel.level);
-    if (user?.name && score > 0) {
-      try {
-        await saveScore(user.name, score);
-      } catch (err) {
-        console.error("Failed to save score:", err);
-      }
+    if (introTimeoutRef.current) {
+      clearTimeout(introTimeoutRef.current);
+      introTimeoutRef.current = null;
     }
-    setGameState("gameover");
+
+    try {
+      await endGame(scoreRef.current);
+      if (user?.name && scoreRef.current > 0) {
+        await saveScore(user.name, scoreRef.current);
+      }
+    } catch (err) {
+      const apiError = err as ApiError;
+      console.error("Error ending game:", apiError.message);
+    } finally {
+      try {
+        play("gameover");
+      } catch {}
+      setGameState("gameover");
+    }
   }
 
   return {
@@ -152,8 +256,7 @@ export function useGameLogic() {
     message,
     score,
     loading,
-    timerKey,
-    timerRef,
+    timeLeft,
     startGame,
     handleClick,
     handleTimeUp,

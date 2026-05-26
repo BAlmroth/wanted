@@ -1,0 +1,53 @@
+.playBtn {
+  background-color: #7ed267;
+  padding: 0 2rem;
+  transition: all 0.2s ease;
+  min-width: 44px;
+  min-height: 44px;
+}
+
+.playBtn:focus-visible {
+  outline: 4px solid var(--focusColor);
+  outline-offset: 2px;
+}
+
+.playBtn:hover {
+  transform: scale(1.05);
+}
+
+.rewardBtn {
+  background-color: var(--yrgoRed);
+  color: #ffee00;
+  transition: all 0.2s ease;
+  min-width: 44px;
+  min-height: 44px;
+}
+
+.rewardBtn:focus-visible {
+  outline: 4px solid var(--focusColor);
+  outline-offset: 2px;
+}
+
+.rewardBtn:hover {
+  transform: scale(1.05);
+}
+
+.tivoliBtn {
+  background-color: #7fb0c7;
+  transition: all 0.2s ease;
+  min-width: 44px;
+  min-height: 44px;
+}
+
+.tivoliBtn:focus-visible {
+  outline: 4px solid var(--focusColor);
+  outline-offset: 2px;
+}
+
+.tivoliBtn:hover {
+  transform: scale(1.05);
+}
+
+.infoButtons {
+  margin-bottom: 1rem;
+}

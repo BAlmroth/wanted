@@ -10,8 +10,6 @@
 
 .infoBoxes {
   max-width: 80%;
-  /* margin-top: 1.5rem;
-  margin-bottom: 1rem; */
 }
 
 .box h3 {
@@ -22,6 +20,8 @@
   background-color: #7ED267;
   padding: 0 2rem;
   transition: all 0.2s ease;
+  min-width: 44px;
+  min-height: 44px;
 }
 
 .playBtn:focus-visible {
@@ -37,6 +37,8 @@
   background-color: var(--yrgoRed);
   color: #FFEE00;
   transition: all 0.2s ease;
+  min-width: 44px;
+  min-height: 44px;
 }
 
 .rewardBtn:focus-visible {
@@ -51,6 +53,8 @@
 .tivoliBtn {
   background-color: #7FB0C7;
   transition: all 0.2s ease;
+  min-width: 44px;
+  min-height: 44px;
 }
 
 .tivoliBtn:focus-visible {
@@ -66,6 +70,40 @@
   margin-bottom: 1rem;
 }
 
+@keyframes titlePopIn {
+  0%   { opacity: 0; transform: translateY(30vh) scale(0.5); }
+  70%  { transform: translateY(30vh) scale(1.06); opacity: 1; }
+  85%  { transform: translateY(30vh) scale(1); }
+  100% { transform: translateY(0) scale(1); opacity: 1; }
+}
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.titleWrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  animation: titlePopIn 1.2s cubic-bezier(0.76, 0, 0.24, 1) forwards 0.2s;
+  opacity: 0;
+}
+
+.idleContainer h2 {
+  opacity: 0;
+  animation: fadeUp 0.4s ease forwards 1s;
+}
+
+.pageContent {
+  opacity: 0;
+  animation: fadeUp 0.4s ease forwards 1.5s;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
 @media (min-width: 768px) {
   .infoBoxes {
     display: flex;
@@ -76,14 +114,18 @@
     width: 30vw;
   }
 
-.idleContainer h1 {
+  .idleContainer h1 {
     font-size: 15rem;
     margin-top: 0.5rem;
   }
 
-.idleContainer h2 {
-  margin-top: -3rem;
-}
+  .idleContainer h2 {
+    margin-top: -3rem;
+  }
+
+  .titleWrap {
+    margin-top: -4vh;
+  }
 }
 
 @media (max-width: 1000px) { 

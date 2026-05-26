@@ -3,14 +3,7 @@ import styles from "./Info.module.css";
 import DownArrow from "../assets/DownArrow.png";
 import InfoContent from "./InfoContent";
 import Caution from "./Caution";
-
-interface InfoModalProps {
-  isOpen: boolean;
-  onClose: () => void;
-  onStartGame?: () => void;
-  showStartButton?: boolean;
-  showCautionOnly?: boolean;
-}
+import type { InfoModalProps } from "../types/Info";
 
 export default function Info({
   isOpen,
@@ -170,7 +163,7 @@ export default function Info({
               disabled={!hasEverScrolledToBottom}
               aria-disabled={!hasEverScrolledToBottom}
             >
-              {showCautionOnly ? "Start game 2€" : "Ready? - Start game 2€"}
+              {showCautionOnly ? "Start game" : "Ready? - Start game 2€"}
             </button>
           ) : (
             <button className={styles.closeButtonBottom} onClick={onClose}>

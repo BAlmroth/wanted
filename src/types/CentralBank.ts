@@ -1,20 +1,41 @@
+export const StampAnimal = {
+  Lion: "lion",
+  Dolphin: "dolphin",
+  Toucan: "toucan",
+  Beetlebug: "beetlebug",
+  Snake: "snake",
+} as const;
+
+export type StampAnimal = (typeof StampAnimal)[keyof typeof StampAnimal];
+
+export const StampMetal = {
+  Silver: "silver",
+  Gold: "gold",
+  Platinum: "platinum",
+} as const;
+
+export type StampMetal = (typeof StampMetal)[keyof typeof StampMetal];
+
 export type CentralbankUser = {
-  id: string;
-  name: string;
+  readonly id: number;
+  readonly name: string;
 };
 
 export type Stamp = {
-  id: string;
-  animal: string;
-  metal: string;
-  image_url: string;
-  created_at: string;
-  updated_at: string;
+  readonly animal: StampAnimal;
+  readonly metal: StampMetal | null;
+  readonly image_url: string;
 };
 
 export type Transaction = {
-  id: string;
-  stamp: Stamp;
+  readonly transaction_id: number;
+  readonly amount: number;
+  readonly stamp: Stamp | null;
+};
+
+export type PayoutResponse = {
+  transaction_id: number;
+  amount: number;
 };
 
 export type CentralbankError =
@@ -27,3 +48,12 @@ export interface ApiError {
   message: string;
   status?: number;
 }
+
+export type UseCentralbankReturn = {
+  user: CentralbankUser | null;
+  startGame: () => Promise<Stamp | null>;
+  endGame: (levelsCleared: number) => Promise<void>;
+  transaction: Transaction | null;
+  error: CentralbankError | null;
+  clearError: () => void;
+};

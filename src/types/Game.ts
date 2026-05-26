@@ -1,8 +1,10 @@
 import type { LEVELS } from "../data/Levels";
-import type { GridCharacter } from "../utils/gameUtils";
+import type { GridCharacter } from "./Character";
 import type { Character } from "./Character";
-import type { TimerHandle } from "../components/Timer";
 import type { Transaction } from "./CentralBank";
+
+export type GamePhase = "idle" | "playing" | "gameover";
+export type ResultType = "win" | "gameover";
 
 export type GameState = {
   characters: Character[];
@@ -13,31 +15,29 @@ export type GameState = {
 };
 
 export type TimerProps = {
-  initialTime: number;
-  onTimeUp: () => void;
+  readonly timeLeft: number;
 };
 
 export interface GameOnProps {
-  currentLevel: (typeof LEVELS)[0];
-  targetFigure: string;
-  characters: GridCharacter[];
-  message: string;
-  score: number;
-  loading: boolean;
-  timerKey: number;
-  timerRef: React.RefObject<TimerHandle | null>;
-  onCharacterClick: (character: GridCharacter) => void;
-  onTimeUp: () => void;
+  readonly currentLevel: (typeof LEVELS)[0];
+  readonly targetFigure: string;
+  readonly characters: GridCharacter[];
+  readonly message: string;
+  readonly score: number;
+  readonly loading: boolean;
+  readonly timeLeft: number;
+  readonly onCharacterClick: (character: GridCharacter) => void;
 }
 
 export interface GameOverProps {
-  score: number;
-  currentLevel: (typeof LEVELS)[0];
-  onPlayAgain: () => void;
-  transaction: Transaction | null;
+  readonly score: number;
+  readonly currentLevel: (typeof LEVELS)[0];
+  readonly onPlayAgain: () => void;
+  readonly transaction: Transaction | null;
+  readonly resultType?: ResultType;
 }
 
 export interface IdleProps {
-  onStartGame: () => void;
-  userName?: string | null;
+  readonly onStartGame: () => void;
+  readonly userName?: string | null;
 }

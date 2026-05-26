@@ -6,6 +6,7 @@ import { Leaderboard } from "../Leaderboard";
 import { Navigation } from "./Navigation";
 import Instructions from "../Instructions";
 import Info from "../Info";
+import { RuneSpeech } from "../RuneSpeech";
 
 export function Idle({ onStartGame, userName }: IdleProps): ReactNode {
   const [isOpen, setIsOpen] = useState(false);
@@ -13,7 +14,7 @@ export function Idle({ onStartGame, userName }: IdleProps): ReactNode {
   const [showStartButton, setShowStartButton] = useState(false);
 
   const openInfoForPlay = () => {
-    setShowCautionOnly(!userName);
+    setShowCautionOnly(!!userName);
     setShowStartButton(true);
     setIsOpen(true);
   };
@@ -32,18 +33,26 @@ export function Idle({ onStartGame, userName }: IdleProps): ReactNode {
   return (
     <>
       <div className={styles.idleContainer}>
-        <h1>WANTED</h1>
-        <h2>
-          AT <span className={styles.yrgo}>YRGO</span>!
-        </h2>
+        <div className={styles.titleWrap}>
+          <h1>WANTED</h1>
+          <h2>
+            AT <span className={styles.yrgo}>YRGO</span>!
+          </h2>
+        </div>
 
-        <section className={styles.infoBoxes}>
-          <Instructions />
-          <Leaderboard />
-        </section>
-
-        <Navigation onStartGame={openInfoForPlay} onInfoClick={openInfo} />
+        <div className={styles.pageContent}>
+          <section className={styles.infoBoxes}>
+            <Instructions />
+            <Leaderboard />
+          </section>
+          <Navigation
+            onStartGame={openInfoForPlay}
+            onInfoClick={openInfo}
+          />
+        </div>
       </div>
+
+      <RuneSpeech />
 
       <Info
         isOpen={isOpen}

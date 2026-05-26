@@ -15,12 +15,10 @@ export default function Game() {
     characters,
     message,
     score,
+    timeLeft,
     loading,
-    timerKey,
-    timerRef,
     startGame,
     handleClick,
-    handleTimeUp,
     transaction,
     error,
     resetToIdle,
@@ -30,7 +28,9 @@ export default function Game() {
 
   if (error?.type === "TOKEN_EXPIRED") return <TokenExpired />;
   if (error?.type === "PAYOUT_FAILED")
-    return <PayoutFailed transactionId={transaction?.id} />;
+    return (
+      <PayoutFailed transactionId={transaction?.transaction_id?.toString()} />
+    );
   if (error?.type === "TRANSACTION_FAILED")
     return <TransactionFailed onRetry={resetToIdle} />;
 
@@ -53,11 +53,9 @@ export default function Game() {
           characters={characters}
           message={message}
           score={score}
+          timeLeft={timeLeft}
           loading={loading}
-          timerKey={timerKey}
-          timerRef={timerRef}
           onCharacterClick={handleClick}
-          onTimeUp={handleTimeUp}
         />
       )}
       {gameState === "gameover" && (
