@@ -8,6 +8,7 @@ import {
 import { saveScore } from "../../utils/leaderboard";
 import { useCentralbank } from "../../hooks/useCentralbank";
 import { TIVOLI_MODE } from "../../config";
+import { useSound } from "../../contexts/SoundContext";
 import type { ApiError } from "../../types/CentralBank";
 import type { GamePhase } from "../../types/Game";
 import type { GridCharacter } from "../../types/Character";
@@ -37,6 +38,8 @@ export function useGameLogic() {
     clearError,
     user,
   } = useCentralbank();
+
+  const { play } = useSound();
 
   function resetToIdle() {
     clearError();
@@ -174,7 +177,7 @@ export function useGameLogic() {
 
     if (correct) {
       try {
-        (globalThis as any).playSound?.("correct");
+        play("correct");
       } catch {}
       const newScore = score + 1;
       timeLeftRef.current += 2;
@@ -186,7 +189,7 @@ export function useGameLogic() {
         setScore(newScore);
         setIsWin(true);
         try {
-          (globalThis as any).playSound?.("victory");
+          play("victory");
         } catch {}
         try {
           await endGame(currentLevel.level);
@@ -207,7 +210,7 @@ export function useGameLogic() {
     } else {
       setMessage("Wrong!");
       try {
-        (globalThis as any).playSound?.("wrong");
+        play("wrong");
       } catch {}
       setTimeout(() => setMessage(""), 3000);
     }
@@ -233,7 +236,7 @@ export function useGameLogic() {
       console.error("Error ending game:", apiError.message);
     } finally {
       try {
-        (globalThis as any).playSound?.("gameover");
+        play("gameover");
       } catch {}
       setGameState("gameover");
     }
