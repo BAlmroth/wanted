@@ -3,18 +3,23 @@ import Game from "./components/Game/Game";
 import NotFound from "./errors/NotFound.tsx";
 import { CloseButton } from "./components/CloseButton";
 import "./App.css";
+import { SoundProvider } from "./contexts/SoundContext";
+import SoundControls from "./components/SoundControls";
 
 function App() {
   return (
-    <BrowserRouter>
-      <CloseButton />
-      <main>
-        <Routes>
-          <Route path="/" element={<Game />} />
-          <Route path="*" element={<NotFound />} />
-        </Routes>
-      </main>
-    </BrowserRouter>
+    <SoundProvider>
+      <SoundControls />
+      <BrowserRouter>
+        <CloseButton />
+        <main>
+          <Routes>
+            <Route path="/" element={<Game />} />
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+        </main>
+      </BrowserRouter>
+    </SoundProvider>
   );
 }
 

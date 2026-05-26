@@ -178,6 +178,9 @@ export function useGameLogic() {
     }
 
     if (correct) {
+      try {
+        (globalThis as any).playSound?.("correct");
+      } catch {}
       const newScore = score + 1;
       timeLeftRef.current += 2;
       setTimeLeft(timeLeftRef.current);
@@ -187,6 +190,9 @@ export function useGameLogic() {
         gameEndedRef.current = true;
         setScore(newScore);
         setIsWin(true);
+        try {
+          (globalThis as any).playSound?.("victory");
+        } catch {}
         try {
           await endGame(currentLevel.level);
           if (user?.name) {
@@ -205,6 +211,9 @@ export function useGameLogic() {
       }
     } else {
       setMessage("Wrong!");
+      try {
+        (globalThis as any).playSound?.("wrong");
+      } catch {}
       setTimeout(() => setMessage(""), 3000);
     }
   }
@@ -228,6 +237,9 @@ export function useGameLogic() {
       const apiError = err as ApiError;
       console.error("Error ending game:", apiError.message);
     } finally {
+      try {
+        (globalThis as any).playSound?.("gameover");
+      } catch {}
       setGameState("gameover");
     }
   }
