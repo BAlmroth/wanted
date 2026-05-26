@@ -145,7 +145,8 @@ export function useGameLogic() {
 
     try {
       await startCentralbankGame();
-    } catch {
+    } catch (err) {
+      console.warn("[Game] Failed to start centralbank game:", err instanceof Error ? err.message : String(err));
       return;
     }
 
@@ -174,7 +175,8 @@ export function useGameLogic() {
       // Tivoli mode - validate on server
       try {
         correct = await validateClick(sessionId, character.id);
-      } catch {
+      } catch (err) {
+        console.warn("[Game] Validation failed:", err instanceof Error ? err.message : String(err));
         setMessage("Connection error, try clicking again.");
         return;
       }
@@ -183,7 +185,9 @@ export function useGameLogic() {
     if (correct) {
       try {
         play("correct");
-      } catch {}
+      } catch (err) {
+        console.warn("[Sound] Failed to play 'correct':", err instanceof Error ? err.message : String(err));
+      }
       const newScore = score + 1;
       timeLeftRef.current += 3;
       setTimeLeft(timeLeftRef.current);
@@ -195,7 +199,9 @@ export function useGameLogic() {
         setIsWin(true);
         try {
           play("victory");
-        } catch {}
+        } catch (err) {
+          console.warn("[Sound] Failed to play 'victory':", err instanceof Error ? err.message : String(err));
+        }
         try {
           await endGame(newScore);
           if (user?.name) {
@@ -216,7 +222,9 @@ export function useGameLogic() {
       setMessage("Wrong!");
       try {
         play("wrong");
-      } catch {}
+      } catch (err) {
+        console.warn("[Sound] Failed to play 'wrong':", err instanceof Error ? err.message : String(err));
+      }
       setTimeout(() => setMessage(""), 3000);
     }
   }
@@ -242,7 +250,9 @@ export function useGameLogic() {
     } finally {
       try {
         play("gameover");
-      } catch {}
+      } catch (err) {
+        console.warn("[Sound] Failed to play 'gameover':", err instanceof Error ? err.message : String(err));
+      }
       setGameState("gameover");
     }
   }
