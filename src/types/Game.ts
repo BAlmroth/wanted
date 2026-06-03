@@ -34,13 +34,13 @@ export interface GameOnProps {
 export interface GameOverProps {
   readonly score: number;
   readonly currentLevel: (typeof LEVELS)[0];
-  readonly onPlayAgain: () => void;
+  readonly onPlayAgain: (playerName?: string) => void | Promise<void>;
   readonly transaction: Transaction | null;
   readonly resultType?: ResultType;
 }
 
 export interface IdleProps {
-  readonly onStartGame: () => void;
+  readonly onStartGame: (playerName?: string) => void | Promise<void>;
   readonly userName?: string | null;
 }
 
@@ -54,7 +54,7 @@ export type UseGameLogicReturn = {
   score: number;
   loading: boolean;
   timeLeft: number;
-  startGame: () => Promise<void>;
+  startGame: (playerName?: string) => Promise<void>;
   handleClick: (character: GridCharacter) => Promise<void>;
   handleTimeUp: () => Promise<void>;
   transaction: UseCentralbankReturn["transaction"];

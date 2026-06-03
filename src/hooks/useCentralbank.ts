@@ -22,7 +22,7 @@ export function useCentralbank(): UseCentralbankReturn {
 
   useEffect((): void => {
     if (!TIVOLI_MODE) {
-      setUser({ id: 123, name: "guest" });
+      setUser(null);
       return;
     }
 
@@ -43,9 +43,8 @@ export function useCentralbank(): UseCentralbankReturn {
   async function startGame(): Promise<Stamp | null> {
     try {
       if (!TIVOLI_MODE) {
-        const txn = await createTransaction("");
-        setTransaction(txn);
-        return txn.stamp;
+        setTransaction(null);
+        return null;
       }
       if (!identityToken) {
         const cbError: CentralbankError = { type: "TOKEN_EXPIRED" };

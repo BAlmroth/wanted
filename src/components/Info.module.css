@@ -1,6 +1,10 @@
 @keyframes fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }
 
 @keyframes slideIn {
@@ -15,8 +19,13 @@
 }
 
 @keyframes smallBounce {
-  0%, 100% { transform: translateX(-50%) translateY(0); }
-  50% { transform: translateX(-50%) translateY(-4px); }
+  0%,
+  100% {
+    transform: translateX(-50%) translateY(0);
+  }
+  50% {
+    transform: translateX(-50%) translateY(-4px);
+  }
 }
 
 .overlay {
@@ -266,7 +275,49 @@
 .footer {
   padding: 0.75rem 1.5rem;
   display: flex;
-  justify-content: flex-end;
+  justify-content: center;
+}
+
+.startControls {
+  display: flex;
+  width: 100%;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.nameField {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  width: 100%;
+}
+
+.nameLabel {
+  color: #fff;
+  font-family: var(--headerFont);
+  font-size: 1.1rem;
+  letter-spacing: 2px;
+  -webkit-text-stroke: 3px black;
+  paint-order: stroke fill;
+}
+
+.nameInput {
+  box-sizing: border-box;
+  width: 100%;
+  min-height: 44px;
+  padding: 0.75rem 1rem;
+  border: none;
+  border-radius: 6px;
+  background-color: rgba(255, 255, 255, 0.95);
+  font-family: var(--headerFont);
+  font-size: 1.2rem;
+  letter-spacing: 1px;
+  color: #111;
+}
+
+.nameInput:focus-visible {
+  outline: 3px solid var(--focusColor);
+  outline-offset: 2px;
 }
 
 .closeButtonBottom {
@@ -317,6 +368,16 @@
   .sideRow {
     flex-direction: row;
     align-items: flex-start;
+  }
+
+  .startControls {
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-end;
+  }
+
+  .nameField {
+    max-width: 320px;
   }
 
   .sideRow .section {

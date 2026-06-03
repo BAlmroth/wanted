@@ -1,5 +1,4 @@
 import type { LeaderboardEntry } from "../types/Leaderboard";
-import { TIVOLI_MODE } from "../config";
 import { getMockLeaderboard, logMockScore } from "./leaderboard.mock";
 
 const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL;
@@ -14,7 +13,7 @@ const headers = {
 export async function getTopFive(
   limit: number = 5,
 ): Promise<LeaderboardEntry[]> {
-  if (!TIVOLI_MODE) {
+  if (!SUPABASE_URL || !SUPABASE_ANON_KEY) {
     return getMockLeaderboard(limit);
   }
   const res = await fetch(
@@ -32,7 +31,7 @@ export async function getTopFive(
 }
 
 export async function saveScore(name: string, score: number): Promise<void> {
-  if (!TIVOLI_MODE) {
+  if (!SUPABASE_URL || !SUPABASE_ANON_KEY) {
     logMockScore(name, score);
     return;
   }
