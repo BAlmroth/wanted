@@ -12,6 +12,7 @@ import { useSound } from "../../contexts/SoundContext";
 import type { ApiError } from "../../types/CentralBank";
 import type { GamePhase, UseGameLogicReturn } from "../../types/Game";
 import type { GridCharacter } from "../../types/Character";
+import { sanitizePlayerName } from "../../utils/gameUtils";
 
 const INITIAL_TIME = 10;
 
@@ -31,6 +32,7 @@ export function useGameLogic(): UseGameLogicReturn {
   const timeLeftRef = useRef(INITIAL_TIME);
   const scoreRef = useRef(0);
   const introTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const standalonePlayerNameRef = useRef("");
   const {
     startGame: startCentralbankGame,
     endGame,
@@ -129,7 +131,7 @@ export function useGameLogic(): UseGameLogicReturn {
     }
   }
 
-  async function startGame(): Promise<void> {
+  async function startGame(playerName?: string): Promise<void> {
     setScore(0);
     setLevelIndex(0);
     setMessage("");
@@ -141,6 +143,14 @@ export function useGameLogic(): UseGameLogicReturn {
     if (introTimeoutRef.current) {
       clearTimeout(introTimeoutRef.current);
       introTimeoutRef.current = null;
+    }
+
+    if (!TIVOLI_MODE) {
+      const sanitizedName = sanitizePlayerName(playerName ?? "");
+      if (!sanitizedName) {
+        return;
+      }
+      standalonePlayerNameRef.current = sanitizedName;
     }
 
     try {
@@ -216,8 +226,11 @@ export function useGameLogic(): UseGameLogicReturn {
         }
         try {
           await endGame(newScore);
-          if (user?.name) {
-            await saveScore(user.name, newScore);
+          const scoreName = TIVOLI_MODE
+            ? user?.name
+            : standalonePlayerNameRef.current;
+          if (scoreName) {
+            await saveScore(scoreName, newScore);
           }
         } catch (err) {
           const apiError = err as ApiError;
@@ -256,8 +269,11 @@ export function useGameLogic(): UseGameLogicReturn {
 
     try {
       await endGame(scoreRef.current);
-      if (user?.name && scoreRef.current > 0) {
-        await saveScore(user.name, scoreRef.current);
+      const scoreName = TIVOLI_MODE
+        ? user?.name
+        : standalonePlayerNameRef.current;
+      if (scoreName && scoreRef.current > 0) {
+        await saveScore(scoreName, scoreRef.current);
       }
     } catch (err) {
       const apiError = err as ApiError;

@@ -6,10 +6,11 @@ import { Navigation } from "./Navigation";
 import Info from "../Info";
 import { calculatePayout } from "../../utils/gameUtils";
 import { RuneSpeech } from "../RuneSpeech";
+import { TIVOLI_MODE } from "../../config";
 
 export function GameOver({
   score,
-  currentLevel: _currentLevel,
+  currentLevel,
   onPlayAgain,
   transaction,
   resultType = "gameover",
@@ -18,9 +19,9 @@ export function GameOver({
 
   const openInfoForPlay = (): void => setInfoMode("play");
   const openInfo = (): void => setInfoMode("info");
-  const handleStartFromInfo = (): void => {
+  const handleStartFromInfo = (playerName?: string): void => {
     setInfoMode(null);
-    onPlayAgain();
+    void onPlayAgain(playerName);
   };
   const euro = calculatePayout(score);
 
@@ -72,21 +73,30 @@ export function GameOver({
 
               <div className={styles.statItem}>
                 <span className={styles.statLabel}>Level:</span>
-                <span className={styles.statValue}>{score}</span>
+                <span className={styles.statValue}>{currentLevel.level}</span>
               </div>
             </div>
 
             <div className={styles.rewardBox}>
-              <p>€{euro}</p>
-              <p>
-                Stamp: {transaction?.stamp?.animal} {transaction?.stamp?.metal}
-              </p>
-              {transaction?.stamp?.image_url && (
-                <img
-                  className={styles.stamp}
-                  src={stampImageUrl}
-                  alt="Your stamp"
-                />
+              {TIVOLI_MODE ? (
+                <>
+                  <p>€{euro}</p>
+                  <p>
+                    Stamp: {transaction?.stamp?.animal}{" "}
+                    {transaction?.stamp?.metal}
+                  </p>
+                  {transaction?.stamp?.image_url && (
+                    <img
+                      className={styles.stamp}
+                      src={stampImageUrl}
+                      alt="Your stamp"
+                    />
+                  )}
+                </>
+              ) : (
+                <>
+                  <p>Thanks for playing!</p>
+                </>
               )}
             </div>
           </div>

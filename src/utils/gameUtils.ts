@@ -78,6 +78,16 @@ export function isImage(figure: string): boolean {
   );
 }
 
+export function sanitizePlayerName(value: string): string {
+  return value
+    .normalize("NFKC")
+    .replace(/[<>"'`\\]/g, "")
+    .replace(/[\u0000-\u001F\u007F]/g, "")
+    .replace(/\s+/g, " ")
+    .trim()
+    .slice(0, 24);
+}
+
 // prize for player
 export function calculatePayout(levelsCleared: number): number {
   if (levelsCleared > 15) return 3.0;

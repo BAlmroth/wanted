@@ -1,9 +1,12 @@
 import { useEffect, useRef, useState } from "react";
+import type { ChangeEvent } from "react";
 import styles from "./Info.module.css";
 import DownArrow from "../assets/DownArrow.png";
 import InfoContent from "./InfoContent";
 import Caution from "./Caution";
 import type { InfoModalProps } from "../types/Info";
+import { TIVOLI_MODE } from "../config";
+import { sanitizePlayerName } from "../utils/gameUtils";
 
 export default function Info({
   isOpen,
@@ -16,10 +19,22 @@ export default function Info({
   const modalRef = useRef<HTMLDivElement | null>(null);
   const [hasScrolledToBottom, setHasScrolledToBottom] = useState(false);
   const [hasEverScrolledToBottom, setHasEverScrolledToBottom] = useState(false);
+  const [playerName, setPlayerName] = useState("");
+
+  const requiresPlayerName = !TIVOLI_MODE && showStartButton;
+  const sanitizedPlayerName = sanitizePlayerName(playerName);
+  const canStart =
+    hasEverScrolledToBottom &&
+    (!requiresPlayerName || sanitizedPlayerName.length > 0);
 
   const handleStart = () => {
-    onStartGame?.();
+    if (!canStart) return;
+    onStartGame?.(requiresPlayerName ? sanitizedPlayerName : undefined);
     onClose();
+  };
+
+  const handlePlayerNameChange = (event: ChangeEvent<HTMLInputElement>) => {
+    setPlayerName(sanitizePlayerName(event.target.value));
   };
 
   const checkScrollPosition = () => {
@@ -98,6 +113,7 @@ export default function Info({
     if (!isOpen) {
       setHasScrolledToBottom(false);
       setHasEverScrolledToBottom(false);
+      setPlayerName("");
     } else {
       // Focus on teh first focusable element
       if (modalRef.current) {
@@ -157,14 +173,38 @@ export default function Info({
 
         <div className={styles.footer}>
           {showStartButton || showCautionOnly ? (
-            <button
-              className={styles.closeButtonBottom}
-              onClick={handleStart}
-              disabled={!hasEverScrolledToBottom}
-              aria-disabled={!hasEverScrolledToBottom}
-            >
-              {showCautionOnly ? "Start game" : "Ready? - Start game 2€"}
-            </button>
+            <div className={styles.startControls}>
+              {requiresPlayerName && (
+                <label className={styles.nameField} htmlFor="player-name">
+                  <span className={styles.nameLabel}>Name</span>
+                  <input
+                    id="player-name"
+                    className={styles.nameInput}
+                    type="text"
+                    value={playerName}
+                    onChange={handlePlayerNameChange}
+                    placeholder="Enter your name"
+                    autoComplete="off"
+                    spellCheck={false}
+                    maxLength={24}
+                    inputMode="text"
+                    aria-label="Enter your name"
+                  />
+                </label>
+              )}
+              <button
+                className={styles.closeButtonBottom}
+                onClick={handleStart}
+                disabled={!canStart}
+                aria-disabled={!canStart}
+              >
+                {TIVOLI_MODE
+                  ? showCautionOnly
+                    ? "Start game"
+                    : "Ready? - Start game 2€"
+                  : "Start game"}
+              </button>
+            </div>
           ) : (
             <button className={styles.closeButtonBottom} onClick={onClose}>
               Got it
