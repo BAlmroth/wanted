@@ -37,9 +37,9 @@ export function Idle({ onStartGame }: IdleProps): ReactNode {
     setIsOpen(true);
   };
 
-  const handleStartGame = () => {
+  const handleStartGame = (playerName?: string) => {
     setIsOpen(false);
-    onStartGame();
+    void onStartGame(playerName);
   };
 
   return (

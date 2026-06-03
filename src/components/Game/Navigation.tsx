@@ -26,7 +26,9 @@ export function Navigation({
       {showPlayButton && (
         <button
           className={styles.playBtn}
-          onClick={onStartGame}
+          onClick={(): void => {
+            void onStartGame();
+          }}
           aria-label="Start playing the game"
           aria-describedby={ariaDescribedBy}
         >
